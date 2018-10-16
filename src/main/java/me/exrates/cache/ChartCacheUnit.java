@@ -40,8 +40,6 @@ public class ChartCacheUnit implements ChartsCacheInterface {
     /*provide update only when user try to get data, or update imediately, when time for update remaining*/
     private final boolean lazyUpdate;
 
-    /*synchronizers*/
-
     private ReentrantLock lock = new ReentrantLock();
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);

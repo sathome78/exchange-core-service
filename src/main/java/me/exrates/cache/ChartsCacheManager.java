@@ -37,7 +37,6 @@ public class ChartsCacheManager {
     private ObjectMapper objectMapper;
 
 
-
     private Map<Integer, Map<String, ChartCacheUnit>> cacheMap = new ConcurrentHashMap<>();
 
     @Async
@@ -76,7 +75,7 @@ public class ChartsCacheManager {
     private ChartsCacheInterface getRequiredCache(Integer pairId, ChartTimeFrame timeFrame) {
         return cacheMap.computeIfAbsent(pairId, p -> {
             Map<String, ChartCacheUnit> map = new ConcurrentHashMap<>();
-            orderService.getChartTimeFrames().forEach(i->{
+            orderService.getChartTimeFrames().forEach(i -> {
                 map.put(i.getResolution().toString(), new ChartCacheUnit(pairId,
                         i,
                         orderService,
@@ -91,7 +90,7 @@ public class ChartsCacheManager {
     @Async
     @EventListener
     void handleChartUpdate(ChartCacheUpdateEvent event) {
-        List<CandleChartItemDto> data = (List<CandleChartItemDto>)event.getSource();
+        List<CandleChartItemDto> data = (List<CandleChartItemDto>) event.getSource();
         String dataToSend = prepareDataToSend(data, event.getPairId(), event.getTimeFrame());
         stompMessenger.sendChartData(event.getPairId(),
                 event.getTimeFrame().getResolution().toString(),
@@ -108,7 +107,7 @@ public class ChartsCacheManager {
         }
 
         /*ArrayList<List> arrayListMain = new ArrayList<>();
-        *//*in first row return backDealInterval - to synchronize period menu with it*//*
+         *//*in first row return backDealInterval - to synchronize period menu with it*//*
         arrayListMain.add(new ArrayList<Object>() {{
             add(backDealInterval);
         }});
@@ -133,7 +132,6 @@ public class ChartsCacheManager {
         }*/
 
     }
-
 
 
 }

@@ -25,10 +25,9 @@ public class AdminStopOrderFilterData extends TableFilterData {
     private String creator;
 
 
-
     @Override
     public void initFilterItems() {
-        FilterDataItem[] items = new FilterDataItem[] {
+        FilterDataItem[] items = new FilterDataItem[]{
                 new FilterDataItem("order_id", "STOP_ORDERS.id =", orderId),
                 new FilterDataItem("currency_pair_id", "STOP_ORDERS.currency_pair_id =", currencyPairId),
                 new FilterDataItem("operation_type_id", "STOP_ORDERS.operation_type_id =", orderType),

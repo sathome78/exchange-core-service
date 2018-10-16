@@ -18,7 +18,6 @@ import me.exrates.util.geetest.GeetestLib;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +32,6 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 @Log4j2
-@PropertySource("classpath:session.properties")
 public class CapchaAuthorizationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
@@ -55,9 +53,12 @@ public class CapchaAuthorizationFilter extends UsernamePasswordAuthenticationFil
     @Autowired
     private GeetestLib geetest;
 
-    private @Value("${session.checkPinParam}") String checkPinParam;
-    private @Value("${session.pinParam}") String pinParam;
-    private @Value("${session.passwordParam}") String passwordParam;
+    private @Value("${session.checkPinParam}")
+    String checkPinParam;
+    private @Value("${session.pinParam}")
+    String pinParam;
+    private @Value("${session.passwordParam}")
+    String passwordParam;
     private String authenticationParamName = "authentication";
 
 
@@ -85,24 +86,24 @@ public class CapchaAuthorizationFilter extends UsernamePasswordAuthenticationFil
         }
 
         if (session.getAttribute(checkPinParam) != null && request.getParameter(pinParam) != null
-                         && request.getParameter(super.getUsernameParameter()) == null
-                         && request.getParameter(super.getPasswordParameter()) == null
-                         && session.getAttribute(authenticationParamName) != null) {
-            Authentication authentication = (Authentication)session.getAttribute(authenticationParamName);
+                && request.getParameter(super.getUsernameParameter()) == null
+                && request.getParameter(super.getPasswordParameter()) == null
+                && session.getAttribute(authenticationParamName) != null) {
+            Authentication authentication = (Authentication) session.getAttribute(authenticationParamName);
             User principal = (User) authentication.getPrincipal();
             if (!userService.checkPin(principal.getUsername(), request.getParameter(pinParam), NotificationMessageEventEnum.LOGIN)) {
                 PinDto res = secureServiceImpl.reSendLoginMessage(request, authentication.getName(), true);
                 throw new IncorrectPinException(res);
             }
             return attemptAuthentication(principal.getUsername(),
-                    String.valueOf(session.getAttribute(passwordParam)),request, response);
+                    String.valueOf(session.getAttribute(passwordParam)), request, response);
         } else {
             String challenge = request.getParameter(GeetestLib.fn_geetest_challenge);
             String validate = request.getParameter(GeetestLib.fn_geetest_validate);
             String seccode = request.getParameter(GeetestLib.fn_geetest_seccode);
 
             int gt_server_status_code = (Integer) request.getSession().getAttribute(geetest.gtServerStatusSessionKey);
-            String userid = (String)request.getSession().getAttribute("userid");
+            String userid = (String) request.getSession().getAttribute("userid");
 
             HashMap<String, String> param = new HashMap<>();
             param.put("user_id", userid);
@@ -125,7 +126,7 @@ public class CapchaAuthorizationFilter extends UsernamePasswordAuthenticationFil
                 throw new NotVerifiedCaptchaError(correctCapchaRequired);
             }
         }
-        if(userService.findByEmail(request.getParameter("username")).getStatus()== UserStatus.REGISTERED){
+        if (userService.findByEmail(request.getParameter("username")).getStatus() == UserStatus.REGISTERED) {
             throw new UnconfirmedUserException(userService.findByEmail(request.getParameter("username")).getEmail());
         }
         /*---------------*/

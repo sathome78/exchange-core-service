@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 public class DataTableParams {
-    
+
     private final String SEARCH_VALUE_KEY = "search_value";
 
     private int draw = 1;
@@ -76,11 +76,11 @@ public class DataTableParams {
         dataTableParams.columns = columnNames;
         return dataTableParams;
     }
-    
+
     public static DataTableParams defaultParams() {
         return new DataTableParams();
     }
-    
+
     public static DataTableParams sortNoPaginationParams(String sortColumn, String sortDirection) {
         DataTableParams dataTableParams = new DataTableParams();
         dataTableParams.columns = Collections.singletonList(sortColumn);
@@ -94,10 +94,10 @@ public class DataTableParams {
         }
         return new StringJoiner(" ").add("ORDER BY").add(columns.get(orderColumn)).add(orderDirection.name()).toString();
     }
-    
+
     public String getSearchClause() {
         return StringUtils.isEmpty(searchValue) ? "" : columns.stream().map(columnName ->
-                        String.format("CONVERT(%s USING utf8) LIKE :%s", columnName, SEARCH_VALUE_KEY))
+                String.format("CONVERT(%s USING utf8) LIKE :%s", columnName, SEARCH_VALUE_KEY))
                 .collect(Collectors.joining(" OR ", "(", ")"));
     }
 
@@ -116,20 +116,19 @@ public class DataTableParams {
     }
 
 
-    
     public Map<String, String> getSearchNamedParams() {
         return Collections.singletonMap(SEARCH_VALUE_KEY, String.format("%%%s%%", searchValue));
     }
-    
+
     public String getLimitAndOffsetClause() {
-      String limit;
-      if (length > 0) {
-        String offset = start > 0 ? " OFFSET :offset " : "";
-        limit = " LIMIT :limit " + offset;
-      } else {
-        limit = "";
-      }
-      return limit;
+        String limit;
+        if (length > 0) {
+            String offset = start > 0 ? " OFFSET :offset " : "";
+            limit = " LIMIT :limit " + offset;
+        } else {
+            limit = "";
+        }
+        return limit;
     }
 
     private static void validateColumnNames(List<String> columnNames) {
@@ -151,5 +150,5 @@ public class DataTableParams {
                 ", columns=" + columns +
                 '}';
     }
-  
+
 }

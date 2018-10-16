@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 @Setter
 public class ChatHistoryDto {
 
-    private String  email;
-    private String  body;
+    private String email;
+    private String body;
     private String messageTime;
 
     public static String getTitle() {

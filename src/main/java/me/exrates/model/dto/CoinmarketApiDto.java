@@ -32,14 +32,14 @@ public class CoinmarketApiDto {
 
     @Override
     public String toString() {
-        return '"'+currency_pair_name.replace('/','_')+"\":" +
-                "{\"last\":"+ BigDecimalProcessing.formatNonePointQuoted(last, true) +
+        return '"' + currency_pair_name.replace('/', '_') + "\":" +
+                "{\"last\":" + BigDecimalProcessing.formatNonePointQuoted(last, true) +
                 ", \"lowestAsk\":" + BigDecimalProcessing.formatNonePointQuoted(lowestAsk, true) +
                 ", \"highestBid\":" + BigDecimalProcessing.formatNonePointQuoted(highestBid, true) +
                 ", \"percentChange\":" + BigDecimalProcessing.formatNonePointQuoted(percentChange, true) +
                 ", \"baseVolume\":" + BigDecimalProcessing.formatNonePointQuoted(baseVolume, true) +
                 ", \"quoteVolume\":" + BigDecimalProcessing.formatNonePointQuoted(quoteVolume, true) +
-                ", \"isFrozen\":" + '"'+isFrozen+'"' +
+                ", \"isFrozen\":" + '"' + isFrozen + '"' +
                 ", \"high24hr\":" + BigDecimalProcessing.formatNonePointQuoted(high24hr, true) +
                 ", \"low24hr\":" + BigDecimalProcessing.formatNonePointQuoted(low24hr, true) +
                 '}';

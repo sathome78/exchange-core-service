@@ -13,13 +13,13 @@ import java.time.ZonedDateTime;
  * Created by Valk
  */
 public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
-  @Override
-  public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-    String str = jsonParser.readValueAsTree().toString().replaceAll("\"", "");
-    if (str.endsWith("Z")) {
-      return ZonedDateTime.parse(str).toLocalDateTime();
-    } else {
-      return LocalDateTime.parse(str);
+    @Override
+    public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+        String str = jsonParser.readValueAsTree().toString().replaceAll("\"", "");
+        if (str.endsWith("Z")) {
+            return ZonedDateTime.parse(str).toLocalDateTime();
+        } else {
+            return LocalDateTime.parse(str);
+        }
     }
-  }
 }

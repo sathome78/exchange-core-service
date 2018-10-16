@@ -3,7 +3,10 @@ package me.exrates.service.impl;
 import me.exrates.dao.CurrencyDao;
 import me.exrates.exception.CurrencyPairNotFoundException;
 import me.exrates.model.dto.CurrencyPairLimitDto;
-import me.exrates.model.enums.*;
+import me.exrates.model.enums.CurrencyPairType;
+import me.exrates.model.enums.OperationType;
+import me.exrates.model.enums.OrderType;
+import me.exrates.model.enums.UserRole;
 import me.exrates.model.main.Currency;
 import me.exrates.model.main.CurrencyPair;
 import me.exrates.service.CurrencyService;
@@ -13,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 public class CurrencyServiceImpl implements CurrencyService {
@@ -82,7 +88,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         return currencyDao.findCurrencyPairByName(currencyPair);
     }
 
-    public List<CurrencyPair> findPermitedCurrencyPairs(CurrencyPairType currencyPairType){
+    public List<CurrencyPair> findPermitedCurrencyPairs(CurrencyPairType currencyPairType) {
         return currencyDao.findPermitedCurrencyPairs(currencyPairType);
     }
 

@@ -11,21 +11,21 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 public class CommissionDataDto {
-  BigDecimal amount;
-  /**/
-  BigDecimal merchantCommissionRate;
-  BigDecimal minMerchantCommissionAmount;
-  String merchantCommissionUnit;
-  BigDecimal merchantCommissionAmount;
-  /**/
-  Commission companyCommission;
-  BigDecimal companyCommissionRate;
-  String companyCommissionUnit;
-  BigDecimal companyCommissionAmount;
-  /**/
-  BigDecimal totalCommissionAmount;
-  BigDecimal resultAmount;
+    BigDecimal amount;
+    /**/
+    BigDecimal merchantCommissionRate;
+    BigDecimal minMerchantCommissionAmount;
+    String merchantCommissionUnit;
+    BigDecimal merchantCommissionAmount;
+    /**/
+    Commission companyCommission;
+    BigDecimal companyCommissionRate;
+    String companyCommissionUnit;
+    BigDecimal companyCommissionAmount;
+    /**/
+    BigDecimal totalCommissionAmount;
+    BigDecimal resultAmount;
 
-  Boolean specificMerchantComissionCount;
+    Boolean specificMerchantComissionCount;
 
 }

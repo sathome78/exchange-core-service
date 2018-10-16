@@ -10,8 +10,8 @@ import me.exrates.model.enums.*;
 import me.exrates.model.error.ErrorInfo;
 import me.exrates.model.main.*;
 import me.exrates.service.*;
-import me.exrates.service.impl.RegisterFormValidation;
 import me.exrates.service.impl.UserSessionService;
+import me.exrates.validator.RegisterFormValidation;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +19,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,7 +55,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Log4j2
 @Controller
-@PropertySource(value = {"classpath:/news.properties", "classpath:/captcha.properties", "classpath:/telegram_bot.properties"})
 public class EntryController {
     private static final Logger LOGGER = LogManager.getLogger(EntryController.class);
 
@@ -153,9 +151,9 @@ public class EntryController {
             model.addObject("userStatus", userStatus);
             model.addObject("roleSettings", userRoleService.retrieveSettingsForRole(user.getRole().getRole()));
             model.addObject("referalPercents", referralService.findAllReferralLevels()
-                                                .stream()
-                                                .filter(p->p.getPercent().compareTo(BigDecimal.ZERO) > 0)
-                                                .collect(toList()));
+                    .stream()
+                    .filter(p -> p.getPercent().compareTo(BigDecimal.ZERO) > 0)
+                    .collect(toList()));
         }
         if (principal == null) {
             request.getSession().setAttribute("lastPageBeforeLogin", request.getRequestURI());
@@ -221,7 +219,7 @@ public class EntryController {
             model.addObject("roleSettings", userRoleService.retrieveSettingsForRole(user.getRole().getRole()));
             model.addObject("referalPercents", referralService.findAllReferralLevels()
                     .stream()
-                    .filter(p->p.getPercent().compareTo(BigDecimal.ZERO) > 0)
+                    .filter(p -> p.getPercent().compareTo(BigDecimal.ZERO) > 0)
                     .collect(toList()));
         }
         if (principal == null) {
@@ -304,7 +302,7 @@ public class EntryController {
             response.setStatus(500);
             message = result.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(toList());
         } else {
-            if(bCryptPasswordEncoder.matches(changePasswordDto.getPassword(), userPrincipal.getPassword())) {
+            if (bCryptPasswordEncoder.matches(changePasswordDto.getPassword(), userPrincipal.getPassword())) {
                 UpdateUserDto updateUserDto = new UpdateUserDto(userPrincipal.getId());
                 updateUserDto.setPassword(changePasswordDto.getConfirmPassword());
                 updateUserDto.setEmail(principal.getName());
@@ -316,21 +314,23 @@ public class EntryController {
                 message = messageSource.getMessage("user.settings.changePassword.fail", null, localeResolver.resolveLocale(request));
             }
         }
-        return new JSONObject(){{put("message", message);}}.toString();
+        return new JSONObject() {{
+            put("message", message);
+        }}.toString();
     }
 
     @RequestMapping(value = "settings/changeNickname/submit", method = POST)
-    public ModelAndView submitsettingsNickname(@RequestParam("nickname")String newNickName, BindingResult result,
+    public ModelAndView submitsettingsNickname(@RequestParam("nickname") String newNickName, BindingResult result,
                                                HttpServletRequest request, RedirectAttributes redirectAttributes, Principal principal) {
         registerFormValidation.validateNickname(newNickName, result, localeResolver.resolveLocale(request));
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorNoty", "Error. Nickname NOT changed.");
             redirectAttributes.addFlashAttribute("sectionid", "nickname-changing");
         } else {
-            boolean userNicknameUpdated = userService.setNickname(newNickName,principal.getName());
-            if(userNicknameUpdated){
+            boolean userNicknameUpdated = userService.setNickname(newNickName, principal.getName());
+            if (userNicknameUpdated) {
                 redirectAttributes.addFlashAttribute("successNoty", "You have successfully updated nickname");
-            }else{
+            } else {
                 redirectAttributes.addFlashAttribute("errorNoty", "Error. Nickname NOT changed.");
             }
         }
@@ -369,7 +369,8 @@ public class EntryController {
                             return option;
                         }
                 ).
-                collect(toList());;
+                collect(toList());
+        ;
         //TODO uncomment after turning notifications on
         /*if (notificationOptions.stream().anyMatch(option -> !option.isSendEmail() && !option.isSendNotification())) {
             redirectAttributes.addFlashAttribute("msg", messageSource.getMessage("notifications.invalid", null,

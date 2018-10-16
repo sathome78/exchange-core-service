@@ -19,7 +19,7 @@ public abstract class TableFilterData {
         filterItems = Stream.of(items).filter(checkNotEmpty())
                 .collect(Collectors.toList());
     }
-    
+
     private Predicate<FilterDataItem> checkNotEmpty() {
         return item -> !(item.getValue() == null
                 || String.valueOf(item.getValue()).isEmpty()

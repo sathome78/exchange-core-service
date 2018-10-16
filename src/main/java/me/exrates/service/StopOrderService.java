@@ -1,7 +1,6 @@
 package me.exrates.service;
 
 import me.exrates.model.dto.OrderCreateDto;
-import me.exrates.model.dto.OrderInfoDto;
 import me.exrates.model.dto.StopOrderSummaryDto;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.OrderActionEnum;

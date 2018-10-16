@@ -1,6 +1,9 @@
 package me.exrates.service;
 
-import me.exrates.model.dto.*;
+import me.exrates.model.dto.OrderDetailDto;
+import me.exrates.model.dto.WalletTransferStatus;
+import me.exrates.model.dto.WalletsForOrderAcceptionDto;
+import me.exrates.model.dto.WalletsForOrderCancelDto;
 import me.exrates.model.enums.CurrencyPairType;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.TransactionSourceType;

@@ -3,13 +3,13 @@ package me.exrates.model.enums;
 import java.util.Arrays;
 
 public enum ChartResolutionTimeUnit {
-    MINUTE("", 60, 5), DAY("D", 86400, 120),WEAK("W", 604800, 1200);
+    MINUTE("", 60, 5), DAY("D", 86400, 120), WEAK("W", 604800, 1200);
 
-   private String shortName;
+    private String shortName;
 
-   private Integer secondsValue;
+    private Integer secondsValue;
 
-   private Integer refreshDelaySeconds;
+    private Integer refreshDelaySeconds;
 
     ChartResolutionTimeUnit(String shortName, Integer secondsValue, Integer refreshDelaySeconds) {
         this.shortName = shortName;

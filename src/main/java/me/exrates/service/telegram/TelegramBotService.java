@@ -9,7 +9,6 @@ import me.exrates.service.Subscribable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -20,7 +19,6 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import javax.annotation.PostConstruct;
 
 
-@PropertySource("classpath:telegram_bot.properties")
 @Log4j2(topic = "message_notify")
 @Component
 public class TelegramBotService extends TelegramLongPollingBot {
@@ -29,10 +27,14 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Autowired
     private Subscribable subscribable;
 
-    private @Value("${telegram.bot.key}") String key;
-    private @Value("${telegram.bot.username}") String botName;
+    private @Value("${telegram.bot.key}")
+    String key;
+    private @Value("${telegram.bot.username}")
+    String botName;
 
-    static {ApiContextInitializer.init();}
+    static {
+        ApiContextInitializer.init();
+    }
 
 
     @PostConstruct

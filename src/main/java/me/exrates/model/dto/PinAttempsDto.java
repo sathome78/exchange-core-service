@@ -10,11 +10,11 @@ public class PinAttempsDto {
     int attempsCount = 0;
 
     public boolean needToSendPin() {
-        if (attempsCount == 0 ) {
+        if (attempsCount == 0) {
             attempsCount++;
             return true;
         }
-        if (attempsCount >= 3 ) {
+        if (attempsCount >= 3) {
             attempsCount = 1;
             return true;
         } else {

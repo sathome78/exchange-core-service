@@ -1,6 +1,6 @@
 package me.exrates.exception;
 
-public class ForbiddenOperationException extends  RuntimeException {
+public class ForbiddenOperationException extends RuntimeException {
     public ForbiddenOperationException() {
     }
 

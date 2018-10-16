@@ -34,7 +34,7 @@ public class CurrencyInputOutputSummaryDto {
 
     @Override
     public String toString() {
-        return Stream.of(String.valueOf(orderNum), String.valueOf(curId),  currencyName, BigDecimalProcessing.formatNoneComma(rateToUSD, false),
+        return Stream.of(String.valueOf(orderNum), String.valueOf(curId), currencyName, BigDecimalProcessing.formatNoneComma(rateToUSD, false),
                 BigDecimalProcessing.formatNoneComma(input, false),
                 BigDecimalProcessing.formatNoneComma(output, false),
                 BigDecimalProcessing.formatNoneComma(diff, false))

@@ -567,6 +567,7 @@ public class OrderServiceImpl implements OrderService {
         acceptOrder(newOrder.getUserId(), acceptedId, locale, false);
         return amountForPartialAccept;
     }
+
     @Override
     public OrderCreateDto getMyOrderById(int orderId) {
         return orderDao.getMyOrderById(orderId);
@@ -611,7 +612,6 @@ public class OrderServiceImpl implements OrderService {
         acceptOrder(userAcceptorId, orderId, locale, true);
 
     }
-
 
 
     private void acceptOrder(int userAcceptorId, int orderId, Locale locale, boolean sendNotification) {
@@ -941,7 +941,6 @@ public class OrderServiceImpl implements OrderService {
     public OrderInfoDto getOrderInfo(int orderId, Locale locale) {
         return orderDao.getOrderInfo(orderId, locale);
     }
-
 
 
     @Override

@@ -5,14 +5,16 @@ import me.exrates.model.dto.ChatHistoryDto;
 import me.exrates.model.enums.ChatLang;
 import me.exrates.model.main.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableSet;
 
 import static java.util.Collections.singletonMap;
 
@@ -65,7 +67,7 @@ public class ChatDaoImpl implements ChatDao {
         final String sql = "SELECT c.id, c.body, c.message_time, USER.email FROM CHAT_" + chatLang.val +
                 " as c INNER JOIN USER ON c.user_id = USER.id ORDER BY c.id DESC";
 
-        return jdbcTemplate.query(sql,  (resultSet, i) -> {
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
             final ChatHistoryDto historyDto = new ChatHistoryDto();
             historyDto.setEmail(resultSet.getString("email"));
             historyDto.setBody(resultSet.getString("body"));

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import me.exrates.model.enums.OperationType;
+
 @Getter
 @Setter
 @NoArgsConstructor

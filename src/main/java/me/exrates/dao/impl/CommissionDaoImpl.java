@@ -5,7 +5,6 @@ import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.UserRole;
 import me.exrates.model.main.Commission;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,10 +32,10 @@ public class CommissionDaoImpl implements CommissionDao {
         final String sql = "SELECT COMMISSION.id, COMMISSION.operation_type, COMMISSION.date, COMMISSION.value " +
                 "FROM COMMISSION " +
                 "WHERE operation_type = :operation_type AND user_role = :role_id";
-        final HashMap<String,Integer> params = new HashMap<>();
-        params.put("operation_type",operationType.type);
+        final HashMap<String, Integer> params = new HashMap<>();
+        params.put("operation_type", operationType.type);
         params.put("role_id", userRole.getRole());
-        return jdbcTemplate.queryForObject(sql,params, commissionRowMapper);
+        return jdbcTemplate.queryForObject(sql, params, commissionRowMapper);
     }
 
     @Override
@@ -44,8 +43,8 @@ public class CommissionDaoImpl implements CommissionDao {
         final String sql = "SELECT id, operation_type, date, value " +
                 "FROM COMMISSION " +
                 "WHERE operation_type = :operation_type AND user_role = 4;";
-        final HashMap<String,Integer> params = new HashMap<>();
-        params.put("operation_type",operationType.type);
-        return jdbcTemplate.queryForObject(sql,params,commissionRowMapper);
+        final HashMap<String, Integer> params = new HashMap<>();
+        params.put("operation_type", operationType.type);
+        return jdbcTemplate.queryForObject(sql, params, commissionRowMapper);
     }
 }

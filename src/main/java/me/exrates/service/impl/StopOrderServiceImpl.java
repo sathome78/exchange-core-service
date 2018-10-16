@@ -5,7 +5,10 @@ import me.exrates.dao.StopOrderDao;
 import me.exrates.exception.NotCreatableOrderException;
 import me.exrates.exception.OrderCancellingException;
 import me.exrates.exception.StopOrderNoConditionException;
-import me.exrates.model.dto.*;
+import me.exrates.model.dto.OrderCreateDto;
+import me.exrates.model.dto.StopOrderSummaryDto;
+import me.exrates.model.dto.WalletTransferStatus;
+import me.exrates.model.dto.WalletsForOrderCancelDto;
 import me.exrates.model.enums.*;
 import me.exrates.model.main.CacheData;
 import me.exrates.model.main.CurrencyPair;
@@ -85,7 +88,7 @@ public class StopOrderServiceImpl implements StopOrderService {
 
     @Override
     public void proceedStopOrders(int pairId, NavigableSet<StopOrderSummaryDto> orders) {
-        orders.forEach(p->{
+        orders.forEach(p -> {
             try {
                 ordersExecutors.execute(new Runnable() {
                     @Override
@@ -232,7 +235,7 @@ public class StopOrderServiceImpl implements StopOrderService {
         log.debug("stop order created {}", exOrder.getId());
         try {
             BigDecimal currentRate = ratesHolder.getCurrentRate(exOrder.getCurrencyPairId(), exOrder.getOperationType());
-            log.debug("current rate {}, stop {}", currentRate, exOrder.getStop() );
+            log.debug("current rate {}, stop {}", currentRate, exOrder.getStop());
             switch (exOrder.getOperationType()) {
                 case SELL: {
                     if (currentRate != null && exOrder.getStop().compareTo(currentRate) >= 0) {

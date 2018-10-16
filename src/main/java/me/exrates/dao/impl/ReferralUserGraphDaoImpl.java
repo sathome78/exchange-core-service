@@ -32,7 +32,7 @@ public class ReferralUserGraphDaoImpl implements ReferralUserGraphDao {
     private NamedParameterJdbcTemplate slaveJdbcTemplate;
 
     @Autowired
-    public ReferralUserGraphDaoImpl(@Qualifier(value = "masterTemplate")final NamedParameterJdbcTemplate jdbcTemplate, @Qualifier(value = "slaveTemplate") NamedParameterJdbcTemplate slaveJdbcTemplate) {
+    public ReferralUserGraphDaoImpl(@Qualifier(value = "masterTemplate") final NamedParameterJdbcTemplate jdbcTemplate, @Qualifier(value = "slaveTemplate") NamedParameterJdbcTemplate slaveJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.slaveJdbcTemplate = slaveJdbcTemplate;
     }
@@ -56,14 +56,14 @@ public class ReferralUserGraphDaoImpl implements ReferralUserGraphDao {
             return null;
         }
     }
-        
+
     @Override
     public List<Integer> getChildrenForParentAndBlock(Integer parent) {
         String sql = "SELECT child FROM REFERRAL_USER_GRAPH WHERE parent = :parent " +
                 " FOR UPDATE ";
         return jdbcTemplate.queryForList(sql, singletonMap("parent", parent), Integer.class);
     }
-    
+
     @Override
     public void changeReferralParent(Integer formerParent, Integer newParent) {
         String sql = "UPDATE REFERRAL_USER_GRAPH SET parent = :new_parent WHERE parent = :former_parent";
@@ -150,7 +150,7 @@ public class ReferralUserGraphDaoImpl implements ReferralUserGraphDao {
         sql = String.format(sql, (String) refFilterData.getSQLParamsMap().get("sql"));
         sql = sql.concat(" GROUP BY CU.id ");
         try {
-             return slaveJdbcTemplate.query(sql, namedParameters, new RowMapper<ReferralProfitDto>() {
+            return slaveJdbcTemplate.query(sql, namedParameters, new RowMapper<ReferralProfitDto>() {
                 @Override
                 public ReferralProfitDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ReferralProfitDto profitDto = new ReferralProfitDto();

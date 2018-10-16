@@ -176,7 +176,7 @@ public class NewsServiceImpl implements NewsService {
             String filename = elem.attr("src").substring(elem.attr("src").lastIndexOf('/') + 1);
             Path filePath = Paths.get(tempImageDir + filename);
             Path targetDirPath = Paths.get(newsImageDir);
-            if(filePath.toFile().exists()) {
+            if (filePath.toFile().exists()) {
                 try {
                     if (!targetDirPath.toFile().exists()) {
                         Files.createDirectories(targetDirPath);

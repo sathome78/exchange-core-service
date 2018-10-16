@@ -3,7 +3,6 @@ package me.exrates.dao.impl;
 import me.exrates.dao.NotificatorPriceDao;
 import me.exrates.model.dto.NotificatorTotalPriceDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class NotificatorPriceDaoImpl implements NotificatorPriceDao {
         final String sql = "SELECT message_price FROM 2FA_NOTIFICATION_PRICE " +
                 "WHERE notificator_id = :notificator_id AND role_id = :role_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue( "notificator_id", notificatorId);
+        params.addValue("notificator_id", notificatorId);
         params.addValue("role_id", roleId);
         return jdbcTemplate.queryForObject(sql, params, BigDecimal.class);
     }

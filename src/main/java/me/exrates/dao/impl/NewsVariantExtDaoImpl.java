@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class NewsVariantExtDaoImpl implements NewsVariantExtDao {
-    
+
     public NewsVariant findByNewsVariantLanguage(Integer newsId, String language) {
         return null;
     }

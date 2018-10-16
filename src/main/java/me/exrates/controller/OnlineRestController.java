@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
@@ -34,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import static org.apache.logging.log4j.core.util.Assert.*;
+import static org.apache.logging.log4j.core.util.Assert.requireNonEmpty;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
@@ -52,7 +51,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * @author ValkSam
  */
 @Log4j2
-@PropertySource("classpath:session.properties")
 @RestController
 public class OnlineRestController {
     private static final Logger LOGGER = LogManager.getLogger(OnlineRestController.class);
@@ -681,6 +679,7 @@ public class OnlineRestController {
         tableParams.updateEofState(result);
         return result;
     }
+
     //TODO should be done
     @RequestMapping(value = "/dashboard/myInputoutputData/{tableId}", method = RequestMethod.GET)
     public List<MyInputOutputHistoryDto> getMyInputoutputData(

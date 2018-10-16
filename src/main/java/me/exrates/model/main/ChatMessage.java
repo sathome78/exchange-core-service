@@ -9,8 +9,8 @@ import java.util.Comparator;
 public class ChatMessage implements Comparable<ChatMessage> {
 
     private Integer userId;
-    private String  nickname;
-    private String  body;
+    private String nickname;
+    private String body;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime time;
     private long id;

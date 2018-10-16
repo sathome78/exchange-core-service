@@ -59,7 +59,7 @@ public class TelegramNotificatorServiceImpl implements NotificatorService, Subsc
     @Transactional
     @Override
     public Object subscribe(Object subscribeData) {
-        TelegramSubscription subscriptionDto = (TelegramSubscription)subscribeData;
+        TelegramSubscription subscriptionDto = (TelegramSubscription) subscribeData;
         String[] data = (subscriptionDto.getRawText()).split(":");
         String email = data[0];
         Optional<TelegramSubscription> subscriptionOptional = subscribtionDao.getSubscribtionByCodeAndEmail(subscriptionDto.getRawText(), email);
@@ -145,7 +145,7 @@ public class TelegramNotificatorServiceImpl implements NotificatorService, Subsc
 
     @Transactional
     private BigDecimal payForSubscribe(String userEmail, OperationType operationType,
-                                 String description) {
+                                       String description) {
         int userId = userService.getIdByEmail(userEmail);
         UserRole role = userService.getUserRoleFromDB(userEmail);
         BigDecimal fee = notificatorsService.getSubscriptionPrice(getNotificationType().getCode(), role.getRole());
@@ -161,7 +161,7 @@ public class TelegramNotificatorServiceImpl implements NotificatorService, Subsc
         walletOperationData.setSourceType(TransactionSourceType.NOTIFICATIONS);
         walletOperationData.setDescription(description);
         WalletTransferStatus walletTransferStatus = walletService.walletBalanceChange(walletOperationData);
-        if(!walletTransferStatus.equals(WalletTransferStatus.SUCCESS)) {
+        if (!walletTransferStatus.equals(WalletTransferStatus.SUCCESS)) {
             throw new PaymentException(walletTransferStatus);
         }
         return fee;

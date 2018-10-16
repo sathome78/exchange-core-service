@@ -1,16 +1,16 @@
 package me.exrates.dao.impl;
 
 import lombok.extern.log4j.Log4j2;
-import me.exrates.dao.*;
+import me.exrates.dao.CurrencyDao;
+import me.exrates.dao.TransactionDao;
+import me.exrates.dao.UserDao;
+import me.exrates.dao.WalletDao;
 import me.exrates.model.dto.*;
 import me.exrates.model.enums.ActionType;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.TransactionSourceType;
-import me.exrates.model.main.CompanyWallet;
+import me.exrates.model.main.*;
 import me.exrates.model.main.Currency;
-import me.exrates.model.main.CurrencyPair;
-import me.exrates.model.main.Transaction;
-import me.exrates.model.main.Wallet;
 import me.exrates.model.onlineTableDto.MyWalletsDetailedDto;
 import me.exrates.model.onlineTableDto.MyWalletsStatisticsDto;
 import me.exrates.model.vo.WalletOperationData;
@@ -75,7 +75,6 @@ public class WalletDaoImpl implements WalletDao {
             return result;
         };
     }
-
 
 
     public BigDecimal getWalletABalance(int walletId) {

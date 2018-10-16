@@ -4,7 +4,6 @@ import me.exrates.dao.CompanyWalletDao;
 import me.exrates.model.main.CompanyWallet;
 import me.exrates.model.main.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -26,12 +25,12 @@ public class CompanyWalletDaoImpl implements CompanyWalletDao {
     public CompanyWallet create(Currency currency) {
         final String sql = "INSERT INTO COMPANY_WALLET(currency_id) VALUES (:currencyId)";
         final KeyHolder keyHolder = new GeneratedKeyHolder();
-        final Map<String,Integer> params = new HashMap<String,Integer>(){
+        final Map<String, Integer> params = new HashMap<String, Integer>() {
             {
-                put("currencyId",currency.getId());
+                put("currencyId", currency.getId());
             }
         };
-        if (jdbcTemplate.update(sql,new MapSqlParameterSource(params),keyHolder)>0) {
+        if (jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder) > 0) {
             final CompanyWallet companyWallet = new CompanyWallet();
             companyWallet.setCurrency(currency);
             companyWallet.setId(keyHolder.getKey().intValue());
@@ -43,7 +42,7 @@ public class CompanyWalletDaoImpl implements CompanyWalletDao {
     @Override
     public CompanyWallet findByCurrencyId(Currency currency) {
         final String sql = "SELECT * FROM  COMPANY_WALLET WHERE currency_id = :currencyId";
-        final Map<String,Integer> params = new HashMap<String, Integer>(){
+        final Map<String, Integer> params = new HashMap<String, Integer>() {
             {
                 put("currencyId", currency.getId());
             }
@@ -65,7 +64,7 @@ public class CompanyWalletDaoImpl implements CompanyWalletDao {
     @Override
     public CompanyWallet findByWalletId(int walletId) {
         final String sql = "SELECT * FROM  COMPANY_WALLET WHERE id = :id";
-        final Map<String,Integer> params = new HashMap<String, Integer>(){
+        final Map<String, Integer> params = new HashMap<String, Integer>() {
             {
                 put("id", walletId);
             }
@@ -89,10 +88,10 @@ public class CompanyWalletDaoImpl implements CompanyWalletDao {
     @Override
     public boolean update(CompanyWallet companyWallet) {
         final String sql = "UPDATE COMPANY_WALLET SET balance = :balance, commission_balance = :commissionBalance where id = :id";
-        final Map<String,Object> params = new HashMap<String,Object>(){
+        final Map<String, Object> params = new HashMap<String, Object>() {
             {
-                put("balance",companyWallet.getBalance());
-                put("commissionBalance",companyWallet.getCommissionBalance());
+                put("balance", companyWallet.getBalance());
+                put("commissionBalance", companyWallet.getCommissionBalance());
                 put("id", companyWallet.getId());
             }
         };
@@ -100,11 +99,11 @@ public class CompanyWalletDaoImpl implements CompanyWalletDao {
     }
 
     @Override
-    public boolean substarctCommissionBalanceById(Integer id, BigDecimal amount){
+    public boolean substarctCommissionBalanceById(Integer id, BigDecimal amount) {
         String sql = "UPDATE COMPANY_WALLET " +
                 " SET commission_balance = commission_balance - :amount" +
                 " WHERE id = :company_wallet_id ";
-        Map<String, Object> params = new HashMap<String, Object>(){{
+        Map<String, Object> params = new HashMap<String, Object>() {{
             put("company_wallet_id", id);
             put("amount", amount);
         }};

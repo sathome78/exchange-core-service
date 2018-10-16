@@ -18,7 +18,7 @@ public class RequestBuilder {
     public String doXMLQuery(String xml) {
         StringBuilder responseString = new StringBuilder();
 
-        Map   params=new HashMap();
+        Map params = new HashMap();
         params.put("XML", xml);
         try {
             Connector.sendPostRequest(this.URL, params);

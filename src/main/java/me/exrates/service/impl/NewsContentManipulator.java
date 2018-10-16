@@ -1,6 +1,5 @@
 package me.exrates.service.impl;
 
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.exception.NewsContentNotSetException;
 import me.exrates.exception.NewsTitleImageNotSetException;

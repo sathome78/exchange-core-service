@@ -18,7 +18,9 @@ public enum UserOperationAuthority {
         this.operationId = operationId;
     }
 
-    public int getOperationId(){ return operationId; }
+    public int getOperationId() {
+        return operationId;
+    }
 
     public static UserOperationAuthority convert(int operationId) {
         return Arrays.stream(UserOperationAuthority.values())

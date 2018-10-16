@@ -30,9 +30,9 @@ public class UserAlertsDaoImpl implements UserAlertsDao {
                 .alertType(rs.getString("alert_type"))
                 .build();
         Optional.ofNullable(rs.getTimestamp("launch_date"))
-                .ifPresent(p->alertDto.setLaunchDateTime(p.toLocalDateTime()));
+                .ifPresent(p -> alertDto.setLaunchDateTime(p.toLocalDateTime()));
         Optional.ofNullable(rs.getTimestamp("time_of_start"))
-                .ifPresent(p->alertDto.setEventStart(p.toLocalDateTime()));
+                .ifPresent(p -> alertDto.setEventStart(p.toLocalDateTime()));
         Optional.ofNullable(rs.getInt("length"))
                 .ifPresent(alertDto::setLenghtOfWorks);
         return alertDto;

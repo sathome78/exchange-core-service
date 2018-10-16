@@ -43,16 +43,16 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
         List<CurrencyPair> currencyPairs = currencyService.getAllCurrencyPairs(CurrencyPairType.MAIN);
         List<StopOrder> activeOrders = stopOrderService
                 .getActiveStopOrdersByCurrencyPairsId(currencyPairs.stream().map(CurrencyPair::getId).collect(Collectors.toList()));
-        currencyPairs.forEach(p->{
-            List<StopOrder> thisPairsOrders = activeOrders.stream().filter(i->i.getCurrencyPairId() == p.getId()).collect(Collectors.toList());
+        currencyPairs.forEach(p -> {
+            List<StopOrder> thisPairsOrders = activeOrders.stream().filter(i -> i.getCurrencyPairId() == p.getId()).collect(Collectors.toList());
             ConcurrentSkipListSet<StopOrderSummaryDto> sellSet = new ConcurrentSkipListSet<>(comparator);
-            thisPairsOrders.stream().filter(i->i.getOperationType().equals(OperationType.SELL)).forEach(i->{
+            thisPairsOrders.stream().filter(i -> i.getOperationType().equals(OperationType.SELL)).forEach(i -> {
                 sellSet.add(new StopOrderSummaryDto(i.getId(), i.getStop(), i.getOperationType()));
             });
             sellOrdersMap.put(p.getId(), sellSet);
-            log.debug("sell set for currency {} size: {}", p.getId(),sellSet.size());
+            log.debug("sell set for currency {} size: {}", p.getId(), sellSet.size());
             ConcurrentSkipListSet<StopOrderSummaryDto> buySet = new ConcurrentSkipListSet<>(comparator);
-            thisPairsOrders.stream().filter(i->i.getOperationType().equals(OperationType.BUY)).forEach(i->{
+            thisPairsOrders.stream().filter(i -> i.getOperationType().equals(OperationType.BUY)).forEach(i -> {
                 buySet.add(new StopOrderSummaryDto(i.getId(), i.getStop(), i.getOperationType()));
             });
             buyOrdersMap.put(p.getId(), buySet);
@@ -61,7 +61,8 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
     }
 
     /**
-     * return set with orders by this currency pair @pairId pair which has higher or equal @rate*/
+     * return set with orders by this currency pair @pairId pair which has higher or equal @rate
+     */
     @Override
     public NavigableSet<StopOrderSummaryDto> getSellOrdersForPairAndStopRate(int pairId, BigDecimal rate) {
         if (!sellOrdersMap.containsKey(pairId)) {
@@ -75,7 +76,8 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
     }
 
     /**
-     * return set with orders by this currency pair @pairId pair which has lower or equal @rate*/
+     * return set with orders by this currency pair @pairId pair which has lower or equal @rate
+     */
     @Override
     public NavigableSet<StopOrderSummaryDto> getBuyOrdersForPairAndStopRate(int pairId, BigDecimal rate) {
         if (!buyOrdersMap.containsKey(pairId)) {
@@ -104,7 +106,8 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
                 throw new RuntimeException("wrong order operation type! ".concat(summaryDto.toString()));
             }
         }
-        if (!thisOrdersSet.contains(summaryDto)) {;
+        if (!thisOrdersSet.contains(summaryDto)) {
+            ;
             throw new RuntimeException("map not conatins this order! ".concat(summaryDto.toString()));
         }
         log.debug("delete, before: {}", thisOrdersSet.size());

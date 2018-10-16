@@ -4,7 +4,6 @@ import me.exrates.dao.OpenApiTokenDao;
 import me.exrates.model.dto.OpenApiTokenPublicDto;
 import me.exrates.model.main.OpenApiToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

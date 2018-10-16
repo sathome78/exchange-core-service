@@ -1,11 +1,10 @@
 package me.exrates.dao;
 
-import me.exrates.model.dto.*;
+import me.exrates.model.dto.OrderCreateDto;
+import me.exrates.model.dto.OrderInfoDto;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.OrderStatus;
 import me.exrates.model.main.CurrencyPair;
-import me.exrates.model.main.DataTableParams;
-import me.exrates.model.main.PagingData;
 import me.exrates.model.main.StopOrder;
 import me.exrates.model.onlineTableDto.OrderWideListDto;
 

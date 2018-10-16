@@ -12,9 +12,9 @@ import java.math.BigDecimal;
  * Created by OLEG on 20.03.2017.
  */
 public class BigDecimalNonePointSerializer extends JsonSerializer<BigDecimal> {
-  
-  @Override
-  public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-    gen.writeString(BigDecimalProcessing.formatNonePoint(value, true));
-  }
+
+    @Override
+    public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
+        gen.writeString(BigDecimalProcessing.formatNonePoint(value, true));
+    }
 }

@@ -129,7 +129,7 @@ public class OrderControllerRest {
         me.exrates.model.vo.ProfileData profileData = new me.exrates.model.vo.ProfileData(200);
         long before = System.currentTimeMillis();
         boolean accessToOperationForUser = userOperationService.getStatusAuthorityForUserByOperation(userService.getIdByEmail(request.getUserPrincipal().getName()), UserOperationAuthority.TRADING);
-        if(!accessToOperationForUser) {
+        if (!accessToOperationForUser) {
             throw new UserOperationAccessException(messageSource.getMessage("merchant.operationNotAvailable", null, localeResolver.resolveLocale(request)));
         }
         /*restore protected orderCreateDto*/
@@ -172,7 +172,7 @@ public class OrderControllerRest {
     public String acceptOrder(@RequestBody String ordersListString, Principal principal, HttpServletRequest request) {
         long before = System.currentTimeMillis();
         boolean accessToOperationForUser = userOperationService.getStatusAuthorityForUserByOperation(userService.getIdByEmail(principal.getName()), UserOperationAuthority.TRADING);
-        if(!accessToOperationForUser) {
+        if (!accessToOperationForUser) {
             throw new UserOperationAccessException(messageSource.getMessage("merchant.operationNotAvailable", null, localeResolver.resolveLocale(request)));
         }
         try {

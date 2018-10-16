@@ -19,7 +19,6 @@ import me.exrates.util.IpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.LocaleResolver;
@@ -33,12 +32,14 @@ import java.util.Locale;
  */
 @Log4j2
 @Service("secureServiceImpl")
-@PropertySource("classpath:session.properties")
 public class SecureServiceImpl implements SecureService {
 
-    private @Value("${session.checkPinParam}") String checkPinParam;
-    private @Value("${session.authenticationParamName}") String authenticationParamName;
-    private @Value("${session.passwordParam}") String passwordParam;
+    private @Value("${session.checkPinParam}")
+    String checkPinParam;
+    private @Value("${session.authenticationParamName}")
+    String authenticationParamName;
+    private @Value("${session.passwordParam}")
+    String passwordParam;
 
     @Autowired
     private NotificationMessageService notificationService;
@@ -71,7 +72,7 @@ public class SecureServiceImpl implements SecureService {
         int userId = userService.getIdByEmail(userEmail);
         NotificationMessageEventEnum event = NotificationMessageEventEnum.LOGIN;
         NotificationsUserSetting setting = settingsService.getByUserAndEvent(userId, event);
-        if (userService.isGlobal2FaActive() || (setting != null && setting.getNotificatorId() != null) ) {
+        if (userService.isGlobal2FaActive() || (setting != null && setting.getNotificatorId() != null)) {
             if (setting == null) {
                 setting = NotificationsUserSetting.builder()
                         .notificatorId(NotificationTypeEnum.EMAIL.getCode())
@@ -89,7 +90,7 @@ public class SecureServiceImpl implements SecureService {
             String message;
             if (needToSendPin) {
                 String newPin = messageSource.getMessage("notification.message.newPinCode", null, locale);
-                message =  newPin.concat(sendPinMessage(userEmail, setting, request, new String[]{IpUtils.getClientIpAddress(request, 18)}));
+                message = newPin.concat(sendPinMessage(userEmail, setting, request, new String[]{IpUtils.getClientIpAddress(request, 18)}));
             } else {
                 NotificationResultDto lastNotificationResultDto = (NotificationResultDto) request.getSession().getAttribute("2fa_message".concat(event.name()));
                 message = messageSource.getMessage(lastNotificationResultDto.getMessageSource(), lastNotificationResultDto.getArguments(), locale);
@@ -110,10 +111,10 @@ public class SecureServiceImpl implements SecureService {
             String message;
             if (needToSendPin) {
                 String newPin = messageSource.getMessage("notification.message.newPinCode", null, locale);
-                message =  newPin.concat(sendPinMessage(email, setting, request, new String[]{amountCurrency}));
+                message = newPin.concat(sendPinMessage(email, setting, request, new String[]{amountCurrency}));
             } else {
                 NotificationResultDto lastNotificationResultDto = (NotificationResultDto) request.getSession().getAttribute("2fa_message".concat(event.name()));
-                message =  messageSource.getMessage(lastNotificationResultDto.getMessageSource(), lastNotificationResultDto.getArguments(), locale);
+                message = messageSource.getMessage(lastNotificationResultDto.getMessageSource(), lastNotificationResultDto.getArguments(), locale);
             }
             return new PinDto(message, needToSendPin);
         }

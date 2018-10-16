@@ -28,7 +28,7 @@ public class ExchangeRatesHolderImpl implements ExchangeRatesHolder {
     @PostConstruct
     private void init() {
         List<ExOrderStatisticsShortByPairsDto> list = orderDao.getOrderStatisticByPairs();
-        list.forEach(p-> ratesMap.put(p.getCurrencyPairId(), p));
+        list.forEach(p -> ratesMap.put(p.getCurrencyPairId(), p));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ExchangeRatesHolderImpl implements ExchangeRatesHolder {
             return Collections.emptyList();
         }
         List<ExOrderStatisticsShortByPairsDto> result = new ArrayList<>();
-        id.forEach(p-> result.add(ratesMap.get(p)));
+        id.forEach(p -> result.add(ratesMap.get(p)));
         return result;
     }
 }

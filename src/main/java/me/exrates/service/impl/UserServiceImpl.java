@@ -6,10 +6,15 @@ import me.exrates.exception.IncorrectSmsPinException;
 import me.exrates.exception.UnRegisteredUserDeleteException;
 import me.exrates.model.Email;
 import me.exrates.model.User;
-import me.exrates.model.dto.*;
+import me.exrates.model.dto.NotificationsUserSetting;
+import me.exrates.model.dto.TemporalToken;
+import me.exrates.model.dto.UpdateUserDto;
 import me.exrates.model.enums.*;
 import me.exrates.model.main.UserFile;
-import me.exrates.service.*;
+import me.exrates.service.NotificationsSettingsService;
+import me.exrates.service.ReferralService;
+import me.exrates.service.SendMailService;
+import me.exrates.service.UserService;
 import me.exrates.service.token.TokenScheduler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +35,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -130,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
-    private final static List<String> LOCALES_LIST = new ArrayList<String>(){{
+    private final static List<String> LOCALES_LIST = new ArrayList<String>() {{
         add("EN");
         add("RU");
         add("CN");
@@ -194,8 +198,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean setNickname(String newNickName,String userEmail) {
-        return userDao.setNickname(newNickName,userEmail);
+    public boolean setNickname(String newNickName, String userEmail) {
+        return userDao.setNickname(newNickName, userEmail);
     }
 
     @Override
@@ -331,7 +335,7 @@ public class UserServiceImpl implements UserService {
                 || tokenType.equals(TokenType.CHANGE_PASSWORD)
                 || tokenType.equals(TokenType.CHANGE_FIN_PASSWORD)) {
             sendMailService.sendMailMandrill(email);
-        }else {
+        } else {
             sendMailService.sendMail(email);
         }
     }
@@ -451,7 +455,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String generateQRUrl(String userEmail) throws UnsupportedEncodingException {
         String secret2faCode = userDao.get2faSecretByEmail(userEmail);
-        if (secret2faCode == null || secret2faCode.isEmpty()){
+        if (secret2faCode == null || secret2faCode.isEmpty()) {
             userDao.set2faSecretCode(userEmail);
             secret2faCode = userDao.get2faSecretByEmail(userEmail);
         }

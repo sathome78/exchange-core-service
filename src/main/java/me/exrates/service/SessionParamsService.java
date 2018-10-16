@@ -1,6 +1,5 @@
 package me.exrates.service;
 
-import com.google.gson.JsonObject;
 import me.exrates.model.SessionLifeTimeType;
 import me.exrates.model.SessionParams;
 

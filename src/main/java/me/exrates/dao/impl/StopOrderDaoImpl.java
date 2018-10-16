@@ -13,7 +13,6 @@ import me.exrates.model.main.StopOrder;
 import me.exrates.model.onlineTableDto.OrderWideListDto;
 import me.exrates.util.BigDecimalProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -238,7 +237,7 @@ public class StopOrderDaoImpl implements StopOrderDao {
                                                        String scope, Integer offset, Integer limit, Locale locale) {
         String userFilterClause;
         String userJoinClause;
-        if(scope == null || scope.isEmpty()) {
+        if (scope == null || scope.isEmpty()) {
             userFilterClause = " AND CREATOR.email = :email ";
             userJoinClause = "  JOIN USER AS CREATOR ON CREATOR.id=STOP_ORDERS.user_id ";
         } else {

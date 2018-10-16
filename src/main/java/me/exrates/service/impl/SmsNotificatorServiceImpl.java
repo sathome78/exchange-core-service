@@ -4,11 +4,11 @@ import com.google.common.base.Preconditions;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.dao.SmsSubscriptionDao;
 import me.exrates.exception.*;
-import me.exrates.model.Email;
 import me.exrates.model.dto.NotificatorSubscription;
 import me.exrates.model.dto.SmsSubscriptionDto;
 import me.exrates.model.dto.WalletTransferStatus;
 import me.exrates.model.enums.*;
+import me.exrates.model.epochta.EpochtaApi;
 import me.exrates.model.epochta.Phones;
 import me.exrates.model.main.CompanyWallet;
 import me.exrates.model.vo.WalletOperationData;
@@ -45,8 +45,6 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
     private SmsSubscriptionDao subscriptionDao;
     @Autowired
     private EpochtaApi smsService;
-    @Autowired
-    private SendMailService sendMailService;
     @Autowired
     private MessageSource messageSource;
     @Autowired
@@ -93,7 +91,7 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
         String xml = send(subscriptionDto.getContact(), message);
         try {
             BigDecimal cost = new BigDecimal(smsService.getValueFromXml(xml, "amount"));
-            log.debug("last cost for number {} is {}", subscriptionDto.getContact(),cost);
+            log.debug("last cost for number {} is {}", subscriptionDto.getContact(), cost);
             if (cost.compareTo(subscriptionDto.getPriceForContact()) != 0 && cost.compareTo(BigDecimal.ZERO) > 0) {
                 subscriptionDao.updateDeliveryPrice(userId, cost);
             }
@@ -107,7 +105,9 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
     private String send(String contact, String message) {
         log.debug("send sms to {}, message {}", contact, message);
         String xml = smsService.sendSms(SENDER, message,
-                new ArrayList<Phones>(){{add(new Phones("id1","", contact));}});
+                new ArrayList<Phones>() {{
+                    add(new Phones("id1", "", contact));
+                }});
 
         log.debug("send sms status {}", xml);
         String status;
@@ -146,7 +146,7 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
             subscriptionDto.setStateEnum(oldDto.getStateEnum());
             subscriptionDto.setPriceForContact(oldDto.getPriceForContact());
             subscriptionDto.setContact(oldDto.getContact());
-        } else  {
+        } else {
             subscriptionDto.setStateEnum(NotificatorSubscriptionStateEnum.getBeginState());
         }
         subscriptionDto.setNewPrice(cost);
@@ -233,7 +233,7 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
         walletOperationData.setSourceType(TransactionSourceType.NOTIFICATIONS);
         walletOperationData.setDescription(description);
         WalletTransferStatus walletTransferStatus = walletService.walletBalanceChange(walletOperationData);
-        if(!walletTransferStatus.equals(WalletTransferStatus.SUCCESS)) {
+        if (!walletTransferStatus.equals(WalletTransferStatus.SUCCESS)) {
             throw new PaymentException(walletTransferStatus);
         }
         CompanyWallet companyWallet = companyWalletService.findByCurrency(currencyService.findByName(CURRENCY_NAME));

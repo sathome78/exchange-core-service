@@ -5,7 +5,6 @@ import me.exrates.dao.NotificationUserSettingsDao;
 import me.exrates.model.dto.NotificationsUserSetting;
 import me.exrates.model.enums.NotificationMessageEventEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -38,7 +37,6 @@ public class NotificationUserSettingsDaoImpl implements NotificationUserSettings
     };
 
 
-
     @Override
     public NotificationsUserSetting getByUserAndEvent(int userId, NotificationMessageEventEnum event) {
         String sql = "SELECT UN.* FROM 2FA_USER_NOTIFICATION_MESSAGE_SETTINGS UN " +
@@ -47,10 +45,9 @@ public class NotificationUserSettingsDaoImpl implements NotificationUserSettings
             put("user_id", userId);
             put("event", event.name());
         }};
-        try{
+        try {
             return namedParameterJdbcTemplate.queryForObject(sql, params, notificationsUserSettingRowMapper);
-        }
-        catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }

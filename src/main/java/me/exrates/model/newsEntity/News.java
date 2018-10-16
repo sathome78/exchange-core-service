@@ -12,20 +12,20 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class News {
-  private Integer id;
+    private Integer id;
 
-  private LocalDateTime date;
+    private LocalDateTime date;
 
-  private String resource;
+    private String resource;
 
-  private String description;
+    private String description;
 
-  private LocalDate calendarDate;
+    private LocalDate calendarDate;
 
-  private List<NewsVariant> newsVariant;
+    private List<NewsVariant> newsVariant;
 
-  private NewsType newsType;
+    private NewsType newsType;
 
-  private Boolean noTitleImg;
+    private Boolean noTitleImg;
 
 }

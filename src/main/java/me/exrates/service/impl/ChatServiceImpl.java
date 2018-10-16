@@ -21,7 +21,7 @@ public class ChatServiceImpl implements ChatService {
     private final boolean INCLUSIVE = true;
 
     private final ChatDao chatDao;
-    private final EnumMap<ChatLang,ChatComponent> chats;
+    private final EnumMap<ChatLang, ChatComponent> chats;
 
     private AtomicLong GENERATOR;
     private long flushCursor;
@@ -29,8 +29,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Autowired
     public ChatServiceImpl(final ChatDao chatDao,
-                           final EnumMap<ChatLang, ChatComponent> chats)
-    {
+                           final EnumMap<ChatLang, ChatComponent> chats) {
         this.chatDao = chatDao;
         this.chats = chats;
     }
@@ -39,7 +38,7 @@ public class ChatServiceImpl implements ChatService {
     public void cacheWarm() {
         final List<Long> ids = new ArrayList<>();
         Stream.of(ChatLang.values())
-                .map(lang -> new Pair<>(lang,new TreeSet<>(chatDao.findLastMessages(lang, MESSAGE_BARRIER))))
+                .map(lang -> new Pair<>(lang, new TreeSet<>(chatDao.findLastMessages(lang, MESSAGE_BARRIER))))
                 .forEach(pair -> {
                     final ChatComponent comp = chats.get(pair.getKey());
                     final NavigableSet<ChatMessage> cache = pair.getValue();

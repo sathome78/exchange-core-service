@@ -5,15 +5,14 @@ import me.exrates.model.dto.TemporalToken;
 import me.exrates.model.dto.UpdateUserDto;
 import me.exrates.model.enums.UserRole;
 import me.exrates.service.*;
-import me.exrates.service.impl.RegisterFormValidation;
 import me.exrates.service.impl.UserSessionService;
 import me.exrates.util.geetest.GeetestLib;
+import me.exrates.validator.RegisterFormValidation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,7 +35,6 @@ import java.security.Principal;
 import java.util.*;
 
 @Controller
-@PropertySource("classpath:/captcha.properties")
 public class DashboardController {
     private static final Logger LOG = LogManager.getLogger(DashboardController.class);
 
@@ -112,49 +110,49 @@ public class DashboardController {
         }
         model.addAttribute("captchaType", CAPTCHA_TYPE);
         return "forgotPassword";
-  }
+    }
 
 
-  @RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
-  public ModelAndView recoveryPassword(@ModelAttribute("user") User user, @ModelAttribute("token") TemporalToken temporalToken) {
-      ModelAndView model = new ModelAndView("fragments/recoverPassword");
+    @RequestMapping(value = "/passwordRecovery", method = RequestMethod.GET)
+    public ModelAndView recoveryPassword(@ModelAttribute("user") User user, @ModelAttribute("token") TemporalToken temporalToken) {
+        ModelAndView model = new ModelAndView("fragments/recoverPassword");
 
-      model.addObject("user", user);
-      model.addObject("token", temporalToken);
+        model.addObject("user", user);
+        model.addObject("token", temporalToken);
 
-      return model;
-  }
+        return model;
+    }
 
-  @RequestMapping(value = "/resetPasswordConfirm")
-  public ModelAndView resetPasswordConfirm(@RequestParam("token") String token, @RequestParam("email") String email, RedirectAttributes attr, HttpServletRequest request) {
-      ModelAndView model = new ModelAndView();
-      try {
-          TemporalToken dbToken = userService.verifyUserEmailForForgetPassword(token);
-          if (dbToken != null && !dbToken.isAlreadyUsed()) {
-              User user = userService.getUserById(dbToken.getUserId());
+    @RequestMapping(value = "/resetPasswordConfirm")
+    public ModelAndView resetPasswordConfirm(@RequestParam("token") String token, @RequestParam("email") String email, RedirectAttributes attr, HttpServletRequest request) {
+        ModelAndView model = new ModelAndView();
+        try {
+            TemporalToken dbToken = userService.verifyUserEmailForForgetPassword(token);
+            if (dbToken != null && !dbToken.isAlreadyUsed()) {
+                User user = userService.getUserById(dbToken.getUserId());
 
-              attr.addFlashAttribute("recoveryConfirm", messageSource.getMessage("register.successfullyproved",
-                      null, localeResolver.resolveLocale(request)));
-              attr.addFlashAttribute("user", user);
-              attr.addFlashAttribute("token", dbToken);
+                attr.addFlashAttribute("recoveryConfirm", messageSource.getMessage("register.successfullyproved",
+                        null, localeResolver.resolveLocale(request)));
+                attr.addFlashAttribute("user", user);
+                attr.addFlashAttribute("token", dbToken);
 
-              model.setViewName("redirect:/passwordRecovery");
-              temporalTokenService.updateTemporalToken(dbToken);
-          } else {
-              if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser") || request.isUserInRole(UserRole.ROLE_CHANGE_PASSWORD.name())) {
-                  attr.addFlashAttribute("userEmail", email);
-                  attr.addFlashAttribute("recoveryError", messageSource.getMessage("dashboard.resetPasswordDoubleClick", null, localeResolver.resolveLocale(request)));
-              } else {
-                  attr.addFlashAttribute("errorNoty", messageSource.getMessage("dashboard.resetPasswordDoubleClick", null, localeResolver.resolveLocale(request)));
-              }
-              return new ModelAndView(new RedirectView("/dashboard"));
-          }
-      } catch (Exception e) {
-          model.setViewName("DBError");
-          e.printStackTrace();
-      }
-      return model;
-  }
+                model.setViewName("redirect:/passwordRecovery");
+                temporalTokenService.updateTemporalToken(dbToken);
+            } else {
+                if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser") || request.isUserInRole(UserRole.ROLE_CHANGE_PASSWORD.name())) {
+                    attr.addFlashAttribute("userEmail", email);
+                    attr.addFlashAttribute("recoveryError", messageSource.getMessage("dashboard.resetPasswordDoubleClick", null, localeResolver.resolveLocale(request)));
+                } else {
+                    attr.addFlashAttribute("errorNoty", messageSource.getMessage("dashboard.resetPasswordDoubleClick", null, localeResolver.resolveLocale(request)));
+                }
+                return new ModelAndView(new RedirectView("/dashboard"));
+            }
+        } catch (Exception e) {
+            model.setViewName("DBError");
+            e.printStackTrace();
+        }
+        return model;
+    }
 
     @RequestMapping(value = "/forgotPassword/submit", method = RequestMethod.POST)
     @ResponseBody
@@ -259,39 +257,39 @@ public class DashboardController {
     }
 
 
-  @RequestMapping(value = "/dashboard/updatePasswordbytoken", method = RequestMethod.POST)
-  public ModelAndView updatePassword(@ModelAttribute("user") User user, @RequestParam("token") String temporalToken,
-                                     @RequestParam("password") String password,
-                                     BindingResult result,
-                                     HttpServletRequest request,
-                                     RedirectAttributes attr, Locale locale) {
-    registerFormValidation.validateResetPassword(user, result, localeResolver.resolveLocale(request));
+    @RequestMapping(value = "/dashboard/updatePasswordbytoken", method = RequestMethod.POST)
+    public ModelAndView updatePassword(@ModelAttribute("user") User user, @RequestParam("token") String temporalToken,
+                                       @RequestParam("password") String password,
+                                       BindingResult result,
+                                       HttpServletRequest request,
+                                       RedirectAttributes attr, Locale locale) {
+        registerFormValidation.validateResetPassword(user, result, localeResolver.resolveLocale(request));
 
-    User userUpdate = userService.getUserByTemporalToken(temporalToken);
-    ModelAndView model = new ModelAndView();
-    UpdateUserDto updateUserDto = new UpdateUserDto(userUpdate.getId());
-    updateUserDto.setPassword(user.getPassword());
-    userService.updateUserByAdmin(updateUserDto);
+        User userUpdate = userService.getUserByTemporalToken(temporalToken);
+        ModelAndView model = new ModelAndView();
+        UpdateUserDto updateUserDto = new UpdateUserDto(userUpdate.getId());
+        updateUserDto.setPassword(user.getPassword());
+        userService.updateUserByAdmin(updateUserDto);
 
-    Collection<GrantedAuthority> authList = new ArrayList<>(userDetailsService.loadUserByUsername(userUpdate.getEmail()).getAuthorities());
-    org.springframework.security.core.userdetails.User userSpring =
-              new org.springframework.security.core.userdetails.User(
-                      userUpdate.getEmail(),
-                      password,
-                      false,
-                      false,
-                      false,
-                      false,
-                      authList
-              );
-    Authentication auth = new UsernamePasswordAuthenticationToken(userSpring, null, authList);
-    SecurityContextHolder.getContext().setAuthentication(auth);
-    temporalTokenService.deleteTemporalToken(temporalToken);
-    userSessionService.invalidateUserSessionExceptSpecific(user.getEmail(), RequestContextHolder.currentRequestAttributes().getSessionId());
-    attr.addFlashAttribute("successNoty", messageSource.getMessage("login.passwordUpdateSuccess", null, locale));
-    model.setViewName("redirect:/dashboard");
-    return model;
-  }
+        Collection<GrantedAuthority> authList = new ArrayList<>(userDetailsService.loadUserByUsername(userUpdate.getEmail()).getAuthorities());
+        org.springframework.security.core.userdetails.User userSpring =
+                new org.springframework.security.core.userdetails.User(
+                        userUpdate.getEmail(),
+                        password,
+                        false,
+                        false,
+                        false,
+                        false,
+                        authList
+                );
+        Authentication auth = new UsernamePasswordAuthenticationToken(userSpring, null, authList);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        temporalTokenService.deleteTemporalToken(temporalToken);
+        userSessionService.invalidateUserSessionExceptSpecific(user.getEmail(), RequestContextHolder.currentRequestAttributes().getSessionId());
+        attr.addFlashAttribute("successNoty", messageSource.getMessage("login.passwordUpdateSuccess", null, locale));
+        model.setViewName("redirect:/dashboard");
+        return model;
+    }
 }
 
 

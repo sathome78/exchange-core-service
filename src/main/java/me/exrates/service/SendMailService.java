@@ -4,7 +4,7 @@ import me.exrates.model.Email;
 
 public interface SendMailService {
 
-	void sendMail(Email email);
+    void sendMail(Email email);
 
     void sendMailMandrill(Email email);
 

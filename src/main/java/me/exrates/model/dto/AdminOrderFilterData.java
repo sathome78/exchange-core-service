@@ -28,10 +28,9 @@ public class AdminOrderFilterData extends TableFilterData {
     private String acceptor;
 
 
-
     @Override
     public void initFilterItems() {
-        FilterDataItem[] items = new FilterDataItem[] {
+        FilterDataItem[] items = new FilterDataItem[]{
                 new FilterDataItem("order_id", "EXORDERS.id =", orderId),
                 new FilterDataItem("currency_pair_id", "EXORDERS.currency_pair_id =", currencyPairId),
                 new FilterDataItem("operation_type_id", "EXORDERS.operation_type_id =", orderType),

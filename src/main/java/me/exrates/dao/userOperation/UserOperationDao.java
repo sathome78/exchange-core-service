@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface UserOperationDao {
 
-  boolean getStatusAuthorityForUserByOperation(int userId, UserOperationAuthority userOperationAuthority);
+    boolean getStatusAuthorityForUserByOperation(int userId, UserOperationAuthority userOperationAuthority);
 
-  List<UserOperationAuthorityOption> getUserOperationAuthorityOption(Integer userId);
+    List<UserOperationAuthorityOption> getUserOperationAuthorityOption(Integer userId);
 
-  void updateUserOperationAuthority(List<UserOperationAuthorityOption> options, Integer userId);
+    void updateUserOperationAuthority(List<UserOperationAuthorityOption> options, Integer userId);
 
 
 }

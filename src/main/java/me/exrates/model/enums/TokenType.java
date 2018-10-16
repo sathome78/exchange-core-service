@@ -22,10 +22,14 @@ public enum TokenType {
 
     public static TokenType convert(int tupleId) {
         switch (tupleId) {
-            case 1 : return REGISTRATION;
-            case 2 : return CHANGE_PASSWORD;
-            case 3 : return CHANGE_FIN_PASSWORD;
-            case 4 : return CONFIRM_NEW_IP;
+            case 1:
+                return REGISTRATION;
+            case 2:
+                return CHANGE_PASSWORD;
+            case 3:
+                return CHANGE_FIN_PASSWORD;
+            case 4:
+                return CONFIRM_NEW_IP;
             default:
                 throw new UnsupportedOperationTypeException(tupleId);
         }

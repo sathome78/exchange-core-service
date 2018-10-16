@@ -12,9 +12,9 @@ import java.time.LocalDate;
  * Created by Valk
  */
 public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
-  @Override
-  public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-    String str = jsonParser.readValueAsTree().toString().replaceAll("\"", "");
-    return LocalDate.parse(str);
-  }
+    @Override
+    public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+        String str = jsonParser.readValueAsTree().toString().replaceAll("\"", "");
+        return LocalDate.parse(str);
+    }
 }

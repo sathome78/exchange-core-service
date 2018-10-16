@@ -44,8 +44,8 @@ public class UsersAlertsServiceImpl implements UsersAlertsService {
     }
 
     private void completeDtos(List<AlertDto> alertDtos, Locale locale) {
-        alertDtos.forEach(p->{
-            if(p.isEnabled()) {
+        alertDtos.forEach(p -> {
+            if (p.isEnabled()) {
                 AlertType alertType = AlertType.valueOf(p.getAlertType());
                 if (alertType.isNeedDateTime() && p.isEnabled()) {
                     if (LocalDateTime.now().isBefore(p.getEventStart())) {

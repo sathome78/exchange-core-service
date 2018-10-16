@@ -1,23 +1,15 @@
 package me.exrates.service.impl;
 
 import me.exrates.dao.NotificationDao;
-import me.exrates.model.Email;
-import me.exrates.model.User;
 import me.exrates.model.enums.NotificationEvent;
-import me.exrates.model.main.CacheData;
 import me.exrates.model.main.Notification;
 import me.exrates.model.main.NotificationOption;
-import me.exrates.model.onlineTableDto.NotificationDto;
 import me.exrates.service.NotificationService;
-import me.exrates.service.SendMailService;
 import me.exrates.service.UserService;
-import me.exrates.util.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -39,7 +31,6 @@ public class NotificationServiceImpl implements NotificationService {
                 messageSource.getMessage(messageCode, normalizeArgs(messageArgs), locale), cause)*/;
 
     }
-
 
 
     @Transactional(readOnly = true)

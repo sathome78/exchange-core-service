@@ -12,10 +12,10 @@ public class Phones {
     private String varaibles;
     private String phone;
 
-    public Phones(String idMessage,String variables,String phone){
-        this.phone=phone;
-        this.varaibles=variables;
-        this.idMessage=idMessage;
+    public Phones(String idMessage, String variables, String phone) {
+        this.phone = phone;
+        this.varaibles = variables;
+        this.idMessage = idMessage;
     }
 
     public Phones(String idMessage, String phone) {

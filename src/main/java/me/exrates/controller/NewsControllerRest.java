@@ -12,7 +12,6 @@ import me.exrates.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +30,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @RestController
-@PropertySource(value = {"classpath:/news.properties"})
 public class NewsControllerRest {
     private final int DEAFAULT_PAGE_SIZE = 20;
     private final String TITLE_DESCRIPTION_FILE_NAME = "title.md";

@@ -8,9 +8,7 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static me.exrates.model.dto.FilterDataItem.DATE_FORMAT;
-import static me.exrates.model.dto.FilterDataItem.IN_FORMAT;
-import static me.exrates.model.dto.FilterDataItem.LIKE_FORMAT_MIDDLE;
+import static me.exrates.model.dto.FilterDataItem.*;
 
 @Getter
 @Setter
@@ -35,7 +33,7 @@ public class WithdrawFilterData extends TableFilterData {
 
     @Override
     public void initFilterItems() {
-        FilterDataItem[] items = new FilterDataItem[] {
+        FilterDataItem[] items = new FilterDataItem[]{
                 new FilterDataItem("request_id", "WITHDRAW_REQUEST.id =", requestId),
                 new FilterDataItem("currency_ids", "WITHDRAW_REQUEST.currency_id IN", currencyIds, IN_FORMAT),
                 new FilterDataItem("merchant_ids", "WITHDRAW_REQUEST.merchant_id IN", merchantIds, IN_FORMAT),

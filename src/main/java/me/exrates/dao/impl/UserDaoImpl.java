@@ -7,13 +7,11 @@ import me.exrates.model.Comment;
 import me.exrates.model.User;
 import me.exrates.model.dto.*;
 import me.exrates.model.enums.*;
-import me.exrates.model.main.PagingData;
 import me.exrates.model.main.UserFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -132,7 +130,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean setNickname( String newNickName, String userEmail) {
+    public boolean setNickname(String newNickName, String userEmail) {
         String sql = "UPDATE USER SET nickname=:nickname WHERE email = :email";
         Map<String, String> namedParameters = new HashMap<>();
         namedParameters.put("nickname", newNickName);
@@ -285,7 +283,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "INSERT INTO USER_ENTRY_DAYS SELECT :user_id, :entry_date " +
                 " FROM USER_ENTRY_DAYS ud " +
                 " WHERE ud.user_id = :user_id AND " +
-                " DATE_FORMAT(ud.entry_date, '%Y-%m-%d') = DATE_FORMAT(:entry_date, '%Y-%m-%d') "+
+                " DATE_FORMAT(ud.entry_date, '%Y-%m-%d') = DATE_FORMAT(:entry_date, '%Y-%m-%d') " +
                 " HAVING count(*) = 0";
         Map<String, Object> params = new HashMap<>();
         params.put("user_id", userId);
@@ -380,11 +378,11 @@ public class UserDaoImpl implements UserDao {
         return namedParameterJdbcTemplate.queryForObject(sql, namedParameters, getUserRowMapper());
     }
 
-    public User getUserByTemporalToken(String token){
+    public User getUserByTemporalToken(String token) {
         String sql = "SELECT * FROM USER WHERE USER.id =(SELECT TEMPORAL_TOKEN.user_id FROM TEMPORAL_TOKEN WHERE TEMPORAL_TOKEN.value=:token_value)";
-        Map<String,String> namedParameters = new HashMap<>();
-        namedParameters.put("token_value",token);
-        return namedParameterJdbcTemplate.query(sql,namedParameters,getUserRowMapperWithoutRoleAndParentEmail()).get(0);
+        Map<String, String> namedParameters = new HashMap<>();
+        namedParameters.put("token_value", token);
+        return namedParameterJdbcTemplate.query(sql, namedParameters, getUserRowMapperWithoutRoleAndParentEmail()).get(0);
     }
 
     @Override
@@ -925,7 +923,7 @@ public class UserDaoImpl implements UserDao {
                 "    JOIN (SELECT user_id, MAX(last_registration_date) AS last_date, MIN(registration_date) AS first_date " +
                 "            FROM USER_IP GROUP BY user_id) AS agg ON U.id = agg.user_id " +
                 "JOIN USER_IP f_ip ON U.id = f_ip.user_id AND f_ip.registration_date = agg.first_date " +
-                "LEFT JOIN USER_IP l_ip ON U.id = l_ip.user_id AND l_ip.last_registration_date = agg.last_date " ;
+                "LEFT JOIN USER_IP l_ip ON U.id = l_ip.user_id AND l_ip.last_registration_date = agg.last_date ";
         String whereClause = "";
         Map<String, Object> params = new HashMap<>();
         if (userRoleList.size() > 0) {

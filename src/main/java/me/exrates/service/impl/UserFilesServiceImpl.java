@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,8 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,11 +20,12 @@ import java.util.stream.Stream;
 import static java.util.Arrays.asList;
 
 @Service
-@PropertySource("classpath:/uploadfiles.properties")
 public class UserFilesServiceImpl implements UserFilesService {
 
-    private @Value("${upload.userFilesDir}") String userFilesDir;
-    private @Value("${upload.userFilesLogicalDir}") String userFilesLogicalDir;
+    private @Value("${upload.userFilesDir}")
+    String userFilesDir;
+    private @Value("${upload.userFilesLogicalDir}")
+    String userFilesLogicalDir;
 
     private final UserService userService;
     private final Set<String> contentTypes;
@@ -43,6 +41,7 @@ public class UserFilesServiceImpl implements UserFilesService {
 
     /**
      * Removes empty files and files with invalid extension from an input array
+     *
      * @param files - Uploaded files
      * @return - ArrayList with valid uploaded files
      */
@@ -61,8 +60,9 @@ public class UserFilesServiceImpl implements UserFilesService {
     /**
      * Moves uploaded files to user dir on the server ({@link UserFilesServiceImpl#userFilesDir} + userId) and persist File names in DB (table USER_DOC)
      * If only one file failed to move - deletes all uploaded files and throws IOException
+     *
      * @param userId - UserId who uploads the files
-     * @param files - uploaded files
+     * @param files  - uploaded files
      * @throws IOException
      */
     @Override
@@ -133,7 +133,7 @@ public class UserFilesServiceImpl implements UserFilesService {
         return file.getContentType().toLowerCase();
     }
 
-    private String extractFileExtension (final MultipartFile file) {
+    private String extractFileExtension(final MultipartFile file) {
         return extractContentType(file).substring(6); //Index of dash in Content-Type
     }
 }

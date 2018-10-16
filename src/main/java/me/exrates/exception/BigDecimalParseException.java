@@ -1,7 +1,5 @@
 package me.exrates.exception;
 
-import java.text.ParseException;
-
 public class BigDecimalParseException extends RuntimeException {
 
     public BigDecimalParseException() {

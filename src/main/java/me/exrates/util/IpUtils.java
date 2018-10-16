@@ -20,7 +20,7 @@ public class IpUtils {
             "HTTP_FORWARDED_FOR",
             "HTTP_FORWARDED",
             "HTTP_VIA",
-            "REMOTE_ADDR" };
+            "REMOTE_ADDR"};
 
     public static String getClientIpAddress(HttpServletRequest request) {
         for (String header : HEADERS_TO_TRY) {

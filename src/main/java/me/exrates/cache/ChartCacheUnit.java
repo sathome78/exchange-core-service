@@ -71,7 +71,7 @@ public class ChartCacheUnit implements ChartsCacheInterface {
     @Override
     public List<CandleChartItemDto> getData() {
         if (cachedData == null || isUpdateCasheRequired()) {
-            updateCache(cachedData != null );
+            updateCache(cachedData != null);
         }
         return cachedData;
     }
@@ -92,7 +92,8 @@ public class ChartCacheUnit implements ChartsCacheInterface {
     private boolean isTimeForUpdate() {
         return lastUpdateDate == null || lastUpdateDate.plusSeconds(minUpdateIntervalSeconds).compareTo(LocalDateTime.now()) <= 0;
     }
-//    @Override
+
+    //    @Override
 //    public void setNeedToUpdate() {
 //        log.debug("setting update data {} {}", currencyPairId, timeFrame);
 //        if (!lazyUpdate) {
@@ -126,9 +127,9 @@ public class ChartCacheUnit implements ChartsCacheInterface {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                            timerLock = new ReentrantLock();
-                            updateCache(true);
-                            eventPublisher.publishEvent(new ChartCacheUpdateEvent(getLastData(), timeFrame, currencyPairId));
+                        timerLock = new ReentrantLock();
+                        updateCache(true);
+                        eventPublisher.publishEvent(new ChartCacheUpdateEvent(getLastData(), timeFrame, currencyPairId));
                     }
                 }, getMinUpdateIntervalSeconds() * 1000);
 
@@ -153,15 +154,15 @@ public class ChartCacheUnit implements ChartsCacheInterface {
                 }
             }
         } else {
-                try {
-                    barrier.await(30, TimeUnit.SECONDS);
-                    /*if (cachedData == null) {
-                        *//*тут рекурсия получается, но без данных трэд не уйдет*//*
+            try {
+                barrier.await(30, TimeUnit.SECONDS);
+                /*if (cachedData == null) {
+                 *//*тут рекурсия получается, но без данных трэд не уйдет*//*
                         updateCache(appendLastEntriesOnly);
                     }*/
-                } catch (Exception e) {
-                    log.warn(e);
-                }
+            } catch (Exception e) {
+                log.warn(e);
+            }
         }
     }
 
@@ -169,13 +170,13 @@ public class ChartCacheUnit implements ChartsCacheInterface {
         if (lock.tryLock()) {
             return true;
         } else if (lastLock.plusSeconds(40).compareTo(LocalDateTime.now()) <= 0) {
-           lock = new ReentrantLock();
-           return lock.tryLock();
+            lock = new ReentrantLock();
+            return lock.tryLock();
         } else return false;
     }
 
     private void performUpdate(boolean appendLastEntriesOnly) {
-        if (appendLastEntriesOnly && cachedData != null && !cachedData.isEmpty() ) {
+        if (appendLastEntriesOnly && cachedData != null && !cachedData.isEmpty()) {
             cachedData.forEach(System.out::println);
             CandleChartItemDto lastBar = cachedData.remove(cachedData.size() - 1);
             LocalDateTime lastBarStartTime = lastBar.getBeginPeriod();

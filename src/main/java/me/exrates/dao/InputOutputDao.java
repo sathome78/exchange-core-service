@@ -11,12 +11,12 @@ import java.util.Locale;
 
 public interface InputOutputDao {
 
-  List<MyInputOutputHistoryDto> findMyInputOutputHistoryByOperationType(
-          String email,
-          Integer offset,
-          Integer limit,
-          List<Integer> operationTypeIdList,
-          Locale locale);
+    List<MyInputOutputHistoryDto> findMyInputOutputHistoryByOperationType(
+            String email,
+            Integer offset,
+            Integer limit,
+            List<Integer> operationTypeIdList,
+            Locale locale);
 
     PaginationWrapper<List<MyInputOutputHistoryDto>> findUnconfirmedInvoices(Integer userId, Integer currencyId, Integer limit, Integer offset);
 

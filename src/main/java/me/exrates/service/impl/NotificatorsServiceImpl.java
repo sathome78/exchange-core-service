@@ -9,7 +9,6 @@ import me.exrates.model.enums.NotificationTypeEnum;
 import me.exrates.service.NotificatorService;
 import me.exrates.service.NotificatorsService;
 import me.exrates.service.Subscribable;
-import me.exrates.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class NotificatorsServiceImpl implements NotificatorsService {
 
     public Map<Integer, Object> getSubscriptions(int userId) {
         Map<Integer, Object> subscrMap = new HashMap<>();
-        Arrays.asList(NotificationTypeEnum.values()).forEach(p->{
+        Arrays.asList(NotificationTypeEnum.values()).forEach(p -> {
             if (p.isNeedSubscribe()) {
                 NotificatorService service = this.getNotificationService(p.getCode());
                 subscrMap.put(p.getCode(), service.getSubscriptionByUserId(userId));
@@ -57,7 +56,7 @@ public class NotificatorsServiceImpl implements NotificatorsService {
     }
 
     @Override
-    public Notificator getById(int id){
+    public Notificator getById(int id) {
         return notificatorsDao.getById(id);
     }
 

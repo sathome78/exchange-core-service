@@ -8,9 +8,7 @@ import lombok.ToString;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static me.exrates.model.dto.FilterDataItem.DATE_FORMAT;
-import static me.exrates.model.dto.FilterDataItem.IN_FORMAT;
-import static me.exrates.model.dto.FilterDataItem.LIKE_FORMAT_MIDDLE;
+import static me.exrates.model.dto.FilterDataItem.*;
 
 
 /**
@@ -39,7 +37,7 @@ public class RefillFilterData extends TableFilterData {
 
     @Override
     public void initFilterItems() {
-        FilterDataItem[] items = new FilterDataItem[] {
+        FilterDataItem[] items = new FilterDataItem[]{
                 new FilterDataItem("request_id", "REFILL_REQUEST.id =", requestId),
                 new FilterDataItem("currency_ids", "REFILL_REQUEST.currency_id IN", currencyIds, IN_FORMAT),
                 new FilterDataItem("merchant_ids", "REFILL_REQUEST.merchant_id IN", merchantIds, IN_FORMAT),
@@ -47,8 +45,8 @@ public class RefillFilterData extends TableFilterData {
                 new FilterDataItem("end_date", "REFILL_REQUEST.date_creation <=", endDate, DATE_FORMAT),
                 new FilterDataItem("amount_from", "REFILL_REQUEST.amount >=", amountFrom),
                 new FilterDataItem("amount_to", "REFILL_REQUEST.amount <=", amountTo),
-              /*  new FilterDataItem("commission_amount_from", "REFILL_REQUEST.commission >=", commissionAmountFrom),
-                new FilterDataItem("commission_amount_to", "REFILL_REQUEST.commission <=", commissionAmountTo),*/
+                /*  new FilterDataItem("commission_amount_from", "REFILL_REQUEST.commission >=", commissionAmountFrom),
+                  new FilterDataItem("commission_amount_to", "REFILL_REQUEST.commission <=", commissionAmountTo),*/
                 new FilterDataItem("address", "RRA.address LIKE", address, LIKE_FORMAT_MIDDLE),
                 new FilterDataItem("wallet", "IB.account_number LIKE", wallet, LIKE_FORMAT_MIDDLE),
                 new FilterDataItem("recipient_bank", "IB.name LIKE", recipientBank, LIKE_FORMAT_MIDDLE),

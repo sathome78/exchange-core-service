@@ -5,7 +5,6 @@ import me.exrates.model.enums.NotificationEvent;
 import me.exrates.model.main.Notification;
 import me.exrates.model.main.NotificationOption;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;

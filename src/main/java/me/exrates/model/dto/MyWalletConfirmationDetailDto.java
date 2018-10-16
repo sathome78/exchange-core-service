@@ -1,6 +1,6 @@
 package me.exrates.model.dto;
 
-public class MyWalletConfirmationDetailDto  {
+public class MyWalletConfirmationDetailDto {
     private String amount;
     private String commission;
     private String total;

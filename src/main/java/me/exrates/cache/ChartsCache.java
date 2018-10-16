@@ -7,7 +7,6 @@ import me.exrates.service.CurrencyService;
 import me.exrates.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -19,20 +18,21 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-@PropertySource("classpath:cache.properties")
 @Log4j2(topic = "cache")
 @Component
 public class ChartsCache {
 
-    private @Value("${pairs_lazy_load}")boolean lazyLoad;
+    private @Value("${pairs_lazy_load}")
+    boolean lazyLoad;
 
     @Autowired
     private CurrencyService currencyService;
     @Autowired
     private OrderService orderService;
 
-    /**Map <pairId, <interval, data>>
-     * */
+    /**
+     * Map <pairId, <interval, data>>
+     */
     private Map<Integer, Map<String, String>> cacheMap = new ConcurrentHashMap<>();
     private Map<Integer, Semaphore> locksMap = new ConcurrentHashMap<>();
     private Map<Integer, ReentrantLock> secondLocksMap = new ConcurrentHashMap<>();
@@ -87,7 +87,7 @@ public class ChartsCache {
             currentSemaphore.release();
             currentCountDownLock.countDown();
             currentLock.unlock();
-        } else if(currentLock.isLocked()) {
+        } else if (currentLock.isLocked()) {
             try {
                 currentCountDownLock.await(10, TimeUnit.SECONDS);
             } catch (InterruptedException e) {

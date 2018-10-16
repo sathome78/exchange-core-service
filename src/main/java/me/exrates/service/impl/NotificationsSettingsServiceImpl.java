@@ -60,13 +60,13 @@ public class NotificationsSettingsServiceImpl implements NotificationsSettingsSe
 
     private Map<Integer, NotificationsUserSetting> setDefaultSettings(int userId, Map<Integer, NotificationsUserSetting> map) {
         Arrays.asList(NotificationMessageEventEnum.values()).forEach(p -> {
-            NotificationsUserSetting setting = map.get(p.getCode());
+                    NotificationsUserSetting setting = map.get(p.getCode());
                     if ((setting == null || setting.getNotificatorId() == null) && !p.isCanBeDisabled())
-                    map.put(p.getCode(), NotificationsUserSetting.builder()
-                            .notificatorId(NotificationTypeEnum.EMAIL.getCode())
-                            .userId(userId)
-                            .notificationMessageEventEnum(p)
-                            .build());
+                        map.put(p.getCode(), NotificationsUserSetting.builder()
+                                .notificatorId(NotificationTypeEnum.EMAIL.getCode())
+                                .userId(userId)
+                                .notificationMessageEventEnum(p)
+                                .build());
                 }
         );
         return map;

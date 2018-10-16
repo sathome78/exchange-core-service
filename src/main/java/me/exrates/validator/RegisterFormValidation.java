@@ -220,7 +220,7 @@ public class RegisterFormValidation implements Validator {
                 "required.email", emailRequired);
 
         Integer apiRateLimit = user.getApiRateLimit();
-        if(apiRateLimit == null || apiRateLimit == 0 ){
+        if (apiRateLimit == null || apiRateLimit == 0) {
             errors.rejectValue("apiRateLimit", "apiRateLimit.incorrect", apiRateLimitIncorrect);
         }
 

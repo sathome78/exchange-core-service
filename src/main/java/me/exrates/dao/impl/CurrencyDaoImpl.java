@@ -189,7 +189,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
         if (currencyPairType != CurrencyPairType.ALL) {
             sql = sql.concat(" AND type =:type");
         }
-        return jdbcTemplate.query(sql, Collections.singletonMap("type", currencyPairType.name()),currencyPairRowMapper);
+        return jdbcTemplate.query(sql, Collections.singletonMap("type", currencyPairType.name()), currencyPairRowMapper);
     }
 
     @Override

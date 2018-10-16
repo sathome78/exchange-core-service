@@ -45,11 +45,11 @@ To determine which of these forms to be filled, we must set field operationType
     private OrderBaseType orderBaseType;
     //
     /*
-    * these fields will be calculated after submitting the order and before final creation confirmation the order
-    * (here: OrderController.submitNewOrderToSell())
-    * These amounts calculated directly in java (after check the order parameters in java validator) and will be persistented in db
-    * (before this step these amounts were being calculated by javascript and may be occur some difference)
-    * */
+     * these fields will be calculated after submitting the order and before final creation confirmation the order
+     * (here: OrderController.submitNewOrderToSell())
+     * These amounts calculated directly in java (after check the order parameters in java validator) and will be persistented in db
+     * (before this step these amounts were being calculated by javascript and may be occur some difference)
+     * */
     private BigDecimal spentWalletBalance;
     private BigDecimal spentAmount;
     private BigDecimal total; //calculated amount of currency conversion = amount * exchangeRate

@@ -10,38 +10,38 @@ import java.util.stream.Collectors;
  */
 public interface InvoiceStatus {
 
-  default Set<InvoiceStatus> getAvailableNextStatesSet(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap) {
-    Set<InvoiceStatus> availableNextStates = schemaMap.values().stream().collect(Collectors.toSet());
-    assert (availableNextStates.size() == schemaMap.values().size());
-    return availableNextStates;
-  }
+    default Set<InvoiceStatus> getAvailableNextStatesSet(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap) {
+        Set<InvoiceStatus> availableNextStates = schemaMap.values().stream().collect(Collectors.toSet());
+        assert (availableNextStates.size() == schemaMap.values().size());
+        return availableNextStates;
+    }
 
-  default Optional<InvoiceStatus> nextState(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap, InvoiceActionTypeEnum action) {
-    return Optional.ofNullable(schemaMap.get(action));
-  }
+    default Optional<InvoiceStatus> nextState(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap, InvoiceActionTypeEnum action) {
+        return Optional.ofNullable(schemaMap.get(action));
+    }
 
-  InvoiceStatus nextState(InvoiceActionTypeEnum action);
+    InvoiceStatus nextState(InvoiceActionTypeEnum action);
 
-  default Boolean availableForAction(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap, InvoiceActionTypeEnum action) {
-    return schemaMap.get(action) != null;
-  }
+    default Boolean availableForAction(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap, InvoiceActionTypeEnum action) {
+        return schemaMap.get(action) != null;
+    }
 
-  InvoiceStatus nextState(InvoiceActionTypeEnum action, InvoiceActionTypeEnum.InvoiceActionParamsValue paramsValue);
+    InvoiceStatus nextState(InvoiceActionTypeEnum action, InvoiceActionTypeEnum.InvoiceActionParamsValue paramsValue);
 
-  Boolean availableForAction(InvoiceActionTypeEnum action);
+    Boolean availableForAction(InvoiceActionTypeEnum action);
 
-  Set<InvoiceActionTypeEnum> getAvailableActionList();
+    Set<InvoiceActionTypeEnum> getAvailableActionList();
 
-  Set<InvoiceActionTypeEnum> getAvailableActionList(InvoiceActionTypeEnum.InvoiceActionParamsValue paramsValue);
+    Set<InvoiceActionTypeEnum> getAvailableActionList(InvoiceActionTypeEnum.InvoiceActionParamsValue paramsValue);
 
-  void initSchema(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap);
+    void initSchema(Map<InvoiceActionTypeEnum, InvoiceStatus> schemaMap);
 
-  Boolean isEndStatus();
+    Boolean isEndStatus();
 
-  Boolean isSuccessEndStatus();
+    Boolean isSuccessEndStatus();
 
-  Integer getCode();
+    Integer getCode();
 
-  String name();
+    String name();
 
 }

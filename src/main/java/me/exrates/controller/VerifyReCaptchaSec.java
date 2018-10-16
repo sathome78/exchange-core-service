@@ -7,7 +7,6 @@ package me.exrates.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.json.Json;
@@ -21,7 +20,6 @@ import java.io.StringReader;
 import java.net.URL;
 
 @Component
-@PropertySource("classpath:/captcha.properties")
 public class VerifyReCaptchaSec {
 
     private static final Logger logger = LogManager.getLogger(VerifyReCaptchaSec.class);
@@ -38,14 +36,14 @@ public class VerifyReCaptchaSec {
         } else {
             try {
                 HttpsURLConnection connection = (HttpsURLConnection) new URL(URL).openConnection();
-            /**/
+                /**/
                 connection.setRequestMethod("POST");
                 connection.setDoOutput(true);
                 DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
                 dos.writeBytes("secret=" + SECRET_KEY + "&response=" + recapchaResponse);
                 dos.flush();
                 dos.close();
-            /**/
+                /**/
                 BufferedReader isbr = new BufferedReader(new InputStreamReader(
                         connection.getInputStream()));
                 String inputLine;

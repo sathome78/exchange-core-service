@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static me.exrates.util.UtilTokenService.*;
+import static me.exrates.util.UtilTokenService.generateKey;
 
 @Service
 public class OpenApiTokenServiceImpl implements OpenApiTokenService {
@@ -52,7 +52,7 @@ public class OpenApiTokenServiceImpl implements OpenApiTokenService {
         }
     }
 
-    public void updateToken(Long tokenId, Boolean allowTrade, String currentUserEmail)  {
+    public void updateToken(Long tokenId, Boolean allowTrade, String currentUserEmail) {
         OpenApiToken token = openApiTokenDao.getById(tokenId).orElseThrow(() -> new TokenNotFoundException("Token not found by id: " + tokenId));
         checkUser(currentUserEmail, token);
         openApiTokenDao.updateToken(tokenId, token.getAlias(), allowTrade, token.getAllowWithdraw());

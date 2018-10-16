@@ -14,7 +14,7 @@ public class UserSummaryOrdersDto {
     private BigDecimal amountSellFee;
 
     public static String getTitle() {
-        return  "email" + ";" +
+        return "email" + ";" +
                 "wallet" + ";" +
                 "group" + ";" +
                 "buy" + ";" +
@@ -26,7 +26,7 @@ public class UserSummaryOrdersDto {
 
     @Override
     public String toString() {
-        return  userEmail + ";" +
+        return userEmail + ";" +
                 wallet + ";" +
                 role + ";" +
                 BigDecimalProcessing.formatNoneComma(amountBuy, false) + ";" +

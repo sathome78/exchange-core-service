@@ -74,14 +74,13 @@ public class OrdersEventsHandler {
 
 
     private void calculateLoadFactor() {
-        float diff = lastEventsCountBeforeSend/MAX_EVENTS;
+        float diff = lastEventsCountBeforeSend / MAX_EVENTS;
         setLoadFactor(getLoadFactor() / diff);
     }
 
     private long getProperlyRefreshTime(long calculatedRefreshTime) {
         return Long.max(Long.min(calculatedRefreshTime, MAX_REFRESH_TIME), MIN_REFRESH_TIME);
     }
-
 
 
 }

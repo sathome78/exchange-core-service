@@ -17,7 +17,7 @@ public class UserSummaryOrdersByCurrencyPairsDto {
     private BigDecimal exrate;
 
     public static String getTitle() {
-        return  "operationType" + ";" +
+        return "operationType" + ";" +
                 "date" + ";" +
                 "ownerEmail" + ";" +
                 "ownerNickname" + ";" +
@@ -32,7 +32,7 @@ public class UserSummaryOrdersByCurrencyPairsDto {
 
     @Override
     public String toString() {
-        return  operationType + ";" +
+        return operationType + ";" +
                 date + ";" +
                 ownerEmail + ";" +
                 ownerNickname + ";" +

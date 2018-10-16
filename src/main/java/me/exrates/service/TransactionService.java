@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public interface TransactionService {
 
-  boolean setStatusById(Integer trasactionId, Integer statusId);
+    boolean setStatusById(Integer trasactionId, Integer statusId);
 
     List<Transaction> getPayedRefTransactionsByOrderId(int orderId);
 

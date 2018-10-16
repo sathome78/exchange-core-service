@@ -1,17 +1,16 @@
 package me.exrates.service.impl;
 
+import lombok.extern.log4j.Log4j2;
 import me.exrates.exception.BannedIpException;
 import me.exrates.model.dto.LoginAttemptDto;
 import me.exrates.model.enums.IpBanStatus;
 import me.exrates.model.enums.IpTypesOfChecking;
 import me.exrates.service.IpBlockingService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 import java.time.LocalDateTime;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Service;
-
 import java.util.concurrent.ConcurrentMap;
 
 @Service

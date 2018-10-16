@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class XssFilter implements Filter {
     @Override

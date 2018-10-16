@@ -25,7 +25,7 @@ public enum IntervalType2 {
         this.chartLazyUpdate = chartLazyUpdate;
         this.shortName = shortName;
     }
-    
+
     public TemporalUnit getCorrespondingTimeUnit() {
         return correspondingTimeUnit;
     }

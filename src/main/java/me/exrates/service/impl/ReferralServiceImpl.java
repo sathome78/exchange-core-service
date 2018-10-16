@@ -33,7 +33,6 @@ import java.util.*;
 
 import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
-import static java.util.Objects.isNull;
 import static me.exrates.model.enums.OperationType.REFERRAL;
 import static me.exrates.model.vo.WalletOperationData.BalanceType.ACTIVE;
 import static me.exrates.util.BigDecimalProcessing.doAction;
@@ -76,7 +75,7 @@ public class ReferralServiceImpl implements ReferralService {
     String referralUrl;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         this.commission = commissionService.getDefaultCommission(REFERRAL);
     }
 
@@ -210,13 +209,13 @@ public class ReferralServiceImpl implements ReferralService {
         RefsListContainer container;
         RefActionType refActionType = RefActionType.convert(action);
         switch (refActionType) {
-            case init:{
+            case init: {
                 container = this
                         .getUsersFirstLevelAndCountProfitForUser(profitUserId, profitUserId, onPage, page, refFilterData);
-                container.setReferralProfitDtos(this.getAllUserRefProfit(null, profitUserId,  refFilterData));
+                container.setReferralProfitDtos(this.getAllUserRefProfit(null, profitUserId, refFilterData));
                 break;
             }
-            case search:{
+            case search: {
                 if (!StringUtils.isEmpty(refFilterData.getEmail())) {
                     userId = userService.getIdByEmail(refFilterData.getEmail());
                     refLevel = this.getUserReferralLevelForChild(userId, profitUserId);
@@ -232,7 +231,7 @@ public class ReferralServiceImpl implements ReferralService {
                 }
                 break;
             }
-            case toggle:{
+            case toggle: {
                 refLevel = this.getUserReferralLevelForChild(userId, profitUserId);
                 if (refLevel >= 7 || refLevel < 0) {
                     return new RefsListContainer(Collections.emptyList());
@@ -242,7 +241,8 @@ public class ReferralServiceImpl implements ReferralService {
 
                 break;
             }
-            default:return new RefsListContainer(Collections.emptyList());
+            default:
+                return new RefsListContainer(Collections.emptyList());
         }
         container.setCurrentLevel(refLevel);
         return container;
@@ -272,7 +272,7 @@ public class ReferralServiceImpl implements ReferralService {
     private int getUserReferralLevelForChild(Integer childUserId, Integer parentUserId) {
         int i = 1;
         int level = -1;
-        if (childUserId == null || childUserId.equals(0) || parentUserId == null){
+        if (childUserId == null || childUserId.equals(0) || parentUserId == null) {
             return level;
         }
         if (childUserId.equals(parentUserId)) {
@@ -314,7 +314,7 @@ public class ReferralServiceImpl implements ReferralService {
                 int newUserId = userService.getIdByEmail(i.getEmail());
                 List<ReferralInfoDto> nextLevelList = referralUserGraphDao
                         .getInfoAboutFirstLevRefs(newUserId, profitForId, -1, -1, filterData);
-                convertTrListToString(nextLevelList, level+1, resultList, profitForId, filterData);
+                convertTrListToString(nextLevelList, level + 1, resultList, profitForId, filterData);
             }
         });
         return resultList;
@@ -335,7 +335,7 @@ public class ReferralServiceImpl implements ReferralService {
         return "Email;Amount;Referrals count;level";
     }
 
-    private List<String> prepareCsv(){
+    private List<String> prepareCsv() {
         List<String> transactionsResult = new ArrayList<>();
         transactionsResult.add(getCSVTransactionsHeader());
         transactionsResult.add("\n");

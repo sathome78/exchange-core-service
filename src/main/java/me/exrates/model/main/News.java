@@ -6,7 +6,7 @@ import me.exrates.util.LocalDateSerializer;
 
 import java.time.LocalDate;
 
-public class News implements Cloneable{
+public class News implements Cloneable {
     private Integer id;
     private String title;
     @JsonSerialize(using = LocalDateSerializer.class)

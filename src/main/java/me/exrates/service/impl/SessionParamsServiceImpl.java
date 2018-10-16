@@ -1,6 +1,5 @@
 package me.exrates.service.impl;
 
-import com.google.gson.JsonObject;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.dao.SessionParamsDao;
 import me.exrates.model.SessionLifeTimeType;
@@ -11,7 +10,6 @@ import me.exrates.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +22,16 @@ import java.util.List;
 
 @Log4j2
 @Service
-@PropertySource("classpath:session.properties")
 public class SessionParamsServiceImpl implements SessionParamsService {
 
-    private @Value("${session.default_session_lifetime_minutes}") int defaultSessionLifetimeMinutes;
-    private @Value("${session.lifeTypeParamName}") String sessionLifeTimeParamName;
-    private @Value("${session.timeParamName}") String sessionTimeMinutesParamName;
-    private @Value("${session.lastRequestParamName}") String sessionLastRequestParamName;
+    private @Value("${session.default_session_lifetime_minutes}")
+    int defaultSessionLifetimeMinutes;
+    private @Value("${session.lifeTypeParamName}")
+    String sessionLifeTimeParamName;
+    private @Value("${session.timeParamName}")
+    String sessionTimeMinutesParamName;
+    private @Value("${session.lastRequestParamName}")
+    String sessionLastRequestParamName;
     private static final int MIN_SESSION_TIME_MINUTES = 5;
     private static final int MAX_SESSION_TIME_MINUTES = 1440;
 

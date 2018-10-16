@@ -43,6 +43,6 @@ public class RefsListContainer {
         if (onPage < 0 || totalSize <= 0) {
             return 1;
         }
-        return (int)Math.ceil((double)totalSize / onPage );
+        return (int) Math.ceil((double) totalSize / onPage);
     }
 }

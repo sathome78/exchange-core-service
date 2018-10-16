@@ -1,7 +1,6 @@
 package me.exrates.model.main;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import me.exrates.exception.UnsupportedIntervalFormatException;
 import me.exrates.exception.UnsupportedIntervalTypeException;
 import me.exrates.model.enums.IntervalType;
@@ -17,7 +16,8 @@ public class BackDealInterval {
         this.intervalType = intervalType;
     }
 
-    public BackDealInterval(){}
+    public BackDealInterval() {
+    }
 
     public String getInterval() {
         return intervalValue + " " + intervalType;

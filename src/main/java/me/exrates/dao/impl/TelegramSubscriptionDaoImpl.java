@@ -59,7 +59,7 @@ public class TelegramSubscriptionDaoImpl implements TelegramSubscriptionDao {
         final String sql = " SELECT * FROM TELEGRAM_SUBSCRIPTION WHERE user_id = :id ";
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", userId);
-        try{
+        try {
             return jdbcTemplate.queryForObject(sql, params, telegramSubscribtionRowMapper);
         } catch (EmptyResultDataAccessException e) {
             return null;

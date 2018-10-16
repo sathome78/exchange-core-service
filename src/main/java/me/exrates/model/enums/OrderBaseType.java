@@ -1,6 +1,7 @@
 package me.exrates.model.enums;
 
 import me.exrates.exception.UnsupportedOrderTypeException;
+
 import java.util.Arrays;
 
 public enum OrderBaseType {

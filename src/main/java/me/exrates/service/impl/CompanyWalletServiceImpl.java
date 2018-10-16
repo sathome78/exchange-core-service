@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import static me.exrates.model.enums.ActionType.SUBTRACT;
 import static me.exrates.util.BigDecimalProcessing.doAction;
@@ -67,7 +65,7 @@ public class CompanyWalletServiceImpl implements CompanyWalletService {
 
     @Override
     @Transactional
-    public boolean substractCommissionBalanceById(Integer id, BigDecimal amount){
+    public boolean substractCommissionBalanceById(Integer id, BigDecimal amount) {
         return companyWalletDao.substarctCommissionBalanceById(id, amount);
     }
 

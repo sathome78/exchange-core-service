@@ -11,7 +11,7 @@ import me.exrates.model.enums.NotificationMessageEventEnum;
 @Data
 @Builder
 public class NotificationsUserSetting {
-    
+
     private Integer id;
     private int userId;
     private NotificationMessageEventEnum notificationMessageEventEnum;

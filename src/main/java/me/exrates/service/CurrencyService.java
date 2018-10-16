@@ -6,9 +6,7 @@ import me.exrates.model.enums.OperationType;
 import me.exrates.model.main.Currency;
 import me.exrates.model.main.CurrencyPair;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 public interface CurrencyService {
     CurrencyPair getNotHiddenCurrencyPairByName(String currencyPair);

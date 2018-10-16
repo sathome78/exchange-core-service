@@ -14,5 +14,5 @@ public class ReferralInfoDto {
     private String email;
     private double refProfitFromUser;
     private int firstRefLevelCount;
-    private  List<ReferralProfitDto> referralProfitDtoList;
+    private List<ReferralProfitDto> referralProfitDtoList;
 }

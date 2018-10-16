@@ -1,7 +1,6 @@
 package me.exrates.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.exception.NewsReadingFromDiskException;
 import me.exrates.exception.NewsVariantNotFoundException;
@@ -13,7 +12,6 @@ import me.exrates.service.NewsExtService;
 import me.exrates.service.NewsVariantExtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
@@ -25,7 +23,6 @@ import java.util.Locale;
 import static me.exrates.model.enums.NewsTypeEnum.PAGE;
 
 @RestController
-@PropertySource(value = {"classpath:/materials.properties"})
 @Log4j2
 public class MaterialsController {
     @Autowired

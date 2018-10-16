@@ -52,6 +52,7 @@ public interface OrderService {
     boolean setStatus(int orderId, OrderStatus status);
 
     void acceptOrdersList(int userAcceptorId, List<Integer> ordersList, Locale locale);
+
     boolean cancelOrder(ExOrder exOrder, Locale locale);
 
     boolean updateOrder(ExOrder exOrder);

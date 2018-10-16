@@ -22,7 +22,7 @@ public class ApiError {
         while (ex.getCause() != null) ex = ex.getCause();
         if (ex instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException exception = (MethodArgumentNotValidException) ex;
-             List<ObjectError> errors = exception.getBindingResult().getAllErrors();
+            List<ObjectError> errors = exception.getBindingResult().getAllErrors();
             if (!errors.isEmpty()) {
                 this.detail = exception.getBindingResult().getFieldErrors().stream()
                         .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)).toString();

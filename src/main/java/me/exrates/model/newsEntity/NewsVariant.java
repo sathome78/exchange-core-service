@@ -14,28 +14,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NewsVariant {
 
-  private Integer id;
+    private Integer id;
 
-  private String title;
+    private String title;
 
-  private String language;
+    private String language;
 
-  private String brief;
+    private String brief;
 
-  private String content;
+    private String content;
 
-  private LocalDateTime addedDate;
+    private LocalDateTime addedDate;
 
-  private Boolean active;
+    private Boolean active;
 
-  private Integer visitCount;
+    private Integer visitCount;
 
-  private String tags;
+    private String tags;
 
-  private LocalDateTime updatedDate;
+    private LocalDateTime updatedDate;
 
-  private LocalDateTime syncToWalletDate;
+    private LocalDateTime syncToWalletDate;
 
-  private News news;
+    private News news;
 
 }

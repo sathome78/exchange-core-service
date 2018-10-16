@@ -26,7 +26,7 @@ import java.util.Locale;
 
 @Service
 @Log4j2
-public class ServiceCacheableProxy  {
+public class ServiceCacheableProxy {
 
     @Autowired
     private OrderDao orderDao;

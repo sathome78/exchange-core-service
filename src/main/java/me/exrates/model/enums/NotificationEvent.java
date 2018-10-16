@@ -21,12 +21,18 @@ public enum NotificationEvent {
 
     public static NotificationEvent convert(int eventType) {
         switch (eventType) {
-            case 1: return CUSTOM;
-            case 2: return ADMIN;
-            case 3: return ACCOUNT;
-            case 4: return ORDER;
-            case 5: return IN_OUT;
-            default: throw new UnsupportedNotificationEventException("Unsupported notification event");
+            case 1:
+                return CUSTOM;
+            case 2:
+                return ADMIN;
+            case 3:
+                return ACCOUNT;
+            case 4:
+                return ORDER;
+            case 5:
+                return IN_OUT;
+            default:
+                throw new UnsupportedNotificationEventException("Unsupported notification event");
         }
     }
 

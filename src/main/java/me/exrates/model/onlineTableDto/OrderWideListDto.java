@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * Created by Valk on 19.04.16.
  */
-public class OrderWideListDto extends OnlineTableDto{
+public class OrderWideListDto extends OnlineTableDto {
     private int id;
     private int userId;
     private String operationType;

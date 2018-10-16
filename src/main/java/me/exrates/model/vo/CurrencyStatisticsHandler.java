@@ -27,11 +27,11 @@ public class CurrencyStatisticsHandler {
     private final Semaphore semaphoreMain = new Semaphore(1, true);
     private static final long DELAY = 700;
     private ReentrantLock lock = new ReentrantLock();
-    private final CountDownLatch cdl  = new CountDownLatch(1);
+    private final CountDownLatch cdl = new CountDownLatch(1);
 
     @Async
     public void onEvent(int pairId) {
-       /* cache.setNeedUpdate(true);*/
+        /* cache.setNeedUpdate(true);*/
         try {
             if (lock.isLocked()) {
                 cdl.await(5, TimeUnit.SECONDS);
@@ -47,7 +47,7 @@ public class CurrencyStatisticsHandler {
                 semaphoreMain.release();
                 cdl.countDown();
                 lock.unlock();
-                if(!forUpdate.isEmpty()) {
+                if (!forUpdate.isEmpty()) {
                     log.debug("currencies list {}", forUpdate.size());
                     stompMessenger.sendStatisticMessage(forUpdate);
                 }
@@ -55,7 +55,7 @@ public class CurrencyStatisticsHandler {
         } catch (Exception e) {
             log.error(e);
             semaphoreMain.release();
-            if(lock.isLocked()) {
+            if (lock.isLocked()) {
                 lock.unlock();
             }
         }

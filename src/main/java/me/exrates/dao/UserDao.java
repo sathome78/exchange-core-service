@@ -3,13 +3,18 @@ package me.exrates.dao;
 import me.exrates.model.AdminAuthorityOption;
 import me.exrates.model.User;
 import me.exrates.model.dto.*;
-import me.exrates.model.enums.*;
+import me.exrates.model.enums.InvoiceOperationDirection;
+import me.exrates.model.enums.InvoiceOperationPermission;
+import me.exrates.model.enums.NotificationMessageEventEnum;
+import me.exrates.model.enums.UserRole;
 import me.exrates.model.main.UserFile;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 public interface UserDao {
 
@@ -90,6 +95,7 @@ public interface UserDao {
     /**
      * Delete all tokens for user with concrete TokenType.
      * Uses in "Send again" in registration.
+     *
      * @param token (TemporalToken)
      * @return boolean (false/true)
      */

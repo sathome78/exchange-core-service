@@ -5,9 +5,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static me.exrates.model.dto.FilterDataItem.DATE_FORMAT;
-import static me.exrates.model.dto.FilterDataItem.IN_FORMAT;
-import static me.exrates.model.dto.FilterDataItem.LIKE_FORMAT_MIDDLE;
+import static me.exrates.model.dto.FilterDataItem.*;
 
 @Data
 public class VoucherFilterData extends TableFilterData {
@@ -28,7 +26,7 @@ public class VoucherFilterData extends TableFilterData {
 
     @Override
     public void initFilterItems() {
-        FilterDataItem[] items = new FilterDataItem[] {
+        FilterDataItem[] items = new FilterDataItem[]{
                 new FilterDataItem("request_id", "TRANSFER_REQUEST.id =", voucherId),
                 new FilterDataItem("currency_ids", "TRANSFER_REQUEST.currency_id IN", currencyIds, IN_FORMAT),
                 new FilterDataItem("merchant_ids", "TRANSFER_REQUEST.merchant_id IN", merchantIds, IN_FORMAT),

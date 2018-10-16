@@ -37,7 +37,7 @@ public class ReferralLevelDaoImpl implements ReferralLevelDao {
     };
 
     @Autowired
-    public ReferralLevelDaoImpl(@Qualifier(value = "masterTemplate")final NamedParameterJdbcTemplate jdbcTemplate) {
+    public ReferralLevelDaoImpl(@Qualifier(value = "masterTemplate") final NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -61,7 +61,7 @@ public class ReferralLevelDaoImpl implements ReferralLevelDao {
     @Override
     public BigDecimal getTotalLevelsPercent() {
         final String sql = "SELECT SUM(o.percent) as amount FROM REFERRAL_LEVEL o LEFT JOIN REFERRAL_LEVEL b ON o.level = b.level AND o.datetime < b.datetime WHERE b.datetime is NULL";
-        return jdbcTemplate.query(sql, resultSet ->  {
+        return jdbcTemplate.query(sql, resultSet -> {
             if (resultSet.next()) {
                 return resultSet.getBigDecimal("amount");
             }

@@ -5,7 +5,6 @@ import me.exrates.model.dto.NewsSummaryDto;
 import me.exrates.model.main.News;
 import me.exrates.model.onlineTableDto.NewsDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;

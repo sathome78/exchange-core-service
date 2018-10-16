@@ -11,6 +11,6 @@ import java.util.Map;
 @Setter
 @ToString
 public class OrderValidationDto {
-  private Map<String, Object> errors = new HashMap<>();
-  private Map<String, Object[]> errorParams = new HashMap<>();
+    private Map<String, Object> errors = new HashMap<>();
+    private Map<String, Object[]> errorParams = new HashMap<>();
 }

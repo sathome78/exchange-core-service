@@ -11,7 +11,6 @@ public class TemporalTokenServiceImpl implements TemporalTokenService {
     @Autowired
     TemporalTokenDao temporalTokenDao;
 
-    @Override
     public boolean updateTemporalToken(TemporalToken temporalToken) {
         return temporalTokenDao.updateTemporalToken(temporalToken);
     }

@@ -6,9 +6,6 @@ import org.springframework.context.MessageSource;
 import java.util.Arrays;
 import java.util.Locale;
 
-/**
- * Created by OLEG on 17.11.2016.
- */
 public enum AdminAuthority {
     PROCESS_WITHDRAW(1),
     PROCESS_INVOICE(2),

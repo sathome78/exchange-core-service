@@ -3,9 +3,6 @@ package me.exrates.model.dto;
 import me.exrates.model.chart.ChartTimeFrame;
 import org.springframework.context.ApplicationEvent;
 
-/**
- * Created by Maks on 26.01.2018.
- */
 public class ChartCacheUpdateEvent extends ApplicationEvent {
 
     private ChartTimeFrame timeFrame;

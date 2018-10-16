@@ -27,9 +27,7 @@ public class NotificationServiceImpl implements NotificationService {
     public long createLocalizedNotification(Integer userId, NotificationEvent cause, String titleCode, String messageCode,
                                             Object[] messageArgs) {
         Locale locale = new Locale(userService.getPreferedLang(userId));
-        return 0L /*createNotification(userId, messageSource.getMessage(titleCode, null, locale),
-                messageSource.getMessage(messageCode, normalizeArgs(messageArgs), locale), cause)*/;
-
+        return 0L;
     }
 
 
@@ -69,7 +67,4 @@ public class NotificationServiceImpl implements NotificationService {
         notificationDao.updateNotificationOptions(options);
     }
 
-    private String[] normalizeArgs(Object... args) {
-        return Arrays.toString(args).replaceAll("[\\[\\]]", "").split("\\s*,\\s*");
-    }
 }

@@ -9,9 +9,6 @@ import me.exrates.util.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Created by Valk on 11.05.2016.
- */
 @Getter
 @Setter
 @ToString

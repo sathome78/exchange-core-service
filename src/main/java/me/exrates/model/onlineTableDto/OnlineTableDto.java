@@ -1,8 +1,5 @@
 package me.exrates.model.onlineTableDto;
 
-/**
- * Created by Valk on 23.06.2016.
- */
 public abstract class OnlineTableDto {
     public boolean needRefresh;
     protected int page;

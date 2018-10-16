@@ -93,33 +93,6 @@ public class ChartCacheUnit implements ChartsCacheInterface {
         return lastUpdateDate == null || lastUpdateDate.plusSeconds(minUpdateIntervalSeconds).compareTo(LocalDateTime.now()) <= 0;
     }
 
-    //    @Override
-//    public void setNeedToUpdate() {
-//        log.debug("setting update data {} {}", currencyPairId, timeFrame);
-//        if (!lazyUpdate) {
-//            log.debug("not lazy update data {} {}", currencyPairId, timeFrame);
-//            if (timerLock.tryLock()) {
-//                timerLock.lock();
-//                try {
-//
-//                    new Timer().schedule(new TimerTask() {
-//                        @Override
-//                        public void run() {
-//                            log.debug("execute task update data {} {}", currencyPairId, timeFrame);
-//                            updateCache(true);
-//                            eventPublisher.publishEvent(new ChartCacheUpdateEvent(getLastData(), timeFrame, currencyPairId));
-//                        }
-//                    }, getMinUpdateIntervalSeconds() * 1000);
-//                } finally {
-//                    timerLock.unlock();
-//                }
-//
-//            }
-//        } else {
-//            needToUpdate.set(true);
-//        }
-//    }
-    @Override
     public void setNeedToUpdate() {
         if (!lazyUpdate) {
             if (timerLock.tryLock()) {

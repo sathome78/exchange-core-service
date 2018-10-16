@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;
 
-/**
- * Created by OLEG on 21.11.2016.
- */
 public class OrderCreationResultDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer createdOrderId;

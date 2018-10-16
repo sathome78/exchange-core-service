@@ -1,10 +1,14 @@
 package me.exrates.model.onlineTableDto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.Getter;
+import lombok.Setter;
 import me.exrates.util.LocalDateSerializer;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 public class NewsDto extends OnlineTableDto {
     private Integer id;
     private String title;
@@ -28,69 +32,4 @@ public class NewsDto extends OnlineTableDto {
         return id != null ? id.hashCode() : 0;
     }
 
-    /*getters setters*/
-
-    public boolean isNeedRefresh() {
-        return needRefresh;
-    }
-
-    public void setNeedRefresh(boolean needRefresh) {
-        this.needRefresh = needRefresh;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getBrief() {
-        return brief;
-    }
-
-    public void setBrief(String brief) {
-        this.brief = brief;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
-    public String getRef() {
-        return ref;
-    }
-
-    public void setRef(String ref) {
-        this.ref = ref;
-    }
-
-    public String getVariant() {
-        return variant;
-    }
-
-    public void setVariant(String variant) {
-        this.variant = variant;
-    }
 }

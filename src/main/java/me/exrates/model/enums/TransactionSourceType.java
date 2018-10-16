@@ -8,9 +8,6 @@ import org.springframework.context.MessageSource;
 import java.util.Arrays;
 import java.util.Locale;
 
-/**
- * Created by Valk on 23.05.2016.
- */
 @Getter
 public enum TransactionSourceType {
     ORDER(1),

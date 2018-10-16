@@ -1,50 +1,20 @@
 package me.exrates.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.math.BigDecimal;
 
-/**
- * @author Denis Savin (pilgrimm333@gmail.com)
- */
+@Getter
+@Setter
+@ToString
 public class ReferralLevel {
 
     private int id;
     private int level;
     private BigDecimal percent;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(final int level) {
-        this.level = level;
-    }
-
-    public BigDecimal getPercent() {
-        return percent;
-    }
-
-    public void setPercent(final BigDecimal percent) {
-        this.percent = percent;
-    }
-
-    @Override
-    public String toString() {
-        return "ReferralLevel{" +
-                "id=" + id +
-                ", level=" + level +
-                ", percent=" + percent +
-                '}';
-    }
-
-    @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -57,7 +27,6 @@ public class ReferralLevel {
 
     }
 
-    @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + level;

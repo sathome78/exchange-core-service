@@ -2,7 +2,6 @@ package me.exrates.service.impl;
 
 import lombok.extern.log4j.Log4j2;
 import me.exrates.dao.WalletDao;
-import me.exrates.exception.BalanceChangeException;
 import me.exrates.model.dto.OrderDetailDto;
 import me.exrates.model.dto.WalletTransferStatus;
 import me.exrates.model.dto.WalletsForOrderAcceptionDto;
@@ -94,37 +93,6 @@ public class WalletServiceImpl implements WalletService {
 
     public WalletTransferStatus walletBalanceChange(final WalletOperationData walletOperationData) {
         return walletDao.walletBalanceChange(walletOperationData);
-    }
-
-    private void changeWalletActiveBalance(BigDecimal amount, Wallet wallet, OperationType operationType,
-                                           TransactionSourceType transactionSourceType) {
-        changeWalletActiveBalance(amount, wallet, operationType, transactionSourceType, null, null);
-    }
-
-    private void changeWalletActiveBalance(BigDecimal amount, Wallet wallet, OperationType operationType,
-                                           TransactionSourceType transactionSourceType,
-                                           BigDecimal specialCommissionAmount, Integer sourceId) {
-        WalletOperationData walletOperationData = new WalletOperationData();
-        walletOperationData.setWalletId(wallet.getId());
-        walletOperationData.setAmount(amount);
-        walletOperationData.setBalanceType(WalletOperationData.BalanceType.ACTIVE);
-        walletOperationData.setOperationType(operationType);
-        walletOperationData.setSourceId(sourceId);
-        Commission commission = commissionService.findCommissionByTypeAndRole(operationType, userService.getUserRoleFromSecurityContext());
-        walletOperationData.setCommission(commission);
-        BigDecimal commissionAmount = specialCommissionAmount == null ?
-                BigDecimalProcessing.doAction(amount, commission.getValue(), ActionType.MULTIPLY_PERCENT) : specialCommissionAmount;
-        walletOperationData.setCommissionAmount(commissionAmount);
-        walletOperationData.setSourceType(transactionSourceType);
-        WalletTransferStatus status = walletBalanceChange(walletOperationData);
-        if (status != WalletTransferStatus.SUCCESS) {
-            throw new BalanceChangeException(status.name());
-        }
-        if (commissionAmount.signum() > 0) {
-
-            CompanyWallet companyWallet = companyWalletService.findByCurrency(currencyService.getById(wallet.getCurrencyId()));
-            companyWalletService.deposit(companyWallet, BigDecimal.ZERO, commissionAmount);
-        }
     }
 
     @Transactional

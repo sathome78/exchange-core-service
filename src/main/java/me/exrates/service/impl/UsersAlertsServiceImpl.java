@@ -25,8 +25,6 @@ public class UsersAlertsServiceImpl implements UsersAlertsService {
     private MessageSource messageSource;
     @Autowired
     private UserAlertsDao userAlertsDao;
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
 
     @PostConstruct
     private void init() {
@@ -68,21 +66,6 @@ public class UsersAlertsServiceImpl implements UsersAlertsService {
     @Transactional
     public AlertDto getAlert(AlertType alertType) {
         return userAlertsDao.getAlert(alertType.name());
-    }
-
-    private void enableAlert(AlertType alertType, AlertDto alertDto) {
-        LocalDateTime eventStart = null;
-        if (alertType.isNeedDateTime()) {
-            eventStart = LocalDateTime.now().plusMinutes(alertDto.getMinutes());
-        }
-        userAlertsDao.updateAlert(AlertDto
-                .builder()
-                .alertType(alertType.name())
-                .launchDateTime(LocalDateTime.now())
-                .enabled(true)
-                .eventStart(eventStart)
-                .lenghtOfWorks(alertDto.getLenghtOfWorks())
-                .build());
     }
 
     private void disableAlert(AlertType alertType) {

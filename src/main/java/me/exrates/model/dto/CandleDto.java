@@ -17,9 +17,6 @@ public class CandleDto {
     private BigDecimal low;
     private BigDecimal volume;
 
-    public CandleDto() {
-    }
-
     public CandleDto(CandleChartItemDto candleChartItemDto) {
         this.time = candleChartItemDto.getBeginDate().getTime();
         this.close = candleChartItemDto.getCloseRate();

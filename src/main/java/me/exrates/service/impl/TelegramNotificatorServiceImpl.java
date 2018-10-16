@@ -27,9 +27,6 @@ import java.util.StringJoiner;
 
 import static me.exrates.model.vo.WalletOperationData.BalanceType.ACTIVE;
 
-/**
- * Created by Maks on 29.09.2017.
- */
 @Log4j2(topic = "message_notify")
 @Component("telegramNotificatorServiceImpl")
 public class TelegramNotificatorServiceImpl implements NotificatorService, Subscribable {
@@ -80,12 +77,10 @@ public class TelegramNotificatorServiceImpl implements NotificatorService, Subsc
         return null;
     }
 
-    @Override
     public Object getSubscriptionByUserId(int userId) {
         return subscribtionDao.getSubscribtionByUserId(userId);
     }
 
-    @Override
     @Transactional
     public String createSubscription(String userEmail) {
         String code = generateCode(userEmail);
@@ -101,12 +96,10 @@ public class TelegramNotificatorServiceImpl implements NotificatorService, Subsc
         return code;
     }
 
-    @Override
     public NotificatorSubscription getSubscription(int userId) {
         return subscribtionDao.getSubscribtionByUserId(userId);
     }
 
-    @Override
     public Object prepareSubscription(Object subscriptionObject) {
         return null;
     }

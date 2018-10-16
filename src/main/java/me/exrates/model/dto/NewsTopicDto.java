@@ -8,9 +8,6 @@ import me.exrates.model.newsEntity.NewsVariant;
 
 import java.time.format.DateTimeFormatter;
 
-/**
- * Created by ValkSam
- */
 @Getter
 @Setter
 @NoArgsConstructor

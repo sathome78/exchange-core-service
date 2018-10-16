@@ -20,9 +20,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-/**
- * Created by Maks on 26.01.2018.
- */
 @Log4j2(topic = "cache")
 @Component
 public class ChartsCacheManager {
@@ -43,24 +40,12 @@ public class ChartsCacheManager {
     public void onUpdateEvent(int pairId) {
         List<ChartTimeFrame> allIntervals = orderService.getChartTimeFrames();
         allIntervals.forEach(p -> setNeedUpdate(pairId, p));
-        /*List<ChartTimeFrame> subscribedTimeFrames = stompMessenger.getSubscribedTimeFramesForCurrencyPair(pairId);
-        subscribedTimeFrames.forEach(i -> {
-            log.debug("subscribed intervals {}", i.getResolution());
-            String data = getPreparedData(pairId, i, true);
-            log.debug("subscribed intervals {}", i.getResolution());
-            stompMessenger.sendChartData(pairId, i.getResolution().toString(), data);
-        });*/
     }
 
 
     private void setNeedUpdate(Integer pairId, ChartTimeFrame timeFrame) {
         ChartsCacheInterface cacheUnit = getRequiredCache(pairId, timeFrame);
         cacheUnit.setNeedToUpdate();
-    }
-
-    public List<CandleChartItemDto> getData(Integer pairId, ChartTimeFrame timeFrame) {
-
-        return getData(pairId, timeFrame, false);
     }
 
     public List<CandleChartItemDto> getData(Integer pairId, ChartTimeFrame timeFrame, boolean lastOnly) {
@@ -105,31 +90,6 @@ public class ChartsCacheManager {
             log.error(e);
             return null;
         }
-
-        /*ArrayList<List> arrayListMain = new ArrayList<>();
-         *//*in first row return backDealInterval - to synchronize period menu with it*//*
-        arrayListMain.add(new ArrayList<Object>() {{
-            add(backDealInterval);
-        }});
-        for (CandleChartItemDto candle : data) {
-            ArrayList<Object> arrayList = new ArrayList<>();
-                *//*values*//*
-            arrayList.add(candle.getBeginDate().toString());
-            arrayList.add(candle.getEndDate().toString());
-            arrayList.add(candle.getOpenRate());
-            arrayList.add(candle.getCloseRate());
-            arrayList.add(candle.getLowRate());
-            arrayList.add(candle.getHighRate());
-            arrayList.add(candle.getBaseVolume());
-            arrayListMain.add(arrayList);
-        }
-        try {
-            return objectMapper.writeValueAsString(new OrdersListWrapper(arrayListMain,
-                    backDealInterval.getInterval(), currencyPairId));
-        } catch (JsonProcessingException e) {
-            log.error(e);
-            return null;
-        }*/
 
     }
 

@@ -1,19 +1,13 @@
 package me.exrates.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import me.exrates.model.enums.UserCommentTopicEnum;
 import me.exrates.util.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class Comment {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime creationTime;

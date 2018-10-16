@@ -7,9 +7,6 @@ import me.exrates.model.enums.RefillStatusEnum;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Created by ValkSam
- */
 @Getter
 @Setter
 public class RefillRequest {

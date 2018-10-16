@@ -9,11 +9,7 @@ import me.exrates.util.LocalDateTimeSerializer;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
 public class Transaction {
     private int id;
     private Wallet userWallet;

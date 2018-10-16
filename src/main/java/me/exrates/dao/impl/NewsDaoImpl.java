@@ -179,7 +179,7 @@ public class NewsDaoImpl implements NewsDao {
                     dto.setResource(resultSet.getString("resource"));
                     dto.setTitle(resultSet.getString("title"));
                     dto.setBrief(resultSet.getString("brief"));
-                    dto.setActive(resultSet.getBoolean("active"));
+                    dto.setIsActive(resultSet.getBoolean("active"));
                     dto.getVariants().add(resultSet.getString("news_variant"));
                     news.add(dto);
                 } else {

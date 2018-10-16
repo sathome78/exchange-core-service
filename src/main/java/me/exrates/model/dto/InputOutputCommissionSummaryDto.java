@@ -12,10 +12,7 @@ import java.util.stream.Stream;
 @Setter
 public class InputOutputCommissionSummaryDto {
     private Integer orderNum;
-    //wolper 19.04.2018
-    //currency id added
     private int curId;
-    //wolper 24.04.18
     private BigDecimal rateToUSD;
     private String currencyName;
     private BigDecimal input;

@@ -6,9 +6,6 @@ import me.exrates.model.enums.OperationType;
 
 import java.sql.Timestamp;
 
-/**
- * Created by Valk on 03.06.2016.
- */
 @Getter
 @Setter
 public class OrderAcceptedHistoryDto extends OnlineTableDto {
@@ -21,10 +18,6 @@ public class OrderAcceptedHistoryDto extends OnlineTableDto {
 
     public OrderAcceptedHistoryDto() {
         this.needRefresh = true;
-    }
-
-    public OrderAcceptedHistoryDto(boolean needRefresh) {
-        this.needRefresh = needRefresh;
     }
 
     public OrderAcceptedHistoryDto(OrderAcceptedHistoryDto orderAcceptedHistoryDto) {

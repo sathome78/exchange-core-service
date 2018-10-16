@@ -26,11 +26,6 @@ public class CoinmarketApiDto {
     private BigDecimal high24hr;
     private BigDecimal low24hr;
 
-    public CoinmarketApiDto(CurrencyPair currencyPair) {
-        this.currency_pair_name = currencyPair.getName();
-    }
-
-    @Override
     public String toString() {
         return '"' + currency_pair_name.replace('/', '_') + "\":" +
                 "{\"last\":" + BigDecimalProcessing.formatNonePointQuoted(last, true) +

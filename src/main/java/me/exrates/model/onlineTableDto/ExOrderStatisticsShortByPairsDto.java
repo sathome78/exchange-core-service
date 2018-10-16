@@ -6,9 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import me.exrates.model.enums.CurrencyPairType;
 
-/**
- * Created by Valk
- */
 @Getter
 @Setter
 @ToString
@@ -26,9 +23,6 @@ public class ExOrderStatisticsShortByPairsDto extends OnlineTableDto {
         this.needRefresh = true;
     }
 
-    public ExOrderStatisticsShortByPairsDto(boolean needRefresh) {
-        this.needRefresh = needRefresh;
-    }
 
     public ExOrderStatisticsShortByPairsDto(ExOrderStatisticsShortByPairsDto exOrderStatisticsShortByPairsDto) {
         this.needRefresh = exOrderStatisticsShortByPairsDto.needRefresh;
@@ -41,13 +35,6 @@ public class ExOrderStatisticsShortByPairsDto extends OnlineTableDto {
         this.currencyPairId = exOrderStatisticsShortByPairsDto.currencyPairId;
     }
 
-    public ExOrderStatisticsShortByPairsDto(Integer pairId, String lastRate, String predLastRate) {
-        this.lastOrderRate = lastRate;
-        this.predLastOrderRate = predLastRate;
-        this.currencyPairId = pairId;
-    }
-
-    @Override
     public int hashCode() {
         int result = currencyPairName != null ? currencyPairName.hashCode() : 0;
         result = 31 * result + (lastOrderRate != null ? lastOrderRate.hashCode() : 0);

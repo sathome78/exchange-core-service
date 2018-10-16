@@ -39,33 +39,16 @@ public class UserFilesServiceImpl implements UserFilesService {
         contentTypes.addAll(asList("image/jpg", "image/jpeg", "image/png"));
     }
 
-    /**
-     * Removes empty files and files with invalid extension from an input array
-     *
-     * @param files - Uploaded files
-     * @return - ArrayList with valid uploaded files
-     */
-    @Override
     public List<MultipartFile> reduceInvalidFiles(final MultipartFile[] files) {
         return Stream.of(files)
                 .filter(this::checkFileValidity)
                 .collect(Collectors.toList());
     }
 
-    @Override
     public boolean checkFileValidity(final MultipartFile file) {
         return !file.isEmpty() && contentTypes.contains(extractContentType(file));
     }
 
-    /**
-     * Moves uploaded files to user dir on the server ({@link UserFilesServiceImpl#userFilesDir} + userId) and persist File names in DB (table USER_DOC)
-     * If only one file failed to move - deletes all uploaded files and throws IOException
-     *
-     * @param userId - UserId who uploads the files
-     * @param files  - uploaded files
-     * @throws IOException
-     */
-    @Override
     public void createUserFiles(final int userId, final List<MultipartFile> files) throws IOException {
         final Path path = Paths.get(userFilesDir + userId);
         final List<Path> logicalPaths = new ArrayList<>();
@@ -100,34 +83,6 @@ public class UserFilesServiceImpl implements UserFilesService {
         }
         userService.createUserFile(userId, logicalPaths);
     }
-
-
-    private Path writeUserFile(Path initialPath, Path logicalPath, String baseFilename, MultipartFile file) throws IOException {
-        Path realPath = null;
-        Path logicalFilePath;
-        try {
-            final String name = baseFilename + "." + extractFileExtension(file);
-            realPath = Paths.get(initialPath.toString(), name);
-            logicalFilePath = Paths.get(logicalPath.toString(), name);
-            Files.write(realPath, file.getBytes());
-            return logicalFilePath;
-        } catch (final IOException e) {
-            if (realPath != null) {
-                final List<IOException> exceptions = new ArrayList<>();
-                try {
-                    Files.delete(realPath);
-                } catch (final IOException ex) {
-                    ex.initCause(e);
-                    exceptions.add(ex);
-                }
-                if (!exceptions.isEmpty()) {
-                    LOG.error("Exceptions during deleting uploaded files " + exceptions);
-                }
-            }
-            throw e;
-        }
-    }
-
 
     private String extractContentType(final MultipartFile file) {
         return file.getContentType().toLowerCase();

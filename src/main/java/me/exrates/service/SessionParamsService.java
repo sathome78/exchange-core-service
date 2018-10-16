@@ -6,9 +6,6 @@ import me.exrates.model.SessionParams;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * Created by maks on 31.03.2017.
- */
 public interface SessionParamsService {
     List<SessionLifeTimeType> getAllByActive(boolean active);
 
@@ -27,5 +24,4 @@ public interface SessionParamsService {
     boolean islifeTypeActive(int sessionLifeTypeId);
 
     void setSessionLifeParams(HttpServletRequest request);
-
 }

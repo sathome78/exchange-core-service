@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
         Boolean flag = false;
         if (this.ifEmailIsUnique(user.getEmail())) {
             if (this.ifNicknameIsUnique(user.getNickname())) {
-                if (userDao.create(user) && userDao.insertIp(user.getEmail(), user.getIp())) {
+                if (userDao.create(user) && userDao.insertIp(user.getEmail(), user.getIpaddress())) {
                     int user_id = this.getIdByEmail(user.getEmail());
                     user.setId(user_id);
                     if (source != null && !source.isEmpty()) {
@@ -235,10 +235,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public List<UserRole> getAllRoles() {
-        return userDao.getAllRoles();
-    }
-
     public User getUserById(int id) {
         return userDao.getUserById(id);
     }
@@ -297,7 +293,7 @@ public class UserServiceImpl implements UserService {
         token.setUserId(user.getId());
         token.setValue(generateRegistrationToken());
         token.setTokenType(tokenType);
-        token.setCheckIp(user.getIp());
+        token.setCheckIp(user.getIpaddress());
         token.setAlreadyUsed(false);
 
         createTemporalToken(token);
@@ -344,7 +340,7 @@ public class UserServiceImpl implements UserService {
     public void sendUnfamiliarIpNotificationEmail(User user, String emailSubject, String emailText, Locale locale) {
         Email email = new Email();
         email.setTo(user.getEmail());
-        email.setMessage(messageSource.getMessage(emailText, new Object[]{user.getIp()}, locale));
+        email.setMessage(messageSource.getMessage(emailText, new Object[]{user.getIpaddress()}, locale));
         email.setSubject(messageSource.getMessage(emailSubject, null, locale));
         sendMailService.sendInfoMail(email);
     }

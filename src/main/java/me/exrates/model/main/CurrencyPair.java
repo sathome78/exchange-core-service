@@ -22,12 +22,6 @@ public class CurrencyPair {
         this.currency2 = currency2;
     }
 
-    /*service methods*/
-    public Currency getAnotherCurrency(Currency currency) {
-        return currency.equals(currency1) ? currency2 : currency1;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -39,7 +33,6 @@ public class CurrencyPair {
         return name != null ? name.equals(that.name) : that.name == null;
     }
 
-    @Override
     public int hashCode() {
         int result = currency1 != null ? currency1.hashCode() : 0;
         result = 31 * result + (currency2 != null ? currency2.hashCode() : 0);

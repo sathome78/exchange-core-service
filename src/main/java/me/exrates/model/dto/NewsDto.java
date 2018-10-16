@@ -7,9 +7,6 @@ import me.exrates.model.enums.NewsTypeEnum;
 
 import java.util.List;
 
-/**
- * Created by ValkSam
- */
 @Getter
 @Setter
 @NoArgsConstructor

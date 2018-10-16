@@ -12,10 +12,6 @@ import static me.exrates.util.BigDecimalProcessing.doAction;
 import static me.exrates.util.BigDecimalProcessing.normalize;
 
 
-/**
- * Created by Valk on 13.04.16.
- */
-
 public class OrderCreateDto {
     /*this field filled from existing order*/
     private int orderId;

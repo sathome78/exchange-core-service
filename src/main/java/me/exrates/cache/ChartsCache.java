@@ -30,9 +30,6 @@ public class ChartsCache {
     @Autowired
     private OrderService orderService;
 
-    /**
-     * Map <pairId, <interval, data>>
-     */
     private Map<Integer, Map<String, String>> cacheMap = new ConcurrentHashMap<>();
     private Map<Integer, Semaphore> locksMap = new ConcurrentHashMap<>();
     private Map<Integer, ReentrantLock> secondLocksMap = new ConcurrentHashMap<>();
@@ -62,16 +59,6 @@ public class ChartsCache {
         return cacheMap.get(currencyPairId);
     }
 
-   /*todo: update only subscribed intervals
-   public Map<String, String> getData(Integer currencyPairId, List<BackDealInterval> intervals) {
-
-        log.debug("get data for pair {}", currencyPairId);
-        if (!cacheMap.containsKey(currencyPairId)) {
-            log.debug("no key {}", currencyPairId );
-            updateCache(currencyPairId);
-        }
-        return cacheMap.get(currencyPairId);
-    }*/
 
     public void updateCache(Integer currencyPairId) {
         Semaphore currentSemaphore = locksMap.computeIfAbsent(currencyPairId, p -> new Semaphore(1));

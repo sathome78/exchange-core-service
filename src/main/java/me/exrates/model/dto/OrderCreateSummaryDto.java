@@ -4,10 +4,6 @@ import me.exrates.util.BigDecimalProcessing;
 
 import java.util.Locale;
 
-/**
- * Created by Valk
- */
-
 public class OrderCreateSummaryDto {
     private String currencyPairName;
     private String operationTypeName;
@@ -19,8 +15,6 @@ public class OrderCreateSummaryDto {
     private String totalWithComission;
     private String stop;
     private String baseType;
-
-    /*constructors*/
 
     public OrderCreateSummaryDto() {
     }

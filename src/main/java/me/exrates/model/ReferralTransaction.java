@@ -1,9 +1,13 @@
 package me.exrates.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import me.exrates.model.enums.ReferralTransactionStatusEnum;
 import me.exrates.model.main.ExOrder;
 import me.exrates.model.main.Transaction;
 
+@Getter
+@Setter
 public class ReferralTransaction {
 
     private int id;
@@ -15,69 +19,6 @@ public class ReferralTransaction {
     private String initiatorEmail;
     private ReferralTransactionStatusEnum statusEnum;
 
-    public ExOrder getExOrder() {
-        return exOrder;
-    }
-
-    public void setExOrder(final ExOrder exOrder) {
-        this.exOrder = exOrder;
-    }
-
-    public ReferralLevel getReferralLevel() {
-        return referralLevel;
-    }
-
-    public void setReferralLevel(final ReferralLevel referralLevel) {
-        this.referralLevel = referralLevel;
-    }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
-    public void setTransaction(final Transaction transaction) {
-        this.transaction = transaction;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(final int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(final int userId) {
-        this.userId = userId;
-    }
-
-    public int getInitiatorId() {
-        return initiatorId;
-    }
-
-    public void setInitiatorId(final int initiatorId) {
-        this.initiatorId = initiatorId;
-    }
-
-    public String getInitiatorEmail() {
-        return initiatorEmail;
-    }
-
-    public void setInitiatorEmail(final String initiatorEmail) {
-        this.initiatorEmail = initiatorEmail;
-    }
-
-    public ReferralTransactionStatusEnum getStatusEnum() {
-        return statusEnum;
-    }
-
-    public void setStatusEnum(ReferralTransactionStatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
-    }
 
     @Override
     public boolean equals(final Object o) {

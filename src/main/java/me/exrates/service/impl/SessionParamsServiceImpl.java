@@ -39,10 +39,6 @@ public class SessionParamsServiceImpl implements SessionParamsService {
     private SessionParamsDao sessionParamsDao;
     @Autowired
     private UserService userService;
-    @Autowired
-    private MessageSource messageSource;
-    @Autowired
-    private LocaleResolver localeResolver;
 
     @Override
     public List<SessionLifeTimeType> getAllByActive(boolean active) {

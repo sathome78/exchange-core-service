@@ -9,9 +9,6 @@ import lombok.experimental.Tolerate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-/**
- * Created by Maks on 13.12.2017.
- */
 @Data
 @Builder(toBuilder = true)
 public class AlertDto {

@@ -2,13 +2,9 @@ package me.exrates.model.dto;
 
 import java.math.BigDecimal;
 
-/**
- * Created by Valk on 03.06.2016.
- */
 public class OrderCommissionsDto {
     private BigDecimal sellCommission;
     private BigDecimal buyCommission;
-    /*getters setters*/
 
     public BigDecimal getSellCommission() {
         return sellCommission;

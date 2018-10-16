@@ -4,9 +4,6 @@ import me.exrates.model.onlineTableDto.OnlineTableDto;
 
 import java.util.List;
 
-/**
- * Created by Valk on 06.06.2016.
- */
 public class TableParams {
     private String tableId;
     private Integer pageSize;

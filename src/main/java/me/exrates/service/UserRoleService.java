@@ -3,8 +3,8 @@ package me.exrates.service;
 import me.exrates.model.dto.UserRoleSettings;
 
 public interface UserRoleService {
-    boolean isOrderAcceptionAllowedForUser(int userId);
+    boolean isOrderAcceptionAllowedForUser(Integer userId);
 
-    UserRoleSettings retrieveSettingsForRole(int role);
+    UserRoleSettings retrieveSettingsForRole(Integer role);
 
 }

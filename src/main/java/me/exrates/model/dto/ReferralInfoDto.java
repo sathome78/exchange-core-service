@@ -4,9 +4,6 @@ import lombok.Data;
 
 import java.util.List;
 
-/**
- * Created by maks on 05.04.2017.
- */
 @Data
 public class ReferralInfoDto {
 

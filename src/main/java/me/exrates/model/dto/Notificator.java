@@ -5,9 +5,6 @@ import me.exrates.model.enums.NotificationPayTypeEnum;
 
 import java.math.BigDecimal;
 
-/**
- * Created by Maks on 29.09.2017.
- */
 @Data
 public class Notificator {
 

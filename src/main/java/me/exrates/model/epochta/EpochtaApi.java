@@ -19,9 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 
-/**
- * Created by Maks on 17.10.2017.
- */
 @Log4j2
 @Component
 public class EpochtaApi {

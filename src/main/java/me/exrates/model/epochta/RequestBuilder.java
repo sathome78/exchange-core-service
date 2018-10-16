@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Maks on 17.10.2017.
- */
 public class RequestBuilder {
 
     String URL;

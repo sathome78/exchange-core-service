@@ -13,7 +13,6 @@ public class OrderRoleInfoForDelete {
     private UserRole acceptorRole;
     private int transactionsCount;
 
-
     public boolean mayDeleteWithoutProcessingTransactions() {
         return status == OrderStatus.CLOSED && creatorRole == BOT_TRADER && acceptorRole == BOT_TRADER && transactionsCount == 0;
     }

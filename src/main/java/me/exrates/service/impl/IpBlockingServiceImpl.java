@@ -18,23 +18,24 @@ import java.util.concurrent.ConcurrentMap;
 public class IpBlockingServiceImpl implements IpBlockingService {
 
 
-    @Value("${}")
-    private long shortBanTime;
 
-    @Value("${}")
-    private long longBanTime;
+    @Value("${ban.short.attempts.num}")
+    private Integer attemptsBeforeShortBan;
 
-    @Value("${}")
-    private int attemptsBeforeLongBan;
+    @Value("${ban.long.attempts.num}")
+    private Integer attemptsBeforeLongBan;
 
-    @Value("${}")
-    private long periodAttemptsBeforeLongBan;
+    @Value("${ban.short.attempts.period}")
+    private Long periodAttemptsBeforeShortBan;
 
-    @Value("${}")
-    private int attemptsBeforeShortBan;
+    @Value("${ban.long.attempts.period}")
+    private Long periodAttemptsBeforeLongBan;
 
-    @Value("${}")
-    private long periodAttemptsBeforeShortBan;
+    @Value("${ban.short.time}")
+    private Long shortBanTime;
+
+    @Value("${ban.long.time}")
+    private Long longBanTime;
 
     private final Object lock = new Object();
 
@@ -66,8 +67,6 @@ public class IpBlockingServiceImpl implements IpBlockingService {
 
             }
         }
-
-
     }
 
     private boolean checkBanPending(LoginAttemptDto attempt, long banTimeSeconds, LocalDateTime currentTime) {

@@ -2,9 +2,6 @@ package me.exrates.model.dto;
 
 import lombok.*;
 
-/**
- * Created by OLEG on 28.02.2017.
- */
 @Getter
 @Setter
 @NoArgsConstructor

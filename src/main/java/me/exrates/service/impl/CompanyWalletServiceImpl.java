@@ -23,10 +23,7 @@ import static me.exrates.util.BigDecimalProcessing.doAction;
 public class CompanyWalletServiceImpl implements CompanyWalletService {
     @Autowired
     private CompanyWalletDao companyWalletDao;
-    @Autowired
-    private CurrencyService currencyService;
 
-    @Override
     public CompanyWallet create(Currency currency) {
         return companyWalletDao.create(currency);
     }

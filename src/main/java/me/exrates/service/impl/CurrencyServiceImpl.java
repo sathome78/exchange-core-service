@@ -28,7 +28,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Autowired
     private CurrencyDao currencyDao;
 
-
     @Autowired
     private UserService userService;
 
@@ -46,11 +45,7 @@ public class CurrencyServiceImpl implements CurrencyService {
             add("DASH");
         }
     };
-    private static final int CRYPTO_PRECISION = 8;
-    private static final int DEFAULT_PRECISION = 2;
 
-
-    @Override
     public List<CurrencyPair> getAllCurrencyPairs(CurrencyPairType type) {
         return currencyDao.getAllCurrencyPairs(type);
     }

@@ -6,9 +6,6 @@ import lombok.Setter;
 import me.exrates.model.enums.NewsTypeEnum;
 
 
-/**
- * Created by ValkSam
- */
 @Getter
 @Setter
 @NoArgsConstructor

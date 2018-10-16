@@ -4,9 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import me.exrates.model.main.CurrencyPair;
 
-/**
- * Created by Valk on 12.04.16.
- */
 @Getter
 @Setter
 public class ExOrderStatisticsDto {
@@ -20,9 +17,6 @@ public class ExOrderStatisticsDto {
     private String maxRate;
     private String sumBase;
     private String sumConvert;
-
-    public ExOrderStatisticsDto() {
-    }
 
     public ExOrderStatisticsDto(CurrencyPair currencyPair) {
         this.currencyPair = currencyPair;

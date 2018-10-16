@@ -1,8 +1,10 @@
 package me.exrates.model.onlineTableDto;
 
-/**
- * Created by Valk
- */
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class MyWalletsDetailedDto extends OnlineTableDto {
     private Integer id;
     private Integer userId;
@@ -25,9 +27,6 @@ public class MyWalletsDetailedDto extends OnlineTableDto {
         this.needRefresh = needRefresh;
     }
 
-    /*hash*/
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -71,109 +70,5 @@ public class MyWalletsDetailedDto extends OnlineTableDto {
         result = 31 * result + (reservedByMerchant != null ? reservedByMerchant.hashCode() : 0);
         return result;
     }
-    /*getters setters*/
 
-    public boolean isNeedRefresh() {
-        return needRefresh;
-    }
-
-    public void setNeedRefresh(boolean needRefresh) {
-        this.needRefresh = needRefresh;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getCurrencyName() {
-        return currencyName;
-    }
-
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
-    }
-
-    public String getActiveBalance() {
-        return activeBalance;
-    }
-
-    public void setActiveBalance(String activeBalance) {
-        this.activeBalance = activeBalance;
-    }
-
-    public String getOnConfirmation() {
-        return onConfirmation;
-    }
-
-    public void setOnConfirmation(String onConfirmation) {
-        this.onConfirmation = onConfirmation;
-    }
-
-    public String getOnConfirmationStage() {
-        return onConfirmationStage;
-    }
-
-    public void setOnConfirmationStage(String onConfirmationStage) {
-        this.onConfirmationStage = onConfirmationStage;
-    }
-
-    public String getOnConfirmationCount() {
-        return onConfirmationCount;
-    }
-
-    public void setOnConfirmationCount(String onConfirmationCount) {
-        this.onConfirmationCount = onConfirmationCount;
-    }
-
-    public String getReservedBalance() {
-        return reservedBalance;
-    }
-
-    public void setReservedBalance(String reservedBalance) {
-        this.reservedBalance = reservedBalance;
-    }
-
-    public String getReservedByOrders() {
-        return reservedByOrders;
-    }
-
-    public void setReservedByOrders(String reservedByOrders) {
-        this.reservedByOrders = reservedByOrders;
-    }
-
-    public String getReservedByMerchant() {
-        return reservedByMerchant;
-    }
-
-    public void setReservedByMerchant(String reservedByMerchant) {
-        this.reservedByMerchant = reservedByMerchant;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getCurrencyId() {
-        return currencyId;
-    }
-
-    public void setCurrencyId(Integer currencyId) {
-        this.currencyId = currencyId;
-    }
-
-    public String getCurrencyDescription() {
-        return currencyDescription;
-    }
-
-    public void setCurrencyDescription(String currencyDescription) {
-        this.currencyDescription = currencyDescription;
-    }
 }

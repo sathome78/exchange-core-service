@@ -25,8 +25,6 @@ public interface NotificatorsService {
 
     List<Notificator> getAllNotificators();
 
-
     NotificatorService getNotificationServiceByBeanName(String beanName);
-
 
 }

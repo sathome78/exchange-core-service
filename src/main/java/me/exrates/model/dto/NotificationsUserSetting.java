@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.experimental.Tolerate;
 import me.exrates.model.enums.NotificationMessageEventEnum;
 
-/**
- * Created by Maks on 29.09.2017.
- */
 @Data
 @Builder
 public class NotificationsUserSetting {

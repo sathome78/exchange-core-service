@@ -9,9 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Maks on 17.10.2017.
- */
 public class Connector {
 
     private static HttpURLConnection httpConn;

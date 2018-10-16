@@ -30,10 +30,6 @@ public enum IntervalType2 {
         return correspondingTimeUnit;
     }
 
-    public Long getChartRefreshInterval() {
-        return chartRefreshInterval;
-    }
-
     public boolean isChartLazyUpdate() {
         return chartLazyUpdate;
     }

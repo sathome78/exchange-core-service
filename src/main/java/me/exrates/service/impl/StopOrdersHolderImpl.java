@@ -60,9 +60,6 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
         });
     }
 
-    /**
-     * return set with orders by this currency pair @pairId pair which has higher or equal @rate
-     */
     @Override
     public NavigableSet<StopOrderSummaryDto> getSellOrdersForPairAndStopRate(int pairId, BigDecimal rate) {
         if (!sellOrdersMap.containsKey(pairId)) {
@@ -75,9 +72,6 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
         return thisOrdersSet.tailSet(new StopOrderSummaryDto(0, rate), true);
     }
 
-    /**
-     * return set with orders by this currency pair @pairId pair which has lower or equal @rate
-     */
     @Override
     public NavigableSet<StopOrderSummaryDto> getBuyOrdersForPairAndStopRate(int pairId, BigDecimal rate) {
         if (!buyOrdersMap.containsKey(pairId)) {

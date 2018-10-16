@@ -5,9 +5,6 @@ import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
-/**
- * Created by maks on 10.04.2017.
- */
 @Log4j2
 @Data
 public class RefsListContainer {

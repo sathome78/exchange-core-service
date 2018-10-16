@@ -6,9 +6,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * Created by ValkSam
- */
 @Getter
 @Setter
 @NoArgsConstructor

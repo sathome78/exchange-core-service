@@ -1,6 +1,5 @@
 package me.exrates.service.impl;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.exception.security.exception.PinCodeCheckNeedException;
@@ -91,27 +90,6 @@ public class SecureServiceImpl implements SecureService {
             if (needToSendPin) {
                 String newPin = messageSource.getMessage("notification.message.newPinCode", null, locale);
                 message = newPin.concat(sendPinMessage(userEmail, setting, request, new String[]{IpUtils.getClientIpAddress(request, 18)}));
-            } else {
-                NotificationResultDto lastNotificationResultDto = (NotificationResultDto) request.getSession().getAttribute("2fa_message".concat(event.name()));
-                message = messageSource.getMessage(lastNotificationResultDto.getMessageSource(), lastNotificationResultDto.getArguments(), locale);
-            }
-            return new PinDto(message, needToSendPin);
-        }
-        return null;
-    }
-
-    public PinDto resendEventPin(HttpServletRequest request, String email, NotificationMessageEventEnum event, String amountCurrency) {
-        Preconditions.checkArgument(event.equals(NotificationMessageEventEnum.TRANSFER) || event.equals(NotificationMessageEventEnum.WITHDRAW));
-        int userId = userService.getIdByEmail(email);
-        NotificationsUserSetting setting = determineSettings(settingsService.getByUserAndEvent(userId, event), event.isCanBeDisabled(), userId, event);
-        if (setting != null) {
-            PinAttempsDto attempsDto = (PinAttempsDto) request.getSession().getAttribute("2fa_".concat(event.name()));
-            Locale locale = localeResolver.resolveLocale(request);
-            boolean needToSendPin = attempsDto.needToSendPin();
-            String message;
-            if (needToSendPin) {
-                String newPin = messageSource.getMessage("notification.message.newPinCode", null, locale);
-                message = newPin.concat(sendPinMessage(email, setting, request, new String[]{amountCurrency}));
             } else {
                 NotificationResultDto lastNotificationResultDto = (NotificationResultDto) request.getSession().getAttribute("2fa_message".concat(event.name()));
                 message = messageSource.getMessage(lastNotificationResultDto.getMessageSource(), lastNotificationResultDto.getArguments(), locale);

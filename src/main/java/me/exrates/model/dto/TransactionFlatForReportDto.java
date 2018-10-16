@@ -8,9 +8,6 @@ import me.exrates.model.enums.TransactionSourceType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Created by ValkSam
- */
 @Getter
 @Setter
 public class TransactionFlatForReportDto {

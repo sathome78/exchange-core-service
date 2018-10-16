@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by maks on 13.04.2017.
- */
 @Data
 public class RefFilterData {
 

@@ -1,8 +1,5 @@
 package me.exrates.model.dto;
 
-/**
- * Created by Valk on 23.05.2016.
- */
 public enum WalletTransferStatus {
     SUCCESS,
     WALLET_NOT_FOUND,

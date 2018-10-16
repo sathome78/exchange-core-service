@@ -2,9 +2,6 @@ package me.exrates.model.dto;
 
 import me.exrates.model.enums.UserRole;
 
-/**
- * Created by OLEG on 06.09.2016.
- */
 public class UserSessionInfoDto {
 
     private int userId;

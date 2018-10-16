@@ -27,8 +27,7 @@ public class StopOrder {
     private BigDecimal commissionFixedAmount;
     private CurrencyPair currencyPair;
 
-    public StopOrder() {
-    }
+    public StopOrder() {}
 
     public StopOrder(ExOrder exOrder) {
         this.id = exOrder.getId();

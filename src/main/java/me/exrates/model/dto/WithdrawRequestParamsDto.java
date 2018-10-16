@@ -7,9 +7,6 @@ import me.exrates.model.enums.OperationType;
 
 import java.math.BigDecimal;
 
-/**
- * @author ValkSam
- */
 @Getter
 @Setter
 @ToString

@@ -14,9 +14,6 @@ import java.util.Map;
 
 import static me.exrates.model.enums.TransactionSourceType.*;
 
-/**
- * Created by Ajet on 23.07.2016.
- */
 @Log4j2
 @Getter
 @Setter

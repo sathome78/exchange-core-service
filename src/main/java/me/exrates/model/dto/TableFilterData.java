@@ -7,9 +7,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created by OLEG on 28.02.2017.
- */
 public abstract class TableFilterData {
     private List<FilterDataItem> filterItems;
 

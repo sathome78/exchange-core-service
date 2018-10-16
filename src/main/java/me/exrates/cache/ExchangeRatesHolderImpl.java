@@ -32,21 +32,6 @@ public class ExchangeRatesHolderImpl implements ExchangeRatesHolder {
     }
 
     @Override
-    public void onRatesChange(Integer pairId, BigDecimal rate) {
-        setRates(pairId, rate);
-    }
-
-    private synchronized void setRates(Integer pairId, BigDecimal rate) {
-        if (ratesMap.containsKey(pairId)) {
-            ExOrderStatisticsShortByPairsDto dto = ratesMap.get(pairId);
-            dto.setPredLastOrderRate(dto.getLastOrderRate());
-            dto.setLastOrderRate(rate.toPlainString());
-        } else {
-            ratesMap.put(pairId, orderDao.getOrderStatisticForSomePairs(Collections.singletonList(pairId)).get(0));
-        }
-    }
-
-    @Override
     public List<ExOrderStatisticsShortByPairsDto> getAllRates() {
         return new ArrayList<>(ratesMap.values());
     }

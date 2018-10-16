@@ -5,9 +5,6 @@ import lombok.Setter;
 import me.exrates.model.enums.OperationType;
 import org.springframework.util.StringUtils;
 
-/**
- * Created by Valk on 14.04.16.
- */
 @Getter
 @Setter
 public class OrderListDto extends OnlineTableDto {

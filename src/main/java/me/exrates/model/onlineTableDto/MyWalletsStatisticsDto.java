@@ -1,8 +1,10 @@
 package me.exrates.model.onlineTableDto;
 
-/**
- * Created by Valk
- */
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class MyWalletsStatisticsDto extends OnlineTableDto {
     private String currencyName;
     private String description;
@@ -13,13 +15,6 @@ public class MyWalletsStatisticsDto extends OnlineTableDto {
         this.needRefresh = true;
     }
 
-    public MyWalletsStatisticsDto(boolean needRefresh) {
-        this.needRefresh = needRefresh;
-    }
-
-    /*hash*/
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -42,45 +37,4 @@ public class MyWalletsStatisticsDto extends OnlineTableDto {
         return result;
     }
 
-    /*getters setters*/
-
-    public boolean isNeedRefresh() {
-        return needRefresh;
-    }
-
-    public void setNeedRefresh(boolean needRefresh) {
-        this.needRefresh = needRefresh;
-    }
-
-    public String getCurrencyName() {
-        return currencyName;
-    }
-
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
-    }
-
-    public String getActiveBalance() {
-        return activeBalance;
-    }
-
-    public void setActiveBalance(String activeBalance) {
-        this.activeBalance = activeBalance;
-    }
-
-    public String getTotalBalance() {
-        return totalBalance;
-    }
-
-    public void setTotalBalance(String totalBalance) {
-        this.totalBalance = totalBalance;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

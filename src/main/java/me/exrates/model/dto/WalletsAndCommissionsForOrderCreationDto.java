@@ -2,15 +2,6 @@ package me.exrates.model.dto;
 
 import java.math.BigDecimal;
 
-/**
- * Contains
- * - IDs the currency
- * - IDs the wallets -
- * - balances the wallets of participants the order: user-creator, user-acceptor, company
- * - status the order
- *
- * @author ValkSam
- */
 public class WalletsAndCommissionsForOrderCreationDto {
     int userId;
     /**/

@@ -5,7 +5,7 @@ import me.exrates.exception.*;
 import me.exrates.exception.security.exception.IncorrectPinException;
 import me.exrates.exception.security.exception.PinCodeCheckNeedException;
 import me.exrates.exception.security.exception.UnconfirmedUserException;
-import me.exrates.model.OrderHistoryPeriod;
+import me.exrates.model.enums.OrderHistoryPeriod;
 import me.exrates.model.User;
 import me.exrates.model.dto.UpdateUserDto;
 import me.exrates.model.dto.UserEmailDto;
@@ -189,7 +189,7 @@ public class MainController {
                     if (ip == null) {
                         ip = request.getRemoteHost();
                     }
-                    user.setIp(ip);
+                    user.setIpaddress(ip);
                     if (userService.create(user, localeResolver.resolveLocale(request), source)) {
                         flag = true;
                         logger.info("User registered with parameters = " + user.toString());

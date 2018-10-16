@@ -7,7 +7,6 @@ import me.exrates.exception.WalletPersistException;
 import me.exrates.model.main.CompanyWallet;
 import me.exrates.model.main.Currency;
 import me.exrates.service.CompanyWalletService;
-import me.exrates.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

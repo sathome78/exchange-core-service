@@ -1,7 +1,6 @@
 package me.exrates.model.main;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.servlet.http.HttpServletRequest;

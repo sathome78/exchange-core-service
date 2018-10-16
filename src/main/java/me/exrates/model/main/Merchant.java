@@ -1,6 +1,6 @@
 package me.exrates.model.main;
 
-import lombok.*;
+import lombok.Data;
 import me.exrates.model.enums.MerchantProcessType;
 
 @Data

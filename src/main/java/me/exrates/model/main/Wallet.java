@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import me.exrates.model.User;
-import me.exrates.util.BigDecimalProcessing;
 
 import java.math.BigDecimal;
 

@@ -1,7 +1,7 @@
 package me.exrates.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
+import lombok.Data;
 import me.exrates.model.enums.UserCommentTopicEnum;
 import me.exrates.util.LocalDateTimeSerializer;
 

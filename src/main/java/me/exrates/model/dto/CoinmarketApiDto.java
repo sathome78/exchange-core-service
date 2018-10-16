@@ -3,7 +3,6 @@ package me.exrates.model.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.exrates.model.main.CurrencyPair;
 import me.exrates.util.BigDecimalProcessing;
 
 import java.math.BigDecimal;

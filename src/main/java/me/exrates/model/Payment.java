@@ -1,6 +1,6 @@
 package me.exrates.model;
 
-import lombok.*;
+import lombok.Data;
 import me.exrates.model.enums.OperationType;
 
 @Data

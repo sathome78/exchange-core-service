@@ -47,9 +47,6 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    private UserSessionService userSessionService;
-
-    @Autowired
     private SendMailService sendMailService;
 
     @Autowired
@@ -60,7 +57,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TokenScheduler tokenScheduler;
-
 
     @Autowired
     private ReferralService referralService;

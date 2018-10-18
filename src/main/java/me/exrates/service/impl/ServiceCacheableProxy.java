@@ -38,25 +38,6 @@ public class ServiceCacheableProxy {
     private Twitter twitter;
 
 
-    @CacheEvict(cacheNames = "currencyPairStatistics", key = "#root.methodName", condition = "#evictCache", beforeInvocation = true)
-    @Cacheable(cacheNames = "currencyPairStatistics", key = "#root.methodName")
-    public List<ExOrderStatisticsShortByPairsDto> getOrdersStatisticByPairs(Boolean evictCache) {
-        log.debug("\nevictCache: " + evictCache);
-        return orderDao.getOrderStatisticByPairs();
-    }
-
-    @CacheEvict(cacheNames = "orderAccepted", key = "#currencyPair.id", condition = "''.equals(#email) && #evictCache", beforeInvocation = true)
-    @Cacheable(cacheNames = "orderAccepted", key = "#currencyPair.id", condition = "''.equals(#email)")
-    public List<OrderAcceptedHistoryDto> getOrderAcceptedForPeriod(
-            String email,
-            BackDealInterval backDealInterval,
-            Integer limit,
-            CurrencyPair currencyPair,
-            Boolean evictCache) {
-        log.debug(String.format("\n%s evictCache: %s", currencyPair, evictCache));
-        return orderDao.getOrderAcceptedForPeriod(email, backDealInterval, limit, currencyPair);
-    }
-
     @CacheEvict(cacheNames = "orderBuy", key = "#currencyPair.id", condition = "#evictCache", beforeInvocation = true)
     @Cacheable(cacheNames = "orderBuy", key = "#currencyPair.id")
     public List<OrderListDto> getAllBuyOrders(
@@ -73,18 +54,6 @@ public class ServiceCacheableProxy {
             UserRole filterRole, Boolean evictCache) {
         log.debug(String.format("\n%s evictCache: %s", currencyPair, evictCache));
         return orderDao.getOrdersSellForCurrencyPair(currencyPair, filterRole);
-    }
-
-    @Cacheable(cacheNames = "singlePairStatistics", key = "{#currencyPair.id, #backDealInterval}")
-    public ExOrderStatisticsDto getOrderStatistic(CurrencyPair currencyPair, BackDealInterval backDealInterval) {
-        log.debug(String.format("\n%s backDealInterval: %s", currencyPair, backDealInterval));
-        return orderDao.getOrderStatistic(currencyPair, backDealInterval);
-    }
-
-    @Cacheable(cacheNames = "candleChart", key = "{#currencyPair.id, #backDealInterval}")
-    public List<CandleChartItemDto> getDataForCandleChart(CurrencyPair currencyPair, BackDealInterval backDealInterval) {
-        log.debug(String.format("\n%s backDealInterval: %s", currencyPair, backDealInterval));
-        return orderDao.getDataForCandleChart(currencyPair, backDealInterval);
     }
 
     @Cacheable(cacheNames = "newsBrief", key = "#locale")

@@ -23,10 +23,7 @@ public interface CurrencyService {
 
     List findAllCurrenciesWithHidden();
 
-
     List<CurrencyPair> findPermitedCurrencyPairs(CurrencyPairType ico);
 
     Currency findByName(String currencyNameForPay);
-
-    Currency getById(int currencyId);
 }

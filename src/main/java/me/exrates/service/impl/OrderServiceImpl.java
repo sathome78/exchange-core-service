@@ -141,7 +141,8 @@ public class OrderServiceImpl implements OrderService {
         return timeFrames;
     }
 
-    @Transactional(transactionManager = "slaveTxManager", readOnly = true)
+    @Transactional( readOnly = true)
+//    @Transactional(transactionManager = "slaveTxManager", readOnly = true) //TODO
     @Override
     public ExOrderStatisticsDto getOrderStatistic(CurrencyPair currencyPair, BackDealInterval backDealInterval, Locale locale) {
         ExOrderStatisticsDto result = orderDao.getOrderStatistic(currencyPair, backDealInterval);
@@ -1325,7 +1326,7 @@ public class OrderServiceImpl implements OrderService {
         return jsonArray.toString();
     }
 
-    @Transactional(transactionManager = "slaveTxManager")
+    @Transactional
     @Override
     public String getChartData(Integer currencyPairId, final BackDealInterval backDealInterval) {
         CurrencyPair cp = currencyService.findCurrencyPairById(currencyPairId);

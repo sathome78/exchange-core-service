@@ -24,14 +24,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@Log4j2(topic = "ws_stomp_log")
+@Log4j2
 @Component
 public class StompMessengerImpl implements StompMessenger {
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+//    @Autowired // TODO
+    private SimpMessagingTemplate brokerMessagingTemplate;
     @Autowired
     private DefaultSimpUserRegistry registry;
     @Autowired
@@ -93,7 +93,7 @@ public class StompMessengerImpl implements StompMessenger {
         String userEmail = userService.getEmailById(userId);
         String destination = "/queue/personal/".concat(currencyPair.toString());
         String message = orderService.getTradesForRefresh(currencyPair, userEmail, RefreshObjectsEnum.MY_TRADES);
-        messagingTemplate.convertAndSendToUser(userEmail, destination, message);
+        brokerMessagingTemplate.convertAndSendToUser(userEmail, destination, message);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class StompMessengerImpl implements StompMessenger {
     }
 
     private void sendMessageToDestination(String destination, String message) {
-        messagingTemplate.convertAndSend(destination, message);
+        brokerMessagingTemplate.convertAndSend(destination, message);
     }
 
     private void sendMessageToSubscription(SimpSubscription subscription, String message, String dest) {
@@ -144,7 +144,7 @@ public class StompMessengerImpl implements StompMessenger {
     }
 
     private void sendMessageToDestinationAndUser(final String user, String destination, String message) {
-        messagingTemplate.convertAndSendToUser(user,
+        brokerMessagingTemplate.convertAndSendToUser(user,
                 destination,
                 message);
     }

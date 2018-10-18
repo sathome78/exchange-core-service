@@ -37,7 +37,8 @@ public class ReferralLevelDaoImpl implements ReferralLevelDao {
     };
 
     @Autowired
-    public ReferralLevelDaoImpl(@Qualifier(value = "masterTemplate") final NamedParameterJdbcTemplate jdbcTemplate) {
+    //TODO @Qualifier(value = "masterTemplate")
+    public ReferralLevelDaoImpl( NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

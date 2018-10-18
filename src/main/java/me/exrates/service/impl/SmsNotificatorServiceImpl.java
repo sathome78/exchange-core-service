@@ -14,6 +14,7 @@ import me.exrates.model.main.CompanyWallet;
 import me.exrates.model.vo.WalletOperationData;
 import me.exrates.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,9 +27,6 @@ import java.util.*;
 import static me.exrates.model.vo.WalletOperationData.BalanceType.ACTIVE;
 import static me.exrates.util.BigDecimalProcessing.doAction;
 
-/**
- * Created by Maks on 29.09.2017.
- */
 @Log4j2(topic = "message_notify")
 @Component
 public class SmsNotificatorServiceImpl implements NotificatorService, Subscribable {
@@ -40,7 +38,7 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
     @Autowired
     private WalletService walletService;
     @Autowired
-    private CurrencyService currencyService;
+    private CurrencyService currencyServiceImpl;
     @Autowired
     private SmsSubscriptionDao subscriptionDao;
     @Autowired
@@ -226,7 +224,7 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
         }
         WalletOperationData walletOperationData = new WalletOperationData();
         walletOperationData.setOperationType(OperationType.OUTPUT);
-        walletOperationData.setWalletId(walletService.getWalletId(userId, currencyService.findByName(CURRENCY_NAME).getId()));
+        walletOperationData.setWalletId(walletService.getWalletId(userId, currencyServiceImpl.findByName(CURRENCY_NAME).getId()));
         walletOperationData.setBalanceType(ACTIVE);
         walletOperationData.setCommissionAmount(feeAmount);
         walletOperationData.setAmount(totalAmount);
@@ -236,7 +234,7 @@ public class SmsNotificatorServiceImpl implements NotificatorService, Subscribab
         if (!walletTransferStatus.equals(WalletTransferStatus.SUCCESS)) {
             throw new PaymentException(walletTransferStatus);
         }
-        CompanyWallet companyWallet = companyWalletService.findByCurrency(currencyService.findByName(CURRENCY_NAME));
+        CompanyWallet companyWallet = companyWalletService.findByCurrency(currencyServiceImpl.findByName(CURRENCY_NAME));
         companyWalletService.deposit(companyWallet, new BigDecimal(0), feeAmount);
         return totalAmount;
     }

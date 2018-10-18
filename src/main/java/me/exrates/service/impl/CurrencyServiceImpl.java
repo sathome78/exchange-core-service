@@ -5,46 +5,26 @@ import me.exrates.exception.CurrencyPairNotFoundException;
 import me.exrates.model.dto.CurrencyPairLimitDto;
 import me.exrates.model.enums.CurrencyPairType;
 import me.exrates.model.enums.OperationType;
-import me.exrates.model.enums.OrderType;
-import me.exrates.model.enums.UserRole;
 import me.exrates.model.main.Currency;
 import me.exrates.model.main.CurrencyPair;
 import me.exrates.service.CurrencyService;
 import me.exrates.service.UserRoleService;
-import me.exrates.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class CurrencyServiceImpl implements CurrencyService {
 
-
     @Autowired
     private CurrencyDao currencyDao;
-
-    @Autowired
-    private UserService userService;
-
+    //    @Autowired
+//    private UserService userService;
     @Autowired
     UserRoleService userRoleService;
-
-    private static final Set<String> CRYPTO = new HashSet<String>() {
-        {
-            add("EDRC");
-            add("BTC");
-            add("LTC");
-            add("EDR");
-            add("ETH");
-            add("ETC");
-            add("DASH");
-        }
-    };
 
     public List<CurrencyPair> getAllCurrencyPairs(CurrencyPairType type) {
         return currencyDao.getAllCurrencyPairs(type);
@@ -65,14 +45,15 @@ public class CurrencyServiceImpl implements CurrencyService {
             throw new CurrencyPairNotFoundException("Currency pair not found");
         }
     }
-
-
+    //TODO should be fix.
     @Override
     public CurrencyPairLimitDto findLimitForRoleByCurrencyPairAndType(int currencyPairId, OperationType operationType) {
-        UserRole userRole = userService.getUserRoleFromSecurityContext();
-        OrderType orderType = OrderType.convert(operationType.name());
-        return currencyDao.findCurrencyPairLimitForRoleByPairAndType(currencyPairId, userRole.getRole(), orderType.getType());
+//        UserRole userRole = userService.getUserRoleFromSecurityContext();
+//        OrderType orderType = OrderType.convert(operationType.name());
+//        return currencyDao.findCurrencyPairLimitForRoleByPairAndType(currencyPairId, userRole.getRole(), orderType.getType());
+        return null;
     }
+
 
     public List<Currency> findAllCurrenciesWithHidden() {
         return currencyDao.findAllCurrenciesWithHidden();
@@ -90,12 +71,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public Currency findByName(String name) {
         return currencyDao.findByName(name);
-    }
-
-    @Override
-    public Currency getById(int id) {
-        return currencyDao.findById(id);
-
     }
 
     @Override

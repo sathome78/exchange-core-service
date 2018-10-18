@@ -20,7 +20,7 @@ import java.util.Optional;
 public class UserAlertsDaoImpl implements UserAlertsDao {
 
     @Autowired
-    @Qualifier(value = "masterTemplate")
+//    @Qualifier(value = "masterTemplate")//TODO
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private static RowMapper<AlertDto> getWalletsForOrderCancelDtoMapper = (rs, idx) -> {

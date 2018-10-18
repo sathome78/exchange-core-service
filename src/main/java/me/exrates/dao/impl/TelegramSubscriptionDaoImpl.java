@@ -24,7 +24,7 @@ import java.util.Optional;
 public class TelegramSubscriptionDaoImpl implements TelegramSubscriptionDao {
 
     @Autowired
-    @Qualifier(value = "masterTemplate")
+//    @Qualifier(value = "masterTemplate") //TODO
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private static RowMapper<TelegramSubscription> telegramSubscribtionRowMapper = (rs, idx) -> {

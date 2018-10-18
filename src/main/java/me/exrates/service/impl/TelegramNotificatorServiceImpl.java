@@ -15,6 +15,7 @@ import me.exrates.model.vo.WalletOperationData;
 import me.exrates.service.*;
 import me.exrates.service.telegram.TelegramBotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,26 +32,30 @@ import static me.exrates.model.vo.WalletOperationData.BalanceType.ACTIVE;
 @Component("telegramNotificatorServiceImpl")
 public class TelegramNotificatorServiceImpl implements NotificatorService, Subscribable {
 
-    @Autowired
-    private TelegramSubscriptionDao subscribtionDao;
-    @Autowired
-    private UserService userService;
+    private final TelegramSubscriptionDao subscribtionDao;
+    private final UserService userService;
     @Autowired
     private TelegramBotService telegramBotService;
-    @Autowired
-    private WalletService walletService;
-    @Autowired
-    private CurrencyService currencyService;
-    @Autowired
-    private NotificatorsService notificatorsService;
+    private final WalletService walletService;
+    private final CurrencyService currencyServiceImpl;
+    private final NotificatorsService notificatorsService;
 
 
     private Currency currency;
     private static final String CURRENCY_NAME_FOR_PAY = "USD";
 
+    @Autowired
+    public TelegramNotificatorServiceImpl(TelegramSubscriptionDao subscribtionDao, UserService userService,WalletService walletService, @Qualifier("currencyServiceImpl") CurrencyService currencyServiceImpl, NotificatorsService notificatorsService) {
+        this.subscribtionDao = subscribtionDao;
+        this.userService = userService;
+        this.walletService = walletService;
+        this.currencyServiceImpl = currencyServiceImpl;
+        this.notificatorsService = notificatorsService;
+    }
+
     @PostConstruct
     private void init() {
-        currency = currencyService.findByName(CURRENCY_NAME_FOR_PAY);
+        currency = currencyServiceImpl.findByName(CURRENCY_NAME_FOR_PAY);
     }
 
     @Transactional

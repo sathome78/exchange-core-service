@@ -35,7 +35,7 @@ public class ChartsCache {
     private Map<Integer, ReentrantLock> secondLocksMap = new ConcurrentHashMap<>();
     private Map<Integer, CountDownLatch> countDownLocksMap = new ConcurrentHashMap<>();
 
-    @PostConstruct
+//    @PostConstruct //todo
     public void init() {
         if (!lazyLoad) {
             List<CurrencyPair> pairs = currencyService.getAllCurrencyPairs(CurrencyPairType.ALL);

@@ -11,6 +11,7 @@ import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class TokenScheduler {
     @Autowired
     protected UserService userService;
 
+    @PostConstruct
     private void init() {
         try {
             TokenScheduler.tokenScheduler = this;
@@ -45,6 +47,7 @@ public class TokenScheduler {
         }
     }
 
+    @PreDestroy
     private void destroy() {
         try {
             scheduler.shutdown(true);

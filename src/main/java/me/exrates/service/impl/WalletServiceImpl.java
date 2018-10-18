@@ -17,6 +17,7 @@ import me.exrates.service.*;
 import me.exrates.util.BigDecimalProcessing;
 import me.exrates.util.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,15 +39,10 @@ public class WalletServiceImpl implements WalletService {
     @Autowired
     private WalletDao walletDao;
     @Autowired
-    private CurrencyService currencyService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CommissionService commissionService;
-    @Autowired
-    private CompanyWalletService companyWalletService;
+    private CurrencyServiceImpl currencyServiceImpl;
 
-    @Transactional(transactionManager = "slaveTxManager", readOnly = true)
+    @Transactional( readOnly = true)
+//    @Transactional(transactionManager = "slaveTxManager", readOnly = true) //TODO
     public List<MyWalletsDetailedDto> getAllWalletsForUserDetailed(CacheData cacheData,
                                                                    String email, Locale locale) {
         List<Integer> withdrawStatusIdForWhichMoneyIsReserved = WithdrawStatusEnum.getEndStatesSet().stream().map(InvoiceStatus::getCode).collect(Collectors.toList());
@@ -59,9 +55,10 @@ public class WalletServiceImpl implements WalletService {
         return result;
     }
 
-    @Transactional(transactionManager = "slaveTxManager", readOnly = true)
+    @Transactional(readOnly = true)
+//    @Transactional(transactionManager = "slaveTxManager", readOnly = true) //TODO
     public List<MyWalletsStatisticsDto> getAllWalletsForUserReduced(CacheData cacheData, String email, Locale locale, CurrencyPairType type) {
-        List<CurrencyPair> pairList = currencyService.getAllCurrencyPairs(type);
+        List<CurrencyPair> pairList = currencyServiceImpl.getAllCurrencyPairs(type);
         Set<Integer> currencies = pairList.stream().map(p -> p.getCurrency2().getId()).collect(Collectors.toSet());
         currencies.addAll(pairList.stream().map(p -> p.getCurrency1().getId()).collect(toSet()));
         return walletDao.getAllWalletsForUserAndCurrenciesReduced(email, locale, currencies);

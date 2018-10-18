@@ -24,7 +24,7 @@ import java.util.Map;
 public class SessionParamsDaoImpl implements SessionParamsDao {
 
     @Autowired
-    @Qualifier(value = "masterTemplate")
+//    @Qualifier(value = "masterTemplate")//TODO
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private RowMapper<SessionParams> getSessionParamsRowMapper() {

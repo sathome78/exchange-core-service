@@ -26,7 +26,6 @@ pipeline {
                 }
             }
         }
-    }
 
     
     stage('Docker Build') {
@@ -48,4 +47,4 @@ pipeline {
       }
     }
   }  
-
+}

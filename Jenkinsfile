@@ -2,18 +2,29 @@ pipeline {
   
   agent any
   
-  stages {
-    stage('Maven Install') {
-      agent {
-        docker {
-          image 'maven:3.5.4'
-        }
+    tools{
+        maven 'maven 3'
+          jdk 'java 8'
+    }
+ 
+      stages {
+      stage ("initialize") {
+       steps {
+      sh '''
+      echo "PATH = ${PATH}"
+      echo "M2_HOME = ${M2_HOME}"
+      '''
       }
-      steps {
-        sh '''apt-get update && apt-get install -y --no-install-recommends openjfx'''
-        sh 'mvn clean install'
+      }
+   stage ('Build project') {
+    steps {
+    dir("project_templates/java_project_template"){
+    sh 'mvn clean verify
+ 
       }
     }
+
+    
     stage('Docker Build') {
       agent any
       steps {

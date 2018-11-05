@@ -10,6 +10,7 @@ pipeline {
         }
       }
       steps {
+        sh 'su root'
         sh 'apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*'
         sh 'mvn clean install'
       }

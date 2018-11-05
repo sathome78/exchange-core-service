@@ -3,7 +3,7 @@ pipeline {
   agent any
   
     tools{
-        maven 'maven 3'
+        maven 'maven 3.5.2'
           jdk 'java 8'
     }
  
@@ -19,7 +19,7 @@ pipeline {
    stage ('Build project') {
     steps {
     dir("project_templates/java_project_template"){
-    sh 'mvn clean verify
+    sh 'mvn clean install'
  
       }
     }

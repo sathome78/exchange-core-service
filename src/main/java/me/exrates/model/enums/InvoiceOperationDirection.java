@@ -1,6 +1,5 @@
 package me.exrates.model.enums;
 
-import lombok.ToString;
 import me.exrates.exception.UnsupportedInvoiceOperationDirectionException;
 
 import java.util.stream.Stream;

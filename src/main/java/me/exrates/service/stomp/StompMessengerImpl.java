@@ -1,28 +1,15 @@
 package me.exrates.service.stomp;
 
-import lombok.Synchronized;
 import lombok.extern.log4j.Log4j2;
-import me.exrates.cache.ChartsCache;
-import me.exrates.model.dto.ChartPeriodsEnum;
-import me.exrates.model.enums.OperationType;
-import me.exrates.model.enums.RefreshObjectsEnum;
-import me.exrates.model.enums.UserRole;
-import me.exrates.model.main.BackDealInterval;
-import me.exrates.service.OrderService;
-import me.exrates.service.UserService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpSubscription;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.DefaultSimpUserRegistry;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Log4j2
 @Component

@@ -1,7 +1,6 @@
 package me.exrates.service;
 
 import me.exrates.model.dto.OrderCreateDto;
-import me.exrates.model.dto.StopOrderSummaryDto;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.OrderActionEnum;
 import me.exrates.model.enums.OrderStatus;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.NavigableSet;
 
 public interface StopOrderService {
 

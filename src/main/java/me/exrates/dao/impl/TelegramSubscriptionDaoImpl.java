@@ -4,7 +4,6 @@ import me.exrates.dao.TelegramSubscriptionDao;
 import me.exrates.model.dto.TelegramSubscription;
 import me.exrates.model.enums.NotificatorSubscriptionStateEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

@@ -1,11 +1,7 @@
 package me.exrates.dao.impl;
 
 import me.exrates.dao.CurrencyDao;
-import me.exrates.model.dto.CurrencyPairLimitDto;
-import me.exrates.model.dto.UserCurrencyOperationPermissionDto;
 import me.exrates.model.enums.CurrencyPairType;
-import me.exrates.model.enums.InvoiceOperationDirection;
-import me.exrates.model.enums.InvoiceOperationPermission;
 import me.exrates.model.main.Currency;
 import me.exrates.model.main.CurrencyPair;
 import org.springframework.beans.factory.annotation.Autowired;

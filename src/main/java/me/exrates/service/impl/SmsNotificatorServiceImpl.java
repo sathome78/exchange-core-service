@@ -14,7 +14,6 @@ import me.exrates.model.main.CompanyWallet;
 import me.exrates.model.vo.WalletOperationData;
 import me.exrates.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;

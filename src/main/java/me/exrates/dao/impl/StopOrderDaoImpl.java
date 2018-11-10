@@ -3,7 +3,6 @@ package me.exrates.dao.impl;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.dao.StopOrderDao;
 import me.exrates.model.dto.OrderCreateDto;
-import me.exrates.model.dto.OrderInfoDto;
 import me.exrates.model.enums.ActionType;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.OrderBaseType;

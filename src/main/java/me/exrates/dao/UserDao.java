@@ -1,7 +1,8 @@
 package me.exrates.dao;
 
 import me.exrates.model.User;
-import me.exrates.model.dto.*;
+import me.exrates.model.dto.TemporalToken;
+import me.exrates.model.dto.UpdateUserDto;
 import me.exrates.model.enums.NotificationMessageEventEnum;
 import me.exrates.model.enums.UserRole;
 import me.exrates.model.main.UserFile;

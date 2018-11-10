@@ -41,8 +41,6 @@ public interface OrderDao {
 
     List<ExOrderStatisticsShortByPairsDto> getOrderStatisticByPairs();
 
-    List<ExOrderStatisticsShortByPairsDto> getOrderStatisticForSomePairs(List<Integer> pairsIds);
-
     List<CoinmarketApiDto> getCoinmarketData(String currencyPairName);
 
     OrderInfoDto getOrderInfo(int orderId, Locale locale);

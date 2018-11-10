@@ -1,8 +1,11 @@
 package me.exrates.filters;
 
+import org.springframework.stereotype.Service;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+@Service
 
 public class CacheFilter implements Filter {
 

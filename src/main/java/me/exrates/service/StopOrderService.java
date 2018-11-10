@@ -23,8 +23,6 @@ public interface StopOrderService {
 
     Integer createOrder(ExOrder exOrder);
 
-    void proceedStopOrders(int pairId, NavigableSet<StopOrderSummaryDto> orders);
-
     @Transactional
     void proceedStopOrderAndRemove(int stopOrderId);
 

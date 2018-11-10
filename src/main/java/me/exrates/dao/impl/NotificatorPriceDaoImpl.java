@@ -51,14 +51,5 @@ public class NotificatorPriceDaoImpl implements NotificatorPriceDao {
     }
 
 
-    @Override
-    public int updatePrice(BigDecimal price, int roleId, int notificatorId, String priceColumn) {
-        final String sql = String.format("UPDATE 2FA_NOTIFICATION_PRICE SET %s = :price " +
-                "WHERE notificator_id = :notificator_id AND role_id = :role_id", priceColumn);
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("notificator_id", notificatorId);
-        params.addValue("role_id", roleId);
-        params.addValue("price", price);
-        return jdbcTemplate.update(sql, params);
-    }
+
 }

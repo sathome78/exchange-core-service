@@ -1,7 +1,6 @@
 package me.exrates.dao;
 
 import me.exrates.model.dto.OrderCreateDto;
-import me.exrates.model.dto.OrderInfoDto;
 import me.exrates.model.enums.OperationType;
 import me.exrates.model.enums.OrderStatus;
 import me.exrates.model.main.CurrencyPair;
@@ -20,8 +19,6 @@ public interface StopOrderDao {
     boolean setStatusAndChildOrderId(int orderId, Integer childOrderId, OrderStatus status);
 
     OrderCreateDto getOrderById(Integer orderId, boolean forUpdate);
-
-    OrderInfoDto getStopOrderInfo(int orderId, Locale locale);
 
     List<OrderWideListDto> getMyOrdersWithState(String email, CurrencyPair currencyPair, OrderStatus status, OperationType operationType, String scope, Integer offset, Integer limit, Locale locale);
 

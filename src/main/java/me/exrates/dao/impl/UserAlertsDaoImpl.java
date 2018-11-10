@@ -63,17 +63,6 @@ public class UserAlertsDaoImpl implements UserAlertsDao {
     }
 
     @Override
-    public boolean setEnable(String alertType, boolean enable) {
-        String sql = "UPDATE SERVICE_ALERTS SA SET SA.enable = :enable " +
-                " WHERE SA.alert_type = :alert_type ";
-        Map<String, Object> params = new HashMap<String, Object>() {{
-            put("enable", enable);
-            put("alert_type", alertType);
-        }};
-        return jdbcTemplate.update(sql, params) > 0;
-    }
-
-    @Override
     public AlertDto getAlert(String name) {
         String sql = "SELECT * FROM SERVICE_ALERTS SA WHERE SA.alert_type = :name";
         Map<String, Object> params = new HashMap<String, Object>() {{

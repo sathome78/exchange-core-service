@@ -14,8 +14,6 @@ import java.util.Locale;
 import java.util.Set;
 
 public interface WalletDao {
-    List<MyWalletConfirmationDetailDto> getWalletConfirmationDetail(Integer walletId, Locale locale);
-
     int getWalletId(int userId, int currencyId);
 
     List<MyWalletsDetailedDto> getAllWalletsForUserDetailed(String email, List<Integer> withdrawStatusIds, Locale locale);

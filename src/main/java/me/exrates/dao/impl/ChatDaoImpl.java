@@ -62,20 +62,4 @@ public class ChatDaoImpl implements ChatDao {
 
     }
 
-    @Override
-    public List<ChatHistoryDto> getChatHistory(ChatLang chatLang) {
-        final String sql = "SELECT c.id, c.body, c.message_time, USER.email FROM CHAT_" + chatLang.val +
-                " as c INNER JOIN USER ON c.user_id = USER.id ORDER BY c.id DESC";
-
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
-            final ChatHistoryDto historyDto = new ChatHistoryDto();
-            historyDto.setEmail(resultSet.getString("email"));
-            historyDto.setBody(resultSet.getString("body"));
-            historyDto.setMessageTime(resultSet.getTimestamp("message_time") != null ?
-                    resultSet.getTimestamp("message_time").toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                    : " ");
-            return historyDto;
-        });
-    }
-
 }

@@ -62,30 +62,6 @@ public class CompanyWalletDaoImpl implements CompanyWalletDao {
     }
 
     @Override
-    public CompanyWallet findByWalletId(int walletId) {
-        final String sql = "SELECT * FROM  COMPANY_WALLET WHERE id = :id";
-        final Map<String, Integer> params = new HashMap<String, Integer>() {
-            {
-                put("id", walletId);
-            }
-        };
-        final CompanyWallet companyWallet = new CompanyWallet();
-        try {
-            return jdbcTemplate.queryForObject(sql, params, (resultSet, i) -> {
-                companyWallet.setId(resultSet.getInt("id"));
-                companyWallet.setBalance(resultSet.getBigDecimal("balance"));
-                companyWallet.setCommissionBalance(resultSet.getBigDecimal("commission_balance"));
-                Currency currency = new Currency();
-                currency.setId(resultSet.getInt("currency_id"));
-                companyWallet.setCurrency(currency);
-                return companyWallet;
-            });
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    @Override
     public boolean update(CompanyWallet companyWallet) {
         final String sql = "UPDATE COMPANY_WALLET SET balance = :balance, commission_balance = :commissionBalance where id = :id";
         final Map<String, Object> params = new HashMap<String, Object>() {

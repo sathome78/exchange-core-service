@@ -156,63 +156,6 @@ public class StopOrderDaoImpl implements StopOrderDao {
     }
 
     @Override
-    public OrderInfoDto getStopOrderInfo(int orderId, Locale locale) {
-        String sql =
-                " SELECT  " +
-                        "     STOP_ORDERS.id, STOP_ORDERS.date_creation, STOP_ORDERS.date_modification,  " +
-                        "     ORDER_STATUS.name AS order_status_name,  " +
-                        "     CURRENCY_PAIR.name as currency_pair_name,  " +
-                        "     UPPER(ORDER_OPERATION.name) AS order_type_name,  " +
-                        "     STOP_ORDERS.limit_rate, STOP_ORDERS.stop_rate, STOP_ORDERS.amount_base, STOP_ORDERS.amount_convert, " +
-                        "     STOP_ORDERS.commission_fixed_amount, ORDER_CURRENCY_BASE.name as currency_base_name, ORDER_CURRENCY_CONVERT.name as currency_convert_name, " +
-                        "     CREATOR.email AS order_creator_email " +
-                        " FROM STOP_ORDERS " +
-                        "      JOIN ORDER_STATUS ON (ORDER_STATUS.id = STOP_ORDERS.status_id) " +
-                        "      JOIN OPERATION_TYPE AS ORDER_OPERATION ON (ORDER_OPERATION.id = STOP_ORDERS.operation_type_id) " +
-                        "      JOIN CURRENCY_PAIR ON (CURRENCY_PAIR.id = STOP_ORDERS.currency_pair_id) " +
-                        "      JOIN CURRENCY ORDER_CURRENCY_BASE ON (ORDER_CURRENCY_BASE.id = CURRENCY_PAIR.currency1_id)   " +
-                        "      JOIN CURRENCY ORDER_CURRENCY_CONVERT ON (ORDER_CURRENCY_CONVERT.id = CURRENCY_PAIR.currency2_id)  " +
-                        "      JOIN USER CREATOR ON (CREATOR.id = STOP_ORDERS.user_id) " +
-                        " WHERE STOP_ORDERS.id=:order_id" +
-                        " GROUP BY " +
-                        "     STOP_ORDERS.id, STOP_ORDERS.date_creation, STOP_ORDERS.date_modification,  " +
-                        "     order_status_name,  " +
-                        "     currency_pair_name,  " +
-                        "     order_type_name,  " +
-                        "     STOP_ORDERS.limit_rate, STOP_ORDERS.stop_rate, STOP_ORDERS.amount_base, STOP_ORDERS.amount_convert, " +
-                        "     currency_base_name, currency_convert_name, " +
-                        "     order_creator_email ";
-        Map<String, String> mapParameters = new HashMap<>();
-        mapParameters.put("order_id", String.valueOf(orderId));
-        try {
-            return namedParameterJdbcTemplate.queryForObject(sql, mapParameters, new RowMapper<OrderInfoDto>() {
-                @Override
-                public OrderInfoDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    OrderInfoDto orderInfoDto = new OrderInfoDto();
-                    orderInfoDto.setId(rs.getInt("id"));
-                    orderInfoDto.setDateCreation(rs.getTimestamp("date_creation").toLocalDateTime());
-                    orderInfoDto.setDateAcception(rs.getTimestamp("date_modification") == null ? null : rs.getTimestamp("date_modification").toLocalDateTime());
-                    orderInfoDto.setCurrencyPairName(rs.getString("currency_pair_name"));
-                    orderInfoDto.setOrderTypeName(rs.getString("order_type_name"));
-                    orderInfoDto.setOrderStatusName(rs.getString("order_status_name"));
-                    orderInfoDto.setExrate(BigDecimalProcessing.formatLocale(rs.getBigDecimal("limit_rate"), locale, 2));
-                    orderInfoDto.setStopRate(BigDecimalProcessing.formatLocale(rs.getBigDecimal("stop_rate"), locale, 2));
-                    orderInfoDto.setAmountBase(BigDecimalProcessing.formatLocale(rs.getBigDecimal("amount_base"), locale, 2));
-                    orderInfoDto.setAmountConvert(BigDecimalProcessing.formatLocale(rs.getBigDecimal("amount_convert"), locale, 2));
-                    orderInfoDto.setCurrencyBaseName(rs.getString("currency_base_name"));
-                    orderInfoDto.setCurrencyConvertName(rs.getString("currency_convert_name"));
-                    orderInfoDto.setOrderCreatorEmail(rs.getString("order_creator_email"));
-                    orderInfoDto.setCompanyCommission(rs.getString("commission_fixed_amount"));
-                    return orderInfoDto;
-                }
-            });
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-
-    }
-
-    @Override
     public List<OrderWideListDto> getMyOrdersWithState(String email, CurrencyPair currencyPair, OrderStatus status, OperationType operationType, String scope, Integer offset, Integer limit, Locale locale) {
         return getMyOrdersWithState(email, currencyPair, Collections.singletonList(status), operationType, scope, offset, limit, locale);
     }

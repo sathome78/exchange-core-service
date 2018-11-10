@@ -7,5 +7,5 @@ import me.exrates.model.main.Commission;
 public interface CommissionDao {
     Commission getCommission(OperationType operationTypeForAcceptor, UserRole userRoleFromDB);
 
-    Commission getDefaultCommission(OperationType storno);
+    Commission getDefaultCommission(OperationType operationType);
 }

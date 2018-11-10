@@ -1,11 +1,13 @@
 package me.exrates.filters;
 
+import org.springframework.stereotype.Service;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+@Service
 public class XssFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

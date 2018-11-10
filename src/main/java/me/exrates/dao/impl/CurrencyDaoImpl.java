@@ -48,53 +48,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<UserCurrencyOperationPermissionDto> findCurrencyOperationPermittedByUserList(Integer userId) {
-        String sql = "SELECT CUR.id, CUR.name, IOP.invoice_operation_permission_id, IOP.operation_direction " +
-                " FROM CURRENCY CUR " +
-                " JOIN USER_CURRENCY_INVOICE_OPERATION_PERMISSION IOP ON " +
-                "				(IOP.currency_id=CUR.id) " +
-                "				AND (IOP.user_id=:user_id) " +
-                " WHERE CUR.hidden IS NOT TRUE " +
-                " ORDER BY CUR.id ";
-        Map<String, Object> params = new HashMap<String, Object>() {{
-            put("user_id", userId);
-        }};
-        return jdbcTemplate.query(sql, params, (rs, row) -> {
-            UserCurrencyOperationPermissionDto dto = new UserCurrencyOperationPermissionDto();
-            dto.setUserId(userId);
-            dto.setCurrencyId(rs.getInt("id"));
-            dto.setCurrencyName(rs.getString("name"));
-            dto.setInvoiceOperationDirection(InvoiceOperationDirection.valueOf(rs.getString("operation_direction")));
-            Integer permissionCode = rs.getObject("invoice_operation_permission_id") == null ? 0 : (Integer) rs.getObject("invoice_operation_permission_id");
-            dto.setInvoiceOperationPermission(InvoiceOperationPermission.convert(permissionCode));
-            return dto;
-        });
-
-    }
-
-    @Override
-    public CurrencyPairLimitDto findCurrencyPairLimitForRoleByPairAndType(Integer currencyPairId, Integer roleId, Integer orderTypeId) {
-        String sql = "SELECT CURRENCY_PAIR.id AS currency_pair_id, CURRENCY_PAIR.name AS currency_pair_name, lim.min_rate, lim.max_rate, " +
-                "lim.min_amount, lim.max_amount " +
-                " FROM CURRENCY_PAIR_LIMIT lim " +
-                " JOIN CURRENCY_PAIR ON lim.currency_pair_id = CURRENCY_PAIR.id AND CURRENCY_PAIR.hidden != 1 " +
-                " WHERE lim.currency_pair_id = :currency_pair_id AND lim.user_role_id = :user_role_id AND lim.order_type_id = :order_type_id";
-        Map<String, Integer> namedParameters = new HashMap<>();
-        namedParameters.put("currency_pair_id", currencyPairId);
-        namedParameters.put("user_role_id", roleId);
-        namedParameters.put("order_type_id", orderTypeId);
-        return jdbcTemplate.queryForObject(sql, namedParameters, (rs, rowNum) -> {
-            CurrencyPairLimitDto dto = new CurrencyPairLimitDto();
-            dto.setCurrencyPairId(rs.getInt("currency_pair_id"));
-            dto.setCurrencyPairName(rs.getString("currency_pair_name"));
-            dto.setMinRate(rs.getBigDecimal("min_rate"));
-            dto.setMaxRate(rs.getBigDecimal("max_rate"));
-            dto.setMinAmount(rs.getBigDecimal("min_amount"));
-            dto.setMaxAmount(rs.getBigDecimal("max_amount"));
-            return dto;
-        });
-
-    }
 
     @Override
     public CurrencyPair getNotHiddenCurrencyPairByName(String currencyPairName) {
@@ -120,31 +73,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
                 " WHERE hidden IS NOT TRUE " + typeClause +
                 " ORDER BY -pair_order DESC";
         return jdbcTemplate.query(sql, Collections.singletonMap("pairType", type.name()), currencyPairRowMapper);
-    }
-
-    public List<Currency> getCurrList() {
-        String sql = "SELECT id, name FROM CURRENCY WHERE hidden IS NOT TRUE ";
-        List<Currency> currList;
-        currList = jdbcTemplate.query(sql, (rs, row) -> {
-            Currency currency = new Currency();
-            currency.setId(rs.getInt("id"));
-            currency.setName(rs.getString("name"));
-            return currency;
-
-        });
-        return currList;
-    }
-
-    @Override
-    public Currency findById(int id) {
-        final String sql = "SELECT * FROM CURRENCY WHERE id = :id";
-        final Map<String, Integer> params = new HashMap<String, Integer>() {
-            {
-                put("id", id);
-            }
-        };
-        return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(Currency.class));
-
     }
 
     @Override

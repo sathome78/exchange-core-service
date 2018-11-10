@@ -45,7 +45,7 @@ public interface OrderService {
 
     Optional<OrderCreationResultDto> autoAcceptOrders(OrderCreateDto orderCreateDto, Locale locale);
 
-    public OrderCreateDto getMyOrderById(int orderId);
+    OrderCreateDto getMyOrderById(int orderId);
 
     ExOrder getOrderById(int orderId);
 

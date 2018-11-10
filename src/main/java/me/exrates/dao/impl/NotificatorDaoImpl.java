@@ -41,31 +41,6 @@ public class NotificatorDaoImpl implements NotificatorsDao {
     }
 
     @Override
-    public int setEnable(int notificatorId, boolean enable) {
-        String sql = "UPDATE 2FA_NOTIFICATOR SET enable = :enable " +
-                " WHERE id = :notificator_id";
-        Map<String, Object> params = new HashMap<String, Object>() {{
-            put("enable", enable);
-            put("notificator_id", notificatorId);
-        }};
-        return jdbcTemplate.update(sql, params);
-    }
-
-    @Override
-    public List<Notificator> getAdminDtoByRole(int roleId) {
-        String sql = "SELECT * FROM 2FA_NOTIFICATOR N " +
-                " JOIN 2FA_NOTIFICATION_PRICE AS NP ON NP.notificator_id = N.id " +
-                " WHERE NP.role_id = :role_id ";
-        Map<String, Integer> params = Collections.singletonMap("role_id", roleId);
-        return jdbcTemplate.query(sql, params, (rs, rowNum) -> {
-            Notificator notificator = notificatorRowMapper.mapRow(rs, rowNum);
-            notificator.setMessagePrice(rs.getBigDecimal("message_price"));
-            notificator.setSubscribePrice(rs.getBigDecimal("subscribe_price"));
-            return notificator;
-        });
-    }
-
-    @Override
     public List<Notificator> getAllNotificators() {
         String sql = "SELECT * FROM 2FA_NOTIFICATOR";
         return jdbcTemplate.query(sql, notificatorRowMapper);

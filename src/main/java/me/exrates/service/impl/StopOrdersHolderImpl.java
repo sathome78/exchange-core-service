@@ -60,29 +60,6 @@ public class StopOrdersHolderImpl implements StopOrdersHolder {
         });
     }
 
-    @Override
-    public NavigableSet<StopOrderSummaryDto> getSellOrdersForPairAndStopRate(int pairId, BigDecimal rate) {
-        if (!sellOrdersMap.containsKey(pairId)) {
-            addNewPairToMap(sellOrdersMap, pairId);
-            return Collections.emptyNavigableSet();
-        }
-        log.debug("order accepted {} {}", pairId, rate);
-        ConcurrentSkipListSet<StopOrderSummaryDto> thisOrdersSet = sellOrdersMap.get(pairId);
-        log.debug("sell orders size {}", thisOrdersSet.size());
-        return thisOrdersSet.tailSet(new StopOrderSummaryDto(0, rate), true);
-    }
-
-    @Override
-    public NavigableSet<StopOrderSummaryDto> getBuyOrdersForPairAndStopRate(int pairId, BigDecimal rate) {
-        if (!buyOrdersMap.containsKey(pairId)) {
-            addNewPairToMap(buyOrdersMap, pairId);
-            return Collections.emptyNavigableSet();
-        }
-        log.debug("order accepted {} {}", pairId, rate);
-        ConcurrentSkipListSet<StopOrderSummaryDto> thisOrdersSet = buyOrdersMap.get(pairId);
-        log.debug("buy orders size {}", thisOrdersSet.size());
-        return thisOrdersSet.headSet(new StopOrderSummaryDto(Integer.MAX_VALUE, rate), true);
-    }
 
     @Override
     public void delete(int pairId, StopOrderSummaryDto summaryDto) {

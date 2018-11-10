@@ -58,12 +58,6 @@ public class ReferralUserGraphDaoImpl implements ReferralUserGraphDao {
         }
     }
 
-    @Override
-    public List<Integer> getChildrenForParentAndBlock(Integer parent) {
-        String sql = "SELECT child FROM REFERRAL_USER_GRAPH WHERE parent = :parent " +
-                " FOR UPDATE ";
-        return jdbcTemplate.queryForList(sql, singletonMap("parent", parent), Integer.class);
-    }
 
     @Override
     public void changeReferralParent(Integer formerParent, Integer newParent) {

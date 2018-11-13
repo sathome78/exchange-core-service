@@ -2,14 +2,22 @@ package me.exrates.configuration;
 
 import me.exrates.model.enums.AdminAuthority;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Collections;
 
 import static me.exrates.model.enums.AdminAuthority.PROCESS_WITHDRAW;
 import static org.springframework.http.HttpMethod.POST;
@@ -34,25 +42,15 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
     }
 
     public void configure(HttpSecurity http) throws Exception {
+
+
         http
-                .antMatcher("/api/**")
                 .authorizeRequests()
-                .antMatchers("/api/**").authenticated()
-                .antMatchers(POST, "/withdraw/request/**").authenticated()
-                .antMatchers("/withdrawal/request/accept", "/withdrawal/request/decline").hasAuthority(PROCESS_WITHDRAW.name())
-                .antMatchers(POST, "/2a8fy7b07dxe44/bitcoinWallet/**").hasAuthority(AdminAuthority.MANAGE_BTC_CORE_WALLET.name())
-                .antMatchers("/", "/index.jsp", "/client/**", "/dashboard/**", "/tradingview/**", "/ico_dashboard/**", "/registrationConfirm/**",
-                        "/changePasswordConfirm/**", "/changePasswordConfirm/**", "/aboutUs", "/57163a9b3d1eafe27b8b456a.txt", "/newIpConfirm/**").permitAll()
-                .antMatchers(POST, "/merchants/withdrawal/request/accept",
-                        "/merchants/withdrawal/request/decline").hasAuthority(PROCESS_WITHDRAW.name())
-                .antMatchers(POST, "/refill/request/**").authenticated()
-                .antMatchers("/2a8fy7b07dxe44/withdrawal").hasAuthority(PROCESS_WITHDRAW.name())
-                .antMatchers(POST, "/2a8fy7b07dxe44/withdraw/**").hasAuthority(PROCESS_WITHDRAW.name())
-//                .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('read')")
-//                .antMatchers(HttpMethod.POST, "/**").access("#oauth2.hasScope('write')")
-//                .antMatchers(HttpMethod.PATCH, "/**").access("#oauth2.hasScope('write')")
-//                .antMatchers(HttpMethod.PUT, "/**").access("#oauth2.hasScope('write')")
-//                .antMatchers(HttpMethod.DELETE, "/**").access("#oauth2.hasScope('write')")
+                .antMatchers(HttpMethod.GET, "/**").access("#oauth2.hasScope('read')")
+                .antMatchers(HttpMethod.POST, "/**").access("#oauth2.hasScope('write')")
+                .antMatchers(HttpMethod.PATCH, "/**").access("#oauth2.hasScope('write')")
+                .antMatchers(HttpMethod.PUT, "/**").access("#oauth2.hasScope('write')")
+                .antMatchers(HttpMethod.DELETE, "/**").access("#oauth2.hasScope('write')")
                 .and()
 
                 .headers().addHeaderWriter((request, response) -> {
@@ -62,6 +60,21 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
                 response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
             }
         });
+    }
+
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        //based on https://github.com/spring-projects/spring-boot/issues/5834
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedMethods(Collections.singletonList("*"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        source.registerCorsConfiguration("/**", config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+        return bean;
     }
 
 }

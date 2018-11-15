@@ -28,6 +28,8 @@
         <maven.test.skip>true</maven.test.skip>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+
+        <aws-java-sdk.version>1.11.433</aws-java-sdk.version>
     </properties>
 
     <dependencies>
@@ -190,6 +192,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ssm</artifactId>
+            <version>${aws-java-sdk.version}</version>
         </dependency>
     </dependencies>
 

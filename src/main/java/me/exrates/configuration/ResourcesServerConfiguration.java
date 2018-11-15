@@ -38,7 +38,7 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
 
     public void configure(ResourceServerSecurityConfigurer resources) {
         TokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
-        resources.resourceId("input_output_api").tokenStore(tokenStore);
+        resources.resourceId("core_api").tokenStore(tokenStore);
     }
 
     public void configure(HttpSecurity http) throws Exception {

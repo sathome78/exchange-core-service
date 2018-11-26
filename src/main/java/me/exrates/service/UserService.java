@@ -76,6 +76,8 @@ public interface UserService {
 
     void sendUnfamiliarIpNotificationEmail(User user, String emailSubject, String emailText, Locale locale);
 
+    String getAvatarPath(Integer userId);
+
     User getCommonReferralRoot();
 
     String logIP(String email, String host);
@@ -97,4 +99,8 @@ public interface UserService {
 
 
     void createUserFile(int userId, List<Path> logicalPaths);
+
+    List<Integer> getUserFavouriteCurrencyPairs(String principalEmail);
+
+    boolean manageUserFavouriteCurrencyPair(String principalEmail, int currencyPairId, boolean toDelete);
 }

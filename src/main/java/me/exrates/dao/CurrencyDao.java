@@ -24,4 +24,8 @@ public interface CurrencyDao {
     Currency findByName(String name);
 
     CurrencyPair findCurrencyPairByOrderId(Integer orderId);
+
+    List<CurrencyPair> findAllCurrenciesByFirstPartName(String partName);
+
+    List<CurrencyPair> findAllCurrenciesBySecondPartName(String partName);
 }

@@ -1,11 +1,13 @@
 package me.exrates.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import me.exrates.model.StatisticForMarket;
 import me.exrates.model.chart.ChartResolution;
 import me.exrates.model.chart.ChartTimeFrame;
 import me.exrates.model.dto.*;
 import me.exrates.model.enums.*;
 import me.exrates.model.main.*;
+import me.exrates.model.main.Currency;
 import me.exrates.model.onlineTableDto.ExOrderStatisticsShortByPairsDto;
 import me.exrates.model.onlineTableDto.OrderAcceptedHistoryDto;
 import me.exrates.model.onlineTableDto.OrderListDto;
@@ -15,10 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 public interface OrderService {
@@ -124,4 +123,17 @@ public interface OrderService {
     List<OrderWideListDto> getMyOrdersWithState(String email, CurrencyPair currencyPair, OrderStatus cancelled, OperationType o, String scope, int i, int i1, Locale locale);
 
     List<ExOrderStatisticsShortByPairsDto> getOrdersStatisticByPairs(CacheData cacheData, Locale resolveLocale);
+
+    Optional<BigDecimal> getLastOrderPriceByCurrencyPair(CurrencyPair currencyPair);
+
+    List<CandleChartItemDto> getCachedDataForCandle(CurrencyPair currencyPair, ChartTimeFrame timeFrame);
+
+    @Transactional(readOnly = true)
+    Map<Integer, List<OrderWideListDto>> getMyOrdersWithStateMap(Integer userId, CurrencyPair currencyPair, OrderStatus status,
+                                                                 String scope, Integer offset, Integer limit,
+                                                                 Locale locale, Map<String, String> sortedColumns);
+
+    Object deleteOrderByAdmin(int id);
+
+    List<StatisticForMarket> getAllCurrenciesMarkersForAllPairsModel();
 }

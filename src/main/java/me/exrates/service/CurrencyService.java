@@ -9,6 +9,8 @@ import me.exrates.model.main.CurrencyPair;
 import java.util.List;
 
 public interface CurrencyService {
+    List<CurrencyPair> findAllCurrenciesBySecondPartName(String partName);
+
     CurrencyPair getNotHiddenCurrencyPairByName(String currencyPair);
 
     CurrencyPair findCurrencyPairById(int id);
@@ -26,4 +28,8 @@ public interface CurrencyService {
     List<CurrencyPair> findPermitedCurrencyPairs(CurrencyPairType ico);
 
     Currency findByName(String currencyNameForPay);
+
+    List<CurrencyPair> getPairsByFirstPartName(String pathName);
+
+    List<CurrencyPair> getPairsBySecondPartName(String pathName);
 }

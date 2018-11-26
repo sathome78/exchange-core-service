@@ -1,10 +1,8 @@
 package me.exrates.dao;
 
+import me.exrates.model.StatisticForMarket;
 import me.exrates.model.dto.*;
-import me.exrates.model.enums.OperationType;
-import me.exrates.model.enums.OrderBaseType;
-import me.exrates.model.enums.OrderStatus;
-import me.exrates.model.enums.UserRole;
+import me.exrates.model.enums.*;
 import me.exrates.model.main.BackDealInterval;
 import me.exrates.model.main.Currency;
 import me.exrates.model.main.CurrencyPair;
@@ -32,6 +30,8 @@ public interface OrderDao {
     boolean setStatus(int orderId, OrderStatus status);
 
     boolean updateOrder(ExOrder exOrder);
+
+    boolean updateOrder(int orderId, ExOrder exOrder);
 
     List<OrderListDto> getOrdersBuyForCurrencyPair(CurrencyPair currencyPair, UserRole filterRole);
 
@@ -61,6 +61,9 @@ public interface OrderDao {
 
     List<OrderWideListDto> getMyOrdersWithState(Integer idByEmail, CurrencyPair currencyPair, OrderStatus status, OperationType operationType, String scope, int offset, int limit, Locale locale);
 
+    List<OrderWideListDto> getMyOrdersWithState(Integer userId, OrderStatus status, CurrencyPair currencyPair, Locale locale,
+                                                String scope, Integer offset, Integer limit, Map<String, String> sortedColumns);
+
     List<Map<String, Object>> getDataForAreaChart(CurrencyPair currencyPair, BackDealInterval backDealInterval);
 
     List<OrderWideListDto> getMyOrdersWithState(Integer userId, CurrencyPair currencyPair, List<OrderStatus> statuses,
@@ -69,4 +72,13 @@ public interface OrderDao {
 
     OrderCommissionsDto getCommissionForOrder(UserRole userRoleFromSecurityContext);
 
+    List<StatisticForMarket> getOrderStatisticForNewMarkets();
+
+    Optional<BigDecimal> getLastOrderPriceByCurrencyPair(int id);
+
+    List<OrderListDto> findAllByOrderTypeAndCurrencyId(OrderType orderType, Integer currencyId);
+
+    Integer getMyOrdersWithStateCount(int userId, CurrencyPair currencyPair, OrderStatus status, String scope, Integer offset, Integer limit, Locale locale);
+
+    OrderRoleInfoForDelete getOrderRoleInfo(int orderId);
 }

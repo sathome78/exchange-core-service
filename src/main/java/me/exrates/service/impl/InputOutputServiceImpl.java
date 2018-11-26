@@ -64,6 +64,23 @@ public class InputOutputServiceImpl implements InputOutputService {
         return result;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<MyInputOutputHistoryDto> getMyInputOutputHistory(
+            String email,
+            Integer offset, Integer limit,
+            String dateFrom,
+            String dateTo,
+            Locale locale) {
+        List<Integer> operationTypeList = OperationType.getInputOutputOperationsList()
+                .stream()
+                .map(OperationType::getType)
+                .collect(Collectors.toList());
+        List<MyInputOutputHistoryDto> result = inputOutputDao.findMyInputOutputHistoryByOperationType(email, offset, limit, dateFrom, dateTo, operationTypeList, locale);
+        setAdditionalFields(result, locale);
+        return result;
+    }
+
     private void setAdditionalFields(List<MyInputOutputHistoryDto> inputOutputList, Locale locale) {
         inputOutputList.forEach(e ->
         {

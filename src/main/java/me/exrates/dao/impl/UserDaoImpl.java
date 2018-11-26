@@ -405,6 +405,22 @@ public class UserDaoImpl implements UserDao {
         return result;
     }
 
+    @Override
+    public String getAvatarPath(Integer userId) {
+        String sql = "SELECT avatar_path FROM USER where id = :id";
+        Map<String, Integer> params = Collections.singletonMap("id", userId);
+        return namedParameterJdbcTemplate.queryForObject(sql, params, (resultSet, row) -> resultSet.getString("avatar_path"));
+    }
+
+    @Override
+    public List<Integer> findFavouriteCurrencyPairsById(int userId) {
+        String sql = "SELECT currency_pair_id FROM USER_FAVORITE_CURRENCY_PAIRS WHERE user_id = :userId";
+        Map<String, Object> params = new HashMap<String, Object>() {{
+            put("userId", userId);
+        }};
+        return namedParameterJdbcTemplate.queryForList(sql, params, Integer.class);
+    }
+
     public boolean delete(User user) {
         boolean result;
         String sql = "delete from USER where id = :id";
@@ -571,6 +587,20 @@ public class UserDaoImpl implements UserDao {
             put("pin", pin);
         }};
         namedParameterJdbcTemplate.update(sql, namedParameters);
+    }
+
+    @Override
+    public boolean manageUserFavouriteCurrencyPair(int userId, int currencyPairId, boolean delete) {
+        String sql = "INSERT IGNORE INTO USER_FAVORITE_CURRENCY_PAIRS (user_id, currency_pair_id) " +
+                " VALUES(:userId, :currencyPairId)";
+        if (delete) {
+            sql = "DELETE FROM USER_FAVORITE_CURRENCY_PAIRS WHERE user_id = :userId AND currency_pair_id = :currencyPairId";
+        }
+        Map<String, Object> params = new HashMap<String, Object>() {{
+            put("userId", userId);
+            put("currencyPairId", currencyPairId);
+        }};
+        return namedParameterJdbcTemplate.update(sql, params) >= 0;
     }
 
 }

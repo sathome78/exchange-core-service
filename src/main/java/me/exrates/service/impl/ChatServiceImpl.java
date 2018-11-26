@@ -2,22 +2,32 @@ package me.exrates.service.impl;
 
 import javafx.util.Pair;
 import me.exrates.dao.ChatDao;
+import me.exrates.exception.IllegalChatMessageException;
 import me.exrates.model.ChatComponent;
+import me.exrates.model.User;
 import me.exrates.model.enums.ChatLang;
 import me.exrates.model.main.ChatMessage;
 import me.exrates.service.ChatService;
+import me.exrates.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 public class ChatServiceImpl implements ChatService {
     private final int MESSAGE_BARRIER = 50;
+    private final int CACHE_BARRIER = 150;
+    private final int MAX_MESSAGE = 256;
     private final boolean INCLUSIVE = true;
 
     private final ChatDao chatDao;
@@ -26,12 +36,15 @@ public class ChatServiceImpl implements ChatService {
     private AtomicLong GENERATOR;
     private long flushCursor;
 
+    private final Predicate<String> deprecatedChars = Pattern.compile("^[^<>{}&*\"/;`]*$").asPredicate();
+    private final UserService userService;
 
     @Autowired
     public ChatServiceImpl(final ChatDao chatDao,
-                           final EnumMap<ChatLang, ChatComponent> chats) {
+                           final EnumMap<ChatLang, ChatComponent> chats, UserService userService) {
         this.chatDao = chatDao;
         this.chats = chats;
+        this.userService = userService;
     }
 
     @PostConstruct
@@ -71,6 +84,34 @@ public class ChatServiceImpl implements ChatService {
         }
         return result;
     }
+
+    @Override
+    public ChatMessage persistPublicMessage(final String body, final String email, ChatLang lang) throws IllegalChatMessageException {
+        if (body.isEmpty() || body.length() > MAX_MESSAGE || !deprecatedChars.test(body)) {
+            throw new IllegalChatMessageException("Message contains invalid symbols : " + body);
+        }
+        User user;
+        final ChatMessage message = new ChatMessage();
+        if (!isEmpty(email)) {
+            try {
+                user = userService.findByEmail(email);
+                message.setUserId(user.getId());
+                message.setNickname(user.getNickname());
+            } catch (Exception ex) {
+                message.setUserId(0);
+                message.setNickname("anonymous");
+            }
+        } else {
+            message.setUserId(0);
+            message.setNickname("anonymous");
+        }
+        message.setBody(body);
+        message.setTime(LocalDateTime.now());
+//        final ChatComponent comp = chats.get(lang);
+//        cacheMessage(message, comp);
+        return chatDao.persistPublic(lang, message);
+    }
+
 
     @Scheduled(fixedDelay = 1000L, initialDelay = 1000L)
     public void flushCache() {

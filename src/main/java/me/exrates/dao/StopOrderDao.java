@@ -23,4 +23,6 @@ public interface StopOrderDao {
     List<OrderWideListDto> getMyOrdersWithState(String email, CurrencyPair currencyPair, OrderStatus status, OperationType operationType, String scope, Integer offset, Integer limit, Locale locale);
 
     List<StopOrder> getOrdersBypairId(List<Integer> pairIds, OrderStatus opened);
+
+    boolean updateOrder(int orderId, StopOrder order);
 }

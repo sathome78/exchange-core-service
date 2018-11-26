@@ -13,4 +13,5 @@ public interface ChatDao {
 
     List<ChatMessage> findLastMessages(ChatLang lang, int message_barrier);
 
+    ChatMessage persistPublic(ChatLang lang, ChatMessage message);
 }

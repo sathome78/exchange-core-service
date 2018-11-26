@@ -4,6 +4,7 @@ import com.google.common.collect.ObjectArrays;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.exception.security.exception.PinCodeCheckNeedException;
 import me.exrates.filters.CapchaAuthorizationFilter;
+import me.exrates.model.User;
 import me.exrates.model.dto.NotificationResultDto;
 import me.exrates.model.dto.NotificationsUserSetting;
 import me.exrates.model.dto.PinAttempsDto;
@@ -124,6 +125,26 @@ public class SecureServiceImpl implements SecureService {
         NotificationResultDto notificationResultDto = notificationService.notifyUser(email, messageText, subject, setting);
         request.getSession().setAttribute("2fa_message".concat(setting.getNotificationMessageEventEnum().name()), notificationResultDto);
         return messageSource.getMessage(notificationResultDto.getMessageSource(), notificationResultDto.getArguments(), locale);
+    }
+
+    @Override
+    public NotificationResultDto sendLoginPincode(User user, HttpServletRequest request) {
+        NotificationsUserSetting setting = getLoginSettings(user);
+        Locale locale = localeResolver.resolveLocale(request);
+        String subject = messageSource.getMessage(setting.getNotificationMessageEventEnum().getSbjCode(), null, locale);
+        String pin = userService.updatePinForUserForEvent(user.getEmail(), setting.getNotificationMessageEventEnum());
+        String messageText = messageSource.getMessage(setting.getNotificationMessageEventEnum().getMessageCode(),
+                new String[] {pin}, locale);
+        return notificationService.notifyUser(user.getEmail(), messageText, subject, setting);
+    }
+
+    private NotificationsUserSetting getLoginSettings(User user) {
+        return  NotificationsUserSetting
+                .builder()
+                .notificationMessageEventEnum(NotificationMessageEventEnum.LOGIN)
+                .notificatorId(NotificationMessageEventEnum.LOGIN.getCode())
+                .userId(user.getId())
+                .build();
     }
 
 }

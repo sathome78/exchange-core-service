@@ -3,11 +3,13 @@ package me.exrates.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import me.exrates.cache.ChartsCacheManager;
 import me.exrates.cache.ExchangeRatesHolder;
 import me.exrates.dao.CommissionDao;
 import me.exrates.dao.OrderDao;
 import me.exrates.exception.*;
 import me.exrates.model.CreateOrderEvent;
+import me.exrates.model.StatisticForMarket;
 import me.exrates.model.User;
 import me.exrates.model.chart.ChartResolution;
 import me.exrates.model.chart.ChartTimeFrame;
@@ -121,6 +123,11 @@ public class OrderServiceImpl implements OrderService {
     private ApplicationEventPublisher eventPublisher;
     @Autowired
     private ExchangeRatesHolder exchangeRatesHolder;
+    @Autowired
+    private ChartsCacheManager chartsCacheManager;
+
+    @Autowired
+    private MarketRatesHolder marketRatesHolder;
 
     @PostConstruct
     public void init() {
@@ -207,6 +214,56 @@ public class OrderServiceImpl implements OrderService {
             e.setPercentChange(BigDecimalProcessing.formatLocaleFixedDecimal(percentChange, locale, 2));
         });
         return result;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<BigDecimal> getLastOrderPriceByCurrencyPair(CurrencyPair currencyPair) {
+        return orderDao.getLastOrderPriceByCurrencyPair(currencyPair.getId());
+    }
+
+    @Override
+    public List<CandleChartItemDto> getCachedDataForCandle(CurrencyPair currencyPair, ChartTimeFrame timeFrame) {
+        return chartsCacheManager.getData(currencyPair.getId(), timeFrame);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Integer, List<OrderWideListDto>> getMyOrdersWithStateMap(Integer userId, CurrencyPair currencyPair, OrderStatus status,
+                                                                        String scope, Integer offset, Integer limit,
+                                                                        Locale locale, Map<String, String> sortedColumns) {
+
+        int records = orderDao.getMyOrdersWithStateCount(userId, currencyPair, status, scope, offset, limit, locale);
+        List<OrderWideListDto> orders = orderDao.getMyOrdersWithState(userId, status, currencyPair, locale, scope,
+                offset, limit, sortedColumns);
+        return Collections.singletonMap(records, orders);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    @Override
+    public Integer deleteOrderByAdmin(int orderId) {
+        OrderCreateDto order = orderDao.getMyOrderById(orderId);
+        OrderRoleInfoForDelete orderRoleInfo = orderDao.getOrderRoleInfo(orderId);
+        if (orderRoleInfo.mayDeleteWithoutProcessingTransactions()) {
+            setStatus(orderId, OrderStatus.DELETED);
+            return 1;
+        }
+
+        Object result = deleteOrder(orderId, OrderStatus.DELETED, DELETE);
+        if (result instanceof OrderDeleteStatus) {
+            if ((OrderDeleteStatus) result == OrderDeleteStatus.NOT_FOUND) {
+                return 0;
+            }
+            throw new OrderDeletingException(((OrderDeleteStatus) result).toString());
+        }
+        notificationService.notifyUser(order.getUserId(), NotificationEvent.ORDER,
+                "deleteOrder.notificationTitle", "deleteOrder.notificationMessage", new Object[]{order.getOrderId()});
+        return (Integer) result;
+    }
+
+    @Override
+    public List<StatisticForMarket> getAllCurrenciesMarkersForAllPairsModel() {
+        return marketRatesHolder.getAll();
     }
 
     @Override

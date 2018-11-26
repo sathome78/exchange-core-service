@@ -4,9 +4,12 @@ import me.exrates.dao.ChatDao;
 import me.exrates.model.enums.ChatLang;
 import me.exrates.model.main.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -58,6 +61,21 @@ public class ChatDaoImpl implements ChatDao {
         namedParameters.put("id", message.getId());
         jdbcTemplate.update(sql, namedParameters);
 
+    }
+
+    @Override
+    public ChatMessage persistPublic(ChatLang lang, ChatMessage message) {
+        final String sql = "INSERT INTO PUBLIC_CHAT_" + lang.val + "(nickname, body, message_time) " +
+                "VALUES (:email, :body, :messageTime) " +
+                " ON DUPLICATE KEY UPDATE body = :body, nickname = :email, message_time = :messageTime";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("email", message.getNickname());
+        params.addValue("body", message.getBody());
+        params.addValue("messageTime", message.getTime());
+        jdbcTemplate.update(sql, params, keyHolder);
+        message.setId(keyHolder.getKey().longValue());
+        return message;
     }
 
 }

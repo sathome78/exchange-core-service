@@ -96,4 +96,9 @@ public interface UserDao {
 
     List<TemporalToken> getAllTokens();
 
+    String getAvatarPath(Integer userId);
+
+    List<Integer> findFavouriteCurrencyPairsById(int id);
+
+    boolean manageUserFavouriteCurrencyPair(int id, int currencyPairId, boolean delete);
 }

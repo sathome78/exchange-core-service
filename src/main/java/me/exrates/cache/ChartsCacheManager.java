@@ -53,6 +53,11 @@ public class ChartsCacheManager {
         return lastOnly ? cacheUnit.getLastData() : cacheUnit.getData();
     }
 
+    public List<CandleChartItemDto> getData(Integer pairId, ChartTimeFrame timeFrame) {
+
+        return getData(pairId, timeFrame, false);
+    }
+
     public String getPreparedData(int pairId, ChartTimeFrame timeFrame, boolean lastOnly) {
         return prepareDataToSend(getData(pairId, timeFrame, lastOnly), pairId, timeFrame);
     }

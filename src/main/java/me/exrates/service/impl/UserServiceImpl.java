@@ -116,6 +116,25 @@ public class UserServiceImpl implements UserService {
         userDao.createUserDoc(userId, paths);
     }
 
+    @Override
+    public List<Integer> getUserFavouriteCurrencyPairs(String email) {
+        User user = findByEmail(email);
+        if (user == null) {
+            return Collections.emptyList();
+        }
+        return userDao.findFavouriteCurrencyPairsById(user.getId());
+    }
+
+    @Override
+    public boolean manageUserFavouriteCurrencyPair(String email, int currencyPairId, boolean delete) {
+        User user = findByEmail(email);
+        if (user == null) {
+            return false;
+        }
+        return userDao.manageUserFavouriteCurrencyPair(user.getId(), currencyPairId, delete);
+    }
+
+
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
@@ -352,6 +371,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getAvatarPath(Integer userId) {
+        return userDao.getAvatarPath(userId);
+    }
+
+    @Override
     public User getCommonReferralRoot() {
         try {
             return userDao.getCommonReferralRoot();
@@ -502,5 +526,6 @@ public class UserServiceImpl implements UserService {
     public User getUserByTemporalToken(String token) {
         return userDao.getUserByTemporalToken(token);
     }
+
 
 }

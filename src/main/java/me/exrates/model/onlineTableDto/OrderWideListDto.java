@@ -38,6 +38,7 @@ public class OrderWideListDto extends OnlineTableDto {
     private String currencyPairName;
     private String statusString;
     private OrderBaseType orderBaseType;
+    private Double commissionValue;
 
     public OrderWideListDto() {
         this.needRefresh = true;

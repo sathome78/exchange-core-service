@@ -1,16 +1,21 @@
 package me.exrates.configuration;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import me.exrates.util.SSMGetter;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
@@ -85,5 +90,41 @@ public class DatabaseConfiguration {
         return transactionManager;
     }
 
+    @Bean(name = "slaveHikariDataSource")
+    public DataSource slaveHikariDataSource() {
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setDriverClassName(driverClassName);
+        hikariConfig.setJdbcUrl(jdbcUrl);
+        hikariConfig.setUsername(dbUsername);
+        hikariConfig.setPassword(password);
+        hikariConfig.setMaximumPoolSize(50);
+        hikariConfig.setReadOnly(true);
+        return new HikariDataSource(hikariConfig);
+    }
 
+    @Bean(name = "masterHikariDataSource")
+    public DataSource masterHikariDataSource() {
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setDriverClassName(driverClassName);
+        hikariConfig.setJdbcUrl(jdbcUrl);
+        hikariConfig.setUsername(dbUsername);
+        hikariConfig.setPassword(password);
+        hikariConfig.setMaximumPoolSize(50);
+        DataSource dataSource = new HikariDataSource(hikariConfig);
+        return dataSource;
+    }
+
+
+    @DependsOn("slaveHikariDataSource")
+    @Bean(name = "slaveTemplate")
+    public NamedParameterJdbcTemplate slaveNamedParameterJdbcTemplate(@Qualifier("slaveHikariDataSource") DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Primary
+    @DependsOn("masterHikariDataSource")
+    @Bean(name = "masterTemplate")
+    public NamedParameterJdbcTemplate masterNamedParameterJdbcTemplate(@Qualifier("masterHikariDataSource") DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
 }

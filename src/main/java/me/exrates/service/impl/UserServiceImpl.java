@@ -134,6 +134,17 @@ public class UserServiceImpl implements UserService {
         return userDao.manageUserFavouriteCurrencyPair(user.getId(), currencyPairId, delete);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateUserSettings(UpdateUserDto user) {
+        return userDao.update(user);
+    }
+
+    @Override
+    public boolean deleteTempTokenByValue(String idTempToken) {
+        return userDao.deleteTemporalToken(idTempToken);
+    }
+
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

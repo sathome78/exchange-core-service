@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.Locale;
 
 public interface InputOutputDao {
-
     List<MyInputOutputHistoryDto> findMyInputOutputHistoryByOperationType(
             String email,
             Integer offset,
             Integer limit,
-            List<Integer> operationTypeIdList,
-            Locale locale);
+            String dateFrom, String dateTo, List<Integer> operationTypeIdList,
+            Locale locale, String currency);
 
     List<CurrencyInputOutputSummaryDto> getInputOutputSummary(LocalDateTime startTime, LocalDateTime endTime, List<Integer> userRoleIdList);
+
+    List<MyInputOutputHistoryDto> findMyInputOutputHistoryByOperationType(String email, Integer offset, Integer limit, List<Integer> operationTypeList, Locale locale);
 }

@@ -58,6 +58,8 @@ public interface UserDao {
 
     boolean deleteTemporalToken(TemporalToken token);
 
+    boolean deleteTemporalToken(String tempToken);
+
     boolean deleteTemporalTokensOfTokentypeForUser(TemporalToken token);
 
     boolean delete(User user);

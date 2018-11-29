@@ -35,4 +35,11 @@ public class User {
     public User() {
     }
 
+    public String getIp() {
+        return ipaddress;
+    }
+
+    public void setIp(String ip) {
+        this.ipaddress = ip;
+    }
 }

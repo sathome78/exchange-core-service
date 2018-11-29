@@ -95,6 +95,8 @@ public class EntryController {
     private UserFilesService userFilesService;
     @Autowired
     private UserSessionService userSessionService;
+    @Autowired
+    private G2faService g2faService;
 
     @RequestMapping(value = {"/dashboard"})
     public ModelAndView dashboard(
@@ -515,8 +517,14 @@ public class EntryController {
 
     @RequestMapping(value = "/settings/2FaOptions/google2fa", method = RequestMethod.POST)
     @ResponseBody
-    public Generic2faResponseDto getGoogle2FA(Principal principal) throws UnsupportedEncodingException {
-        return new Generic2faResponseDto(userService.generateQRUrl(principal.getName()));
+    public Generic2faResponseDto getGoogle2FaState(Principal principal) throws UnsupportedEncodingException {
+        User user = userService.findByEmail(principal.getName());
+        Boolean isConnected = g2faService.isGoogleAuthenticatorEnable(user.getId());
+        Generic2faResponseDto dto = null;
+        if (!isConnected) {
+            dto = new Generic2faResponseDto(g2faService.generateQRUrl(principal.getName()), g2faService.getGoogleAuthenticatorCode(user.getId()));
+        }
+        return dto;
     }
 
     @ResponseBody

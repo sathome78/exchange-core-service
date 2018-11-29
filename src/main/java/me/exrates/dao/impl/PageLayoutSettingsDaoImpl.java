@@ -1,6 +1,7 @@
 package me.exrates.dao.impl;
 
 import me.exrates.dao.PageLayoutSettingsDao;
+import me.exrates.model.ColorScheme;
 import me.exrates.model.dto.PageLayoutSettingsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

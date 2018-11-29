@@ -8,7 +8,9 @@ import me.exrates.util.BigDecimalProcessing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +27,7 @@ public class InputOutputDaoImpl implements InputOutputDao {
     private static final Logger log = LogManager.getLogger("inputoutput");
 
     @Autowired
+    @Qualifier("masterTemplate")
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -35,8 +38,8 @@ public class InputOutputDaoImpl implements InputOutputDao {
             String email,
             Integer offset,
             Integer limit,
-            List<Integer> operationTypeIdList,
-            Locale locale) {
+            String dateFrom, String dateTo, List<Integer> operationTypeIdList,
+            Locale locale, String currency) {
         String sql = " SELECT " +
                 "    IF (WITHDRAW_REQUEST.date_creation IS NOT NULL, WITHDRAW_REQUEST.date_creation, REFILL_REQUEST.date_creation) AS datetime, " +
                 "    CURRENCY.name as currency, TRANSACTION.amount, " +
@@ -66,7 +69,8 @@ public class InputOutputDaoImpl implements InputOutputDao {
                 "    left join WALLET on WALLET.id = TRANSACTION.user_wallet_id" +
                 "    left join USER on WALLET.user_id=USER.id" +
                 "  WHERE " +
-                "    TRANSACTION.operation_type_id IN (:operation_type_id_list) and " +
+                "    TRANSACTION.operation_type_id IN (:operation_type_id_list) AND " + (currency != null ? " TRANSACTION.currency_id = (SELECT id FROM CURRENCY WHERE name = :currency)" :" ") +
+                " TRANSACTION.datetime BETWEEN '" + dateFrom + "' AND '" + dateTo + "' and " +
                 "    USER.email=:email " +
                 "    AND TRANSACTION.source_type <>  'USER_TRANSFER'  " +
 
@@ -197,36 +201,9 @@ public class InputOutputDaoImpl implements InputOutputDao {
                 (limit == -1 ? "" : "  LIMIT " + limit + " OFFSET " + offset);
         final Map<String, Object> params = new HashMap<>();
         params.put("email", email);
+        params.put("currency", currency);
         params.put("operation_type_id_list", operationTypeIdList);
-        return jdbcTemplate.query(sql, params, (rs, i) -> {
-            MyInputOutputHistoryDto myInputOutputHistoryDto = new MyInputOutputHistoryDto();
-            Timestamp datetime = rs.getTimestamp("datetime");
-            myInputOutputHistoryDto.setDatetime(datetime == null ? null : datetime.toLocalDateTime());
-            myInputOutputHistoryDto.setCurrencyName(rs.getString("currency"));
-            myInputOutputHistoryDto.setAmount(BigDecimalProcessing.formatLocale(rs.getBigDecimal("amount"), locale, 2));
-            myInputOutputHistoryDto.setCommissionAmount(BigDecimalProcessing.formatLocale(rs.getBigDecimal("commission_amount"), locale, 2));
-            myInputOutputHistoryDto.setMerchantName(rs.getString("merchant"));
-            myInputOutputHistoryDto.setOperationType(rs.getString("operation_type"));
-            myInputOutputHistoryDto.setConfirmation(rs.getInt("confirmation"));
-            myInputOutputHistoryDto.setTransactionId(rs.getInt("transaction_id"));
-            myInputOutputHistoryDto.setProvided(myInputOutputHistoryDto.getTransactionId() == null ? 0 : 1);
-            myInputOutputHistoryDto.setTransactionProvided(myInputOutputHistoryDto.getProvided() == 0 ?
-                    messageSource.getMessage("inputoutput.statusFalse", null, locale) :
-                    messageSource.getMessage("inputoutput.statusTrue", null, locale));
-            myInputOutputHistoryDto.setId(rs.getInt("operation_id"));
-            myInputOutputHistoryDto.setUserId(rs.getInt("user_id"));
-            myInputOutputHistoryDto.setBankAccount(rs.getString("destination"));
-            TransactionSourceType sourceType = TransactionSourceType.convert(rs.getString("source_type"));
-            myInputOutputHistoryDto.setSourceType(sourceType);
-            myInputOutputHistoryDto.setStatus(rs.getInt("status_id"));
-            Timestamp dateModification = rs.getTimestamp("status_modification_date");
-            myInputOutputHistoryDto.setStatusUpdateDate(dateModification == null ? null : dateModification.toLocalDateTime());
-            myInputOutputHistoryDto.setUserFullName(rs.getString("user_full_name"));
-            myInputOutputHistoryDto.setRemark(rs.getString("remark"));
-            myInputOutputHistoryDto.setAdminHolderId(rs.getInt("admin_holder_id"));
-            myInputOutputHistoryDto.setTransactionHash(rs.getString("transaction_hash"));
-            return myInputOutputHistoryDto;
-        });
+        return jdbcTemplate.query(sql, params, rowMapper(locale));
     }
 
     @Override
@@ -274,4 +251,40 @@ public class InputOutputDaoImpl implements InputOutputDao {
         });
     }
 
+    @Override
+    public List<MyInputOutputHistoryDto> findMyInputOutputHistoryByOperationType(String email, Integer offset, Integer limit, List<Integer> operationTypeList, Locale locale) {
+        return null;
+    }
+
+    private RowMapper<MyInputOutputHistoryDto> rowMapper(Locale locale) {
+        return (rs, i) -> {
+            MyInputOutputHistoryDto myInputOutputHistoryDto = new MyInputOutputHistoryDto();
+            Timestamp datetime = rs.getTimestamp("datetime");
+            myInputOutputHistoryDto.setDatetime(datetime == null ? null: datetime.toLocalDateTime());
+            myInputOutputHistoryDto.setCurrencyName(rs.getString("currency"));
+            myInputOutputHistoryDto.setAmount(BigDecimalProcessing.formatLocale(rs.getBigDecimal("amount"), locale, 2));
+            myInputOutputHistoryDto.setCommissionAmount(BigDecimalProcessing.formatLocale(rs.getBigDecimal("commission_amount"), locale, 2));
+            myInputOutputHistoryDto.setMerchantName(rs.getString("merchant"));
+            myInputOutputHistoryDto.setOperationType(rs.getString("operation_type"));
+            myInputOutputHistoryDto.setConfirmation(rs.getInt("confirmation"));
+            myInputOutputHistoryDto.setTransactionId(rs.getInt("transaction_id"));
+            myInputOutputHistoryDto.setProvided(myInputOutputHistoryDto.getTransactionId() == null ? 0 : 1);
+            myInputOutputHistoryDto.setTransactionProvided(myInputOutputHistoryDto.getProvided() == 0 ?
+                    messageSource.getMessage("inputoutput.statusFalse", null, locale) :
+                    messageSource.getMessage("inputoutput.statusTrue", null, locale));
+            myInputOutputHistoryDto.setId(rs.getInt("operation_id"));
+            myInputOutputHistoryDto.setUserId(rs.getInt("user_id"));
+            myInputOutputHistoryDto.setBankAccount(rs.getString("destination"));
+            TransactionSourceType sourceType = TransactionSourceType.convert(rs.getString("source_type"));
+            myInputOutputHistoryDto.setSourceType(sourceType);
+            myInputOutputHistoryDto.setStatus(rs.getInt("status_id"));
+            Timestamp dateModification = rs.getTimestamp("status_modification_date");
+            myInputOutputHistoryDto.setStatusUpdateDate(dateModification == null ? null : dateModification.toLocalDateTime());
+            myInputOutputHistoryDto.setUserFullName(rs.getString("user_full_name"));
+            myInputOutputHistoryDto.setRemark(rs.getString("remark"));
+            myInputOutputHistoryDto.setAdminHolderId(rs.getInt("admin_holder_id"));
+            myInputOutputHistoryDto.setTransactionHash(rs.getString("transaction_hash"));
+            return myInputOutputHistoryDto;
+        };
+    }
 }

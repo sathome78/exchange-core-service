@@ -19,7 +19,7 @@ public interface InputOutputService {
             Integer offset, Integer limit,
             String dateFrom,
             String dateTo,
-            Locale locale);
+            Locale locale, String currency);
 
     List<Map<String, Object>> generateAndGetButtonsSet(InvoiceStatus status, InvoiceOperationPermission permittedOperation, boolean authorisedUserIsHolder, Locale locale);
 

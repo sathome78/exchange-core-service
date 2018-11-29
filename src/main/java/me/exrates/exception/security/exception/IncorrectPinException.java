@@ -17,6 +17,10 @@ public class IncorrectPinException extends AuthenticationException {
         this.dto = dto;
     }
 
+    public IncorrectPinException(String code) {
+        super(code);
+    }
+
     public PinDto getDto() {
         return dto;
     }

@@ -374,6 +374,14 @@ public class UserDaoImpl implements UserDao {
         return namedParameterJdbcTemplate.update(sql, namedParameters) > 0;
     }
 
+    @Override
+    public boolean deleteTemporalToken(String tempToken) {
+        String sql = "delete from TEMPORAL_TOKEN where value = :token";
+        Map<String, String> namedParameters = new HashMap<>(1);
+        namedParameters.put("token", tempToken);
+        return namedParameterJdbcTemplate.update(sql, namedParameters) > 0;
+    }
+
     public boolean deleteTemporalTokensOfTokentypeForUser(TemporalToken token) {
         if (token == null) {
             return false;

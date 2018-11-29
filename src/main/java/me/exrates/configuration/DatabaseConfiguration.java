@@ -38,11 +38,11 @@ public class DatabaseConfiguration {
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
-    @Value("${spring.datasource.hikari.maximum-pool-size}")
-    private int maximumPoolSize;
-
-    @Value("${spring.datasource.hikari.minimum-idle}")
-    private int minimumidle;
+//    @Value("${spring.datasource.hikari.maximum-pool-size}") TODO
+//    private int maximumPoolSize;
+//
+//    @Value("${spring.datasource.hikari.minimum-idle}")
+//    private int minimumidle;
 
     @Value("${spring.datasource.ssm-path}")
     private String password;
@@ -62,8 +62,8 @@ public class DatabaseConfiguration {
         hikariDataSource.setJdbcUrl(jdbcUrl);
         hikariDataSource.setConnectionTestQuery(connectionTestQuery);
         hikariDataSource.setDriverClassName(driverClassName);
-        hikariDataSource.setMaximumPoolSize(maximumPoolSize);
-        hikariDataSource.setMinimumIdle(minimumidle);
+//        hikariDataSource.setMaximumPoolSize(maximumPoolSize); TODO
+//        hikariDataSource.setMinimumIdle(minimumidle);
 
         return hikariDataSource;
     }

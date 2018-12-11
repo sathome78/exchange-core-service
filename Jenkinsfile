@@ -3,7 +3,7 @@ pipeline {
   agent any
     stages {
   
-    stage('Docker Build') {
+    stage('Maven install & Docker Build') {
       agent any      
       steps {
          sh 'mvn clean install'

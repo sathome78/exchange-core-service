@@ -33,8 +33,9 @@ public class ReferralUserGraphDaoImpl implements ReferralUserGraphDao {
 
     @Autowired
     //TODO @Qualifier(value = "masterTemplate")
-    public ReferralUserGraphDaoImpl( final NamedParameterJdbcTemplate jdbcTemplate, @Qualifier(value = "namedParameterJdbcTemplate") NamedParameterJdbcTemplate slaveJdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ReferralUserGraphDaoImpl(@Qualifier(value = "masterTemplate") final NamedParameterJdbcTemplate masterJdbcTemplate,
+                                    @Qualifier(value = "slaveTemplate") NamedParameterJdbcTemplate slaveJdbcTemplate) {
+        this.jdbcTemplate = masterJdbcTemplate;
         this.slaveJdbcTemplate = slaveJdbcTemplate;
     }
 

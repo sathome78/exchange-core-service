@@ -34,10 +34,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
 @Service
-@PropertySource(value = {"classpath:/mobile.properties", "classpath:/angular.properties"})
 public class AuthTokenServiceImpl implements AuthTokenService {
     private static final Logger logger = LogManager.getLogger("mobileAPI");
-    private static final int PIN_WAIT_MINUTES = 20;
+
     @Value("${token.key}")
     private String TOKEN_KEY;
     @Value("${token.duration}")

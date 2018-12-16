@@ -37,7 +37,6 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
-@PropertySource(value = {"classpath:/angular.properties"})
 public class NgUserController {
 
     private static final Logger logger = LogManager.getLogger(NgUserController.class);

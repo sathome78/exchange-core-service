@@ -26,7 +26,6 @@ import static org.springframework.http.HttpMethod.POST;
 @Configuration
 public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapter {
 
-
     private final
     RedisConnectionFactory redisConnectionFactory;
 
@@ -42,8 +41,6 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
     }
 
     public void configure(HttpSecurity http) throws Exception {
-
-
         http
                 .authorizeRequests()
                 .antMatchers("/actuator/**").permitAll()
@@ -76,5 +73,4 @@ public class ResourcesServerConfiguration extends ResourceServerConfigurerAdapte
         bean.setOrder(0);
         return bean;
     }
-
 }

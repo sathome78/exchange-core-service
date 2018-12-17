@@ -27,7 +27,6 @@ public class EmailConfiguration {
     @Value("${mail.mail_mandrill.protocol}")
     private String mailMandrillProtocol;
     @Value("${mail.mail_mandrill.user}")
-
     private String mailMandrillUser;
     @Value("${mail.mail_mandrill.password}")
     private String mailMandrillPassword;
@@ -89,5 +88,4 @@ public class EmailConfiguration {
         mailSenderImpl.setJavaMailProperties(javaMailProps);
         return mailSenderImpl;
     }
-
 }

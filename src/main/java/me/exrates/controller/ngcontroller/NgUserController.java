@@ -3,7 +3,6 @@ package me.exrates.controller.ngcontroller;
 import me.exrates.controller.ngcontroller.exception.NgDashboardException;
 import me.exrates.controller.ngcontroller.model.PasswordCreateDto;
 import me.exrates.controller.ngcontroller.service.NgUserService;
-import me.exrates.exception.BannedIpException;
 import me.exrates.exception.IncorrectPasswordException;
 import me.exrates.exception.UserNotFoundException;
 import me.exrates.exception.security.exception.IncorrectPinException;
@@ -13,17 +12,26 @@ import me.exrates.model.UserAuthenticationDto;
 import me.exrates.model.dto.UserEmailDto;
 import me.exrates.model.enums.UserStatus;
 import me.exrates.model.error.ErrorInfo;
-import me.exrates.service.*;
+import me.exrates.service.AuthTokenService;
+import me.exrates.service.G2faService;
+import me.exrates.service.ReferralService;
+import me.exrates.service.SecureService;
+import me.exrates.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -41,7 +49,6 @@ public class NgUserController {
 
     private static final Logger logger = LogManager.getLogger(NgUserController.class);
 
-    private final IpBlockingService ipBlockingService;
     private final AuthTokenService authTokenService;
     private final UserService userService;
     private final ReferralService referralService;
@@ -53,12 +60,12 @@ public class NgUserController {
     private boolean DEV_MODE;
 
     @Autowired
-    public NgUserController(IpBlockingService ipBlockingService, AuthTokenService authTokenService,
-                            UserService userService, ReferralService referralService,
+    public NgUserController(AuthTokenService authTokenService,
+                            UserService userService,
+                            ReferralService referralService,
                             SecureService secureService,
                             G2faService g2faService,
                             NgUserService ngUserService) {
-        this.ipBlockingService = ipBlockingService;
         this.authTokenService = authTokenService;
         this.userService = userService;
         this.referralService = referralService;
@@ -70,27 +77,13 @@ public class NgUserController {
     @PostMapping(value = "/authenticate")
     public ResponseEntity<AuthTokenDto> authenticate(@RequestBody @Valid UserAuthenticationDto authenticationDto,
                                                      HttpServletRequest request) throws Exception {
-
         logger.info("authenticate, email = {}, ip = {}", authenticationDto.getEmail(),
                 authenticationDto.getClientIp());
-        try {
-            if (!DEV_MODE) {
-//                ipBlockingService.checkIp(authenticationDto.getClientIp(), IpTypesOfChecking.LOGIN);
-            }
-        } catch (BannedIpException ban) {
-            return new ResponseEntity<>(HttpStatus.DESTINATION_LOCKED); // 419
-        }
 
         if (authenticationDto.getEmail().startsWith("promo@ex") ||
                 authenticationDto.getEmail().startsWith("dev@exrat")) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);   // 403
         }
-
-        if (authenticationDto.getEmail().startsWith("promo@ex") ||
-                authenticationDto.getEmail().startsWith("dev@exrat")) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);   // 403
-        }
-
         User user;
         try {
             user = userService.findByEmail(authenticationDto.getEmail());
@@ -105,14 +98,6 @@ public class NgUserController {
         if (user.getStatus() == UserStatus.DELETED) {
             return new ResponseEntity<>(HttpStatus.GONE); // 410
         }
-
-        if (user.getStatus() == UserStatus.REGISTERED) {
-            return new ResponseEntity<>(HttpStatus.UPGRADE_REQUIRED); // 426
-        }
-        if (user.getStatus() == UserStatus.DELETED) {
-            return new ResponseEntity<>(HttpStatus.GONE); // 410
-        }
-
         boolean shouldLoginWithGoogle = g2faService.isGoogleAuthenticatorEnable(user.getId());
 
         if (!DEV_MODE) {
@@ -125,7 +110,6 @@ public class NgUserController {
                 return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT); //418
             }
         }
-
         authenticationDto.setPinRequired(true);
         Optional<AuthTokenDto> authTokenResult;
         try {
@@ -149,19 +133,16 @@ public class NgUserController {
         authTokenDto.setFinPasswordSet(user.getFinpassword() != null);
         authTokenDto.setReferralReference(referralService.generateReferral(user.getEmail()));
 //        ipBlockingService.successfulProcessing(authenticationDto.getClientIp(), IpTypesOfChecking.LOGIN);
-        return new ResponseEntity<>(authTokenDto, HttpStatus.OK); // 200
+        return ResponseEntity.ok(authTokenDto); // 200
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity register(@RequestBody @Valid UserEmailDto userEmailDto, HttpServletRequest request) {
-
         boolean result = ngUserService.registerUser(userEmailDto, request);
-
         if (result) {
             return ResponseEntity.ok().build();
         }
-
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().build();
     }
 
     private String getAvatarPathPrefix(HttpServletRequest request) {
@@ -171,18 +152,16 @@ public class NgUserController {
 
     @PostMapping("/createPassword")
     public ResponseEntity savePassword(@RequestBody @Valid PasswordCreateDto passwordCreateDto,
-                                        HttpServletRequest request) {
+                                       HttpServletRequest request) {
         AuthTokenDto tokenDto = ngUserService.createPassword(passwordCreateDto, request);
-        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+        return ResponseEntity.ok(tokenDto);
     }
 
     @PostMapping("/recoveryPassword")
-    public ResponseEntity recoveryPassword(@RequestBody @Valid UserEmailDto userEmailDto, HttpServletRequest request){
+    public ResponseEntity recoveryPassword(@RequestBody @Valid UserEmailDto userEmailDto, HttpServletRequest request) {
         boolean result = ngUserService.recoveryPassword(userEmailDto, request);
         return result ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
-
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NgDashboardException.class)

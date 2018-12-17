@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class SSMConfiguration {
 
 
-    @Bean
+//    @Bean
     public AWSSimpleSystemsManagement awsSimpleSystemsManagement() {
         return AWSSimpleSystemsManagementClientBuilder.defaultClient();
     }

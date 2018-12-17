@@ -71,13 +71,6 @@ public class OtherConfiguration {
                 twitterAccessTokenSecret);
     }
 
-
-    @Bean
-    public DefaultSimpUserRegistry defaultSimpUserRegistry() {
-        return new DefaultSimpUserRegistry();
-    }
-
-
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();

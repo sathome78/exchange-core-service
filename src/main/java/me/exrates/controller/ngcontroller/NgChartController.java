@@ -57,12 +57,11 @@ public class NgChartController {
             errors.put("errmsg", "can not find currencyPair");
             return new ResponseEntity(errors, HttpStatus.NOT_FOUND);
         }
-
         String rsolutionForChartTime = (resolution.equals("W") || resolution.equals("M")) ? "D" : resolution;
         result = orderService.getCachedDataForCandle(currencyPair,
                 ChartTimeFramesEnum.ofResolution(rsolutionForChartTime).getTimeFrame())
                 .stream().map(CandleDto::new).collect(Collectors.toList());
-        return new ResponseEntity(ngOrderService.filterDataPeriod(result, from, to, resolution), HttpStatus.OK);
+        return ResponseEntity.ok(ngOrderService.filterDataPeriod(result, from, to, resolution));
     }
 
     @GetMapping("/timescale_marks")
@@ -72,23 +71,22 @@ public class NgChartController {
             @QueryParam("from") Long from,
             @QueryParam("resolution") String resolution,
             @QueryParam("countback") String countback) {
-
         return getCandleChartHistoryData(symbol, to, from, resolution, countback);
     }
 
     @GetMapping(value = "/config")
     public ResponseEntity getChartConfig() {
-        return new ResponseEntity(getConfig().toString(), HttpStatus.OK);
+        return ResponseEntity.ok(getConfig().toString());
     }
 
     @GetMapping(value = "/symbols")
     public ResponseEntity getChartSymbol(@QueryParam("symbol") String symbol) {
-        return new ResponseEntity(getSymbolInfo(symbol).toString(), HttpStatus.OK);
+        return ResponseEntity.ok(getSymbolInfo(symbol).toString());
     }
 
     @GetMapping(value = "/time")
     public ResponseEntity getChartTime() {
-        return new ResponseEntity(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC), HttpStatus.OK);
+        return ResponseEntity.ok(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
     }
 
     /**
@@ -97,7 +95,6 @@ public class NgChartController {
      * @return
      */
     private JsonObject getConfig() {
-
         return Json.createObjectBuilder()
                 .add("supports_search", true)
                 .add("supports_group_request", false)
@@ -123,7 +120,6 @@ public class NgChartController {
     }
 
     private JsonObject getSymbolInfo(@QueryParam("symbol") String symbol) {
-
         return Json.createObjectBuilder()
                 .add("name", symbol)
                 .add("base_name", Json.createArrayBuilder().add(symbol))
@@ -150,5 +146,4 @@ public class NgChartController {
                 .add("volume_precision", 2)
                 .build();
     }
-
 }

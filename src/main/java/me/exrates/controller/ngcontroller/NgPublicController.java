@@ -15,12 +15,17 @@ import me.exrates.model.enums.IpTypesOfChecking;
 import me.exrates.model.enums.OrderType;
 import me.exrates.model.main.ChatMessage;
 import me.exrates.model.main.CurrencyPair;
-import me.exrates.service.*;
+import me.exrates.service.ChatService;
+import me.exrates.service.G2faService;
+import me.exrates.service.IpBlockingService;
+import me.exrates.service.MarketRatesHolder;
+import me.exrates.service.OrderService;
+import me.exrates.service.TelegramChatBotService;
+import me.exrates.service.UserService;
 import me.exrates.util.IpUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,13 +35,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -56,9 +58,9 @@ public class NgPublicController {
     private static final Logger logger = LogManager.getLogger(NgPublicController.class);
 
     private final ChatService chatService;
-    private final IpBlockingService ipBlockingService;;
+    private final IpBlockingService ipBlockingService;
     private final UserService userService;
-    private final SimpMessagingTemplate messagingTemplate;
+        private final SimpMessagingTemplate messagingTemplate;
     private final OrderService orderService;
     private final G2faService g2faService;
     private final NgOrderService ngOrderService;
@@ -86,24 +88,17 @@ public class NgPublicController {
         this.marketRatesHolder = marketRatesHolder;
     }
 
-    @PostConstruct
-    private void initCheckVersion() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        logger.error("Build at: " + LocalDateTime.now().format(formatter));
-    }
-
     @GetMapping(value = "/if_email_exists")
     public ResponseEntity<Boolean> checkIfNewUserEmailExists(@RequestParam("email") String email, HttpServletRequest request) {
         Boolean unique = processIpBlocking(request, "email", email,
                 () -> userService.ifEmailIsUnique(email));
         // we may use this elsewhere, so exists is opposite to unique
-        return new ResponseEntity<>(!unique, HttpStatus.OK);
+        return ResponseEntity.ok(!unique);
     }
 
     @GetMapping("/is_google_2fa_enabled")
-    @ResponseBody
-    public Boolean isGoogleTwoFAEnabled(@RequestParam("email") String email) {
-        return g2faService.isGoogleAuthenticatorEnable(email);
+    public ResponseEntity<Boolean> isGoogleTwoFAEnabled(@RequestParam("email") String email) {
+        return ResponseEntity.ok(g2faService.isGoogleAuthenticatorEnable(email));
     }
 
     @GetMapping(value = "/if_username_exists")
@@ -111,89 +106,77 @@ public class NgPublicController {
         Boolean unique = processIpBlocking(request, "username", username,
                 () -> userService.ifNicknameIsUnique(username));
         // we may use this elsewhere, so exists is opposite to unique
-        return new ResponseEntity<>(!unique, HttpStatus.OK);
+        return ResponseEntity.ok(!unique);
     }
 
     @GetMapping(value = "/chat/history")
-    @ResponseBody
-    public List<ChatHistoryDateWrapperDto> getChatMessages(final @RequestParam("lang") String lang) {
+    public ResponseEntity<List<ChatHistoryDateWrapperDto>> getChatMessages(final @RequestParam("lang") String lang) {
         try {
             List<ChatHistoryDto> msgs = Lists.newArrayList(telegramChatBotService.getMessages());
-            return Lists.newArrayList(new ChatHistoryDateWrapperDto(LocalDate.now(), msgs));
+            return ResponseEntity.ok(Lists.newArrayList(new ChatHistoryDateWrapperDto(LocalDate.now(), msgs)));
         } catch (Exception e) {
-            return Collections.emptyList();
-
+            return ResponseEntity.ok(Collections.emptyList());
         }
     }
 
-    @PostMapping(value = "/chat")
-    public ResponseEntity<Void> sendChatMessage(@RequestBody Map<String, String> body) {
+    @PostMapping("/chat")
+    public ResponseEntity sendChatMessage(@RequestBody Map<String, String> body) {
         String language = body.getOrDefault("LANG", "EN");
         ChatLang chatLang = ChatLang.toInstance(language);
         String simpleMessage = body.get("MESSAGE");
         String email = body.getOrDefault("EMAIL", "");
         if (isEmpty(simpleMessage)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
         final ChatMessage message;
         try {
             message = chatService.persistPublicMessage(simpleMessage, email, chatLang);
         } catch (IllegalChatMessageException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
         String destination = "/topic/chat/".concat(language.toLowerCase());
         messagingTemplate.convertAndSend(destination, fromChatMessage(message));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/open-orders/{pairId}/{precision}")
-    @ResponseBody
-    public List<OrderBookWrapperDto> getOpenOrders(@PathVariable Integer pairId, @PathVariable Integer precision) {
-        return ImmutableList.of(
+    @GetMapping("/open-orders/{pairId}/{precision}")
+    public ResponseEntity<List<OrderBookWrapperDto>> getOpenOrders(@PathVariable Integer pairId, @PathVariable Integer precision) {
+        return ResponseEntity.ok(ImmutableList.of(
                 ngOrderService.findAllOrderBookItems(OrderType.BUY, pairId, precision),
-                ngOrderService.findAllOrderBookItems(OrderType.SELL, pairId, precision));
-    }
-
-    public String getMinAndMaxOrdersSell() {
-        return orderService.getAllCurrenciesStatForRefreshForAllPairs();
+                ngOrderService.findAllOrderBookItems(OrderType.SELL, pairId, precision)));
     }
 
     @GetMapping("/info/{currencyPairId}")
-    public ResponseEntity getCurrencyPairInfo(@PathVariable int currencyPairId) {
+    public ResponseEntity<ResponseInfoCurrencyPairDto> getCurrencyPairInfo(@PathVariable int currencyPairId) {
         try {
             ResponseInfoCurrencyPairDto currencyPairInfo = ngOrderService.getCurrencyPairInfo(currencyPairId);
-            return new ResponseEntity<>(currencyPairInfo, HttpStatus.OK);
-        } catch (Exception e){
+            return ResponseEntity.ok(currencyPairInfo);
+        } catch (Exception e) {
             logger.error("Error - {}", e);
         }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/currencies/fast")
-    @ResponseBody
-    public List<StatisticForMarket> getCurrencyPairInfoAll() {
-        return orderService.getAllCurrenciesMarkersForAllPairsModel();
+    public ResponseEntity<List<StatisticForMarket>> getCurrencyPairInfoAll() {
+        return ResponseEntity.ok(orderService.getAllCurrenciesMarkersForAllPairsModel());
     }
 
     @GetMapping("/currencies/fromdb")
-    @ResponseBody
-    public List<StatisticForMarket> getCurrencyPairInfoAllFromDb() {
-        return marketRatesHolder.getAllFromDb();
+    public ResponseEntity<List<StatisticForMarket>> getCurrencyPairInfoAllFromDb() {
+        return ResponseEntity.ok(marketRatesHolder.getAllFromDb());
     }
 
     @GetMapping("/pair/{part}/{name}")
-    public ResponseEntity getPairsByPartName(@PathVariable String name,
-                                             @PathVariable String part) {
+    public ResponseEntity<List<CurrencyPair>> getPairsByPartName(@PathVariable String name,
+                                                                 @PathVariable String part) {
         List<CurrencyPair> result;
-
         if (part.equalsIgnoreCase("first")) {
             result = ngOrderService.getAllPairsByFirstPartName(name);
         } else {
             result = ngOrderService.getAllPairsBySecondPartName(name);
         }
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.ok(result);
     }
 
     private String fromChatMessage(ChatMessage message) {
@@ -226,5 +209,4 @@ public class NgPublicController {
         }
         return result;
     }
-
 }

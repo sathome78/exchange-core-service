@@ -15,16 +15,17 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class StompMessengerImpl implements StompMessenger {
 
-//    @Autowired // TODO
+    @Autowired
     private SimpMessagingTemplate brokerMessagingTemplate;
     @Autowired
     private DefaultSimpUserRegistry registry;
+
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @PostConstruct
     public void init() {
         scheduler.scheduleAtFixedRate(() -> registry.findSubscriptions(sub -> true)
-                        .forEach(sub -> System.out.printf("sub: dest %s, user %s")),
+                        .forEach(sub -> System.out.printf("sub: dest %s, user %s", sub.getDestination(), sub.getId())),
                 1, 2, TimeUnit.MINUTES);
     }
 

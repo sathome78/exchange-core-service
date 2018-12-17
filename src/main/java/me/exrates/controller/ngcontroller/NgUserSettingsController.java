@@ -21,7 +21,6 @@ import me.exrates.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -88,20 +87,20 @@ public class NgUserSettingsController {
     }
 
     @PutMapping(value = "/updateMainPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateMainPassword(@RequestBody Map<String, String> body) {
+    public ResponseEntity updateMainPassword(@RequestBody Map<String, String> body) {
         String email = getPrincipalEmail();
         User user = userService.findByEmail(email);
         Locale locale = userService.getUserLocaleForMobile(email);
         String password = body.getOrDefault("password", "");
         if (password.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
         user.setPassword(password);
         user.setConfirmPassword(password);
 
         //   registerFormValidation.validateResetPassword(user, result, locale);
         if (userService.update(getUpdateUserDto(user), locale)) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -115,29 +114,29 @@ public class NgUserSettingsController {
     }
 
     @PutMapping(value = NICKNAME, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateNickName(@RequestBody Map<String, String> body) {
+    public ResponseEntity updateNickName(@RequestBody Map<String, String> body) {
         User user = userService.findByEmail(getPrincipalEmail());
         if (body.containsKey(NICKNAME)) {
             user.setNickname(body.get(NICKNAME));
             if (userService.setNickname(user.getNickname(), user.getEmail())) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                return ResponseEntity.ok().build();
             }
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping(value = SESSION_INTERVAL)
-    public Integer getSessionPeriod() {
+    public ResponseEntity<Integer> getSessionPeriod() {
         SessionParams params = sessionService.getByEmailOrDefault(getPrincipalEmail());
         if (null == params) {
-            return 0;
+            return ResponseEntity.ok(0);
         }
-        return params.getSessionTimeMinutes();
+        return ResponseEntity.ok(params.getSessionTimeMinutes());
     }
 
     @PutMapping(value = SESSION_INTERVAL, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateSessionPeriod(@RequestBody Map<String, Integer> body) {
+    public ResponseEntity updateSessionPeriod(@RequestBody Map<String, Integer> body) {
         try {
             int interval = body.get(SESSION_INTERVAL);
             SessionParams sessionParams = new SessionParams(interval, SessionLifeTypeEnum.INACTIVE_COUNT_LIFETIME.getTypeId());
@@ -145,67 +144,65 @@ public class NgUserSettingsController {
                 sessionService.saveOrUpdate(sessionParams, getPrincipalEmail());
 //                sessionService.setSessionLifeParams(request);
                 //todo inform user to logout to implement params next time
-                return new ResponseEntity<>(HttpStatus.OK);
+                return ResponseEntity.ok().build();
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping(value = EMAIL_NOTIFICATION)
-    public Map<NotificationEvent, Boolean> getUserNotifications() {
+    public ResponseEntity<Map<NotificationEvent, Boolean>> getUserNotifications() {
         try {
             int userId = userService.getIdByEmail(getPrincipalEmail());
-            return notificationService
+            return ResponseEntity.ok(notificationService
                     .getNotificationOptionsByUser(userId)
                     .stream()
-                    .collect(Collectors.toMap(NotificationOption::getEvent, NotificationOption::isSendEmail));
+                    .collect(Collectors.toMap(NotificationOption::getEvent, NotificationOption::isSendEmail)));
         } catch (Exception e) {
-            return Collections.emptyMap();
+            return ResponseEntity.ok(Collections.emptyMap());
         }
     }
 
     @PutMapping(value = EMAIL_NOTIFICATION, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateUserNotification(@RequestBody List<NotificationOption> options) {
+    public ResponseEntity updateUserNotification(@RequestBody List<NotificationOption> options) {
         try {
             int userId = userService.getIdByEmail(getPrincipalEmail());
             notificationService.updateNotificationOptionsForUser(userId, options);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @GetMapping(IS_COLOR_BLIND)
-    @ResponseBody
-    public Boolean getUserColorDepth() {
+    public ResponseEntity<Boolean> getUserColorDepth() {
         User user = userService.findByEmail(getPrincipalEmail());
         PageLayoutSettingsDto dto = this.layoutSettingsService.findByUser(user);
-        return dto != null && dto.isLowColorEnabled();
+        return ResponseEntity.ok(dto != null && dto.isLowColorEnabled());
     }
 
     @PutMapping(value = IS_COLOR_BLIND, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateUserColorDepth(@RequestBody Map<String, Boolean> params) {
+    public ResponseEntity updateUserColorDepth(@RequestBody Map<String, Boolean> params) {
         if (params.containsKey(STATE)) {
             User user = userService.findByEmail(getPrincipalEmail());
             this.layoutSettingsService.toggleLowColorMode(user, params.get(STATE));
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+            return ResponseEntity.unprocessableEntity().build();
         }
     }
 
     @GetMapping(COLOR_SCHEME)
-    @ResponseBody
-    public ColorScheme getUserColorScheme() {
+    public ResponseEntity<ColorScheme> getUserColorScheme() {
         User user = userService.findByEmail(getPrincipalEmail());
-        return this.layoutSettingsService.getColorScheme(user);
+        return ResponseEntity.ok(layoutSettingsService.getColorScheme(user));
     }
 
     @PutMapping(value = COLOR_SCHEME, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> updateUserColorScheme(@RequestBody Map<String, String> params) {
+    public ResponseEntity updateUserColorScheme(@RequestBody Map<String, String> params) {
         if (params.containsKey("SCHEME")) {
             Integer userId = userService.getIdByEmail(getPrincipalEmail());
             PageLayoutSettingsDto settingsDto = PageLayoutSettingsDto
@@ -214,9 +211,9 @@ public class NgUserSettingsController {
                     .scheme(ColorScheme.of(params.get("SCHEME")))
                     .build();
             this.layoutSettingsService.save(settingsDto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+            return ResponseEntity.unprocessableEntity().build();
         }
     }
 
@@ -230,20 +227,19 @@ public class NgUserSettingsController {
         if (attempt != null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/userFiles/docs/{type}")
-    public ResponseEntity<Void> uploadUserVerificationDocs(@RequestBody Map<String, String> body,
-                                                           @PathVariable("type") String type) {
-
+    public ResponseEntity uploadUserVerificationDocs(@RequestBody Map<String, String> body,
+                                                     @PathVariable("type") String type) {
         VerificationDocumentType documentType = VerificationDocumentType.of(type);
         int userId = userService.getIdByEmail(getPrincipalEmail());
         String encoded = body.getOrDefault("BASE_64", "");
 
         if (StringUtils.isEmpty(encoded)) {
             logger.info("uploadUserVerificationDocs() Error get data from file");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
         UserDocVerificationDto data = new UserDocVerificationDto(userId, documentType, encoded);
 
@@ -251,26 +247,25 @@ public class NgUserSettingsController {
         if (attempt != null) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("currency_pair/favourites")
-    @ResponseBody
-    public List<Integer> getUserFavouriteCurrencyPairs() {
-        return userService.getUserFavouriteCurrencyPairs(getPrincipalEmail());
+    public ResponseEntity<List<Integer>> getUserFavouriteCurrencyPairs() {
+        return ResponseEntity.ok(userService.getUserFavouriteCurrencyPairs(getPrincipalEmail()));
     }
 
     @PutMapping("currency_pair/favourites")
-    public ResponseEntity<Void> manegeUserFavouriteCurrencyPairs(@RequestBody  Map <String, String> params) {
+    public ResponseEntity manegeUserFavouriteCurrencyPairs(@RequestBody Map<String, String> params) {
         int currencyPairId;
         boolean toDelete;
-         try {
+        try {
             currencyPairId = Integer.parseInt(params.get("PAIR_ID"));
             toDelete = Boolean.valueOf(params.get("TO_DELETE"));
-         } catch (Exception e) {
-             logger.info("Failed to convert attributes as {}", e.getMessage());
-             return ResponseEntity.badRequest().build();
-         }
+        } catch (Exception e) {
+            logger.info("Failed to convert attributes as {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
         boolean result = userService.manageUserFavouriteCurrencyPair(getPrincipalEmail(), currencyPairId, toDelete);
         if (result) {
             return ResponseEntity.ok().build();
@@ -313,5 +308,4 @@ public class NgUserSettingsController {
     private String getPrincipalEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
-
 }

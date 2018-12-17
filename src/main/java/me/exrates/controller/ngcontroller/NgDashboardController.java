@@ -47,7 +47,11 @@ import org.springframework.web.servlet.LocaleResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/info/private/v2/dashboard/",
@@ -72,8 +76,8 @@ public class NgDashboardController {
                                  OrderService orderService,
                                  UserService userService,
                                  LocaleResolver localeResolver,
-                                 NgOrderService ngOrderService,
-                                 SimpMessagingTemplate messagingTemplate) {
+                                 SimpMessagingTemplate messagingTemplate,
+                                 NgOrderService ngOrderService) {
         this.dashboardService = dashboardService;
         this.currencyService = currencyService;
         this.orderService = orderService;
@@ -85,7 +89,6 @@ public class NgDashboardController {
 
     @PostMapping("/order")
     public ResponseEntity createOrder(@RequestBody @Valid InputCreateOrderDto inputOrder) {
-
         String result = ngOrderService.createOrder(inputOrder);
         HashMap<String, String> resultMap = new HashMap<>();
 
@@ -94,23 +97,23 @@ public class NgDashboardController {
             return new ResponseEntity<>(resultMap, HttpStatus.CREATED);
         } else {
             resultMap.put("message", "fail");
-            return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/order/{id}")
     public ResponseEntity deleteOrderById(@PathVariable int id) {
         Integer result = (Integer) orderService.deleteOrderByAdmin(id);
-        return result == 1 ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
+        return result == 1
+                ? ResponseEntity.ok().build()
+                : ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/order")
     public ResponseEntity updateOrder(@RequestBody @Valid InputCreateOrderDto inputOrder) {
-
         if (inputOrder.getOrderId() == null) {
             throw new OrderParamsWrongException();
         }
-
         String userName = userService.getUserEmailFromSecurityContext();
         User user = userService.findByEmail(userName);
 
@@ -129,7 +132,6 @@ public class NgDashboardController {
             default:
                 throw new NgDashboardException("Unknown type - " + baseType);
         }
-
         if (result) {
             String destination = "/topic/myorders/".concat(userName);
             messagingTemplate.convertAndSend(destination, fromResult(result));
@@ -140,32 +142,29 @@ public class NgDashboardController {
 
     @GetMapping("/balance/{currency}")
     public ResponseEntity<BigDecimal> getBalanceByCurrency(@PathVariable("currency") String currencyName) {
-
         String userName = userService.getUserEmailFromSecurityContext();
         User user = userService.findByEmail(userName);
         Currency currency = currencyService.findByName(currencyName);
+
         BigDecimal balanceByCurrency;
         try {
             balanceByCurrency = dashboardService.getBalanceByCurrency(user.getId(), currency.getId());
         } catch (Exception e) {
             logger.error("Error while get balance by currency user {}, currency {} , e {}",
                     user.getEmail(), currency.getName(), e.getLocalizedMessage());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity<>(balanceByCurrency, HttpStatus.OK);
+        return ResponseEntity.ok(balanceByCurrency);
     }
-
 
     @GetMapping("/commission/{orderType}/{currencyPairId}")
     public ResponseEntity<WalletsAndCommissionsForOrderCreationDto> getCommission(@PathVariable OperationType orderType,
                                                                                   @PathVariable int currencyPairId) {
-
         String email = userService.getUserEmailFromSecurityContext();
 
-        WalletsAndCommissionsForOrderCreationDto result =
-                ngOrderService.getWalletAndCommision(email, orderType, currencyPairId);
+        WalletsAndCommissionsForOrderCreationDto result = ngOrderService.getWalletAndCommision(email, orderType, currencyPairId);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -247,24 +246,21 @@ public class NgDashboardController {
 
             return ResponseEntity.ok(pagedResult);
         } catch (Exception ex) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
-
     }
 
     private String getPrincipalEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-
     @GetMapping("/info/{currencyPairId}")
     public ResponseEntity getCurrencyPairInfo(@PathVariable int currencyPairId) {
-
         String userName = userService.getUserEmailFromSecurityContext();
         User user = userService.findByEmail(userName);
         ResponseUserBalances result = ngOrderService.getBalanceByCurrencyPairId(currencyPairId, user);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.ok(result);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -291,5 +287,4 @@ public class NgDashboardController {
         }
         return send;
     }
-
 }

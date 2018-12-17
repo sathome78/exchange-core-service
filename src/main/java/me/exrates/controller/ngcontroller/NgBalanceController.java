@@ -10,8 +10,13 @@ import me.exrates.service.InputOutputService;
 import me.exrates.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,17 +31,17 @@ import java.util.Locale;
 public class NgBalanceController {
 
     private final UserService userService;
-
     private final RefillPendingRequestService refillPendingRequestService;
-
     private final InputOutputService inputOutputService;
-
     private final LocaleResolver localeResolver;
-
     private final NgWalletService ngWalletService;
 
     @Autowired
-    public NgBalanceController(UserService userService, RefillPendingRequestService refillPendingRequestService, InputOutputService inputOutputService, LocaleResolver localeResolver, NgWalletService ngWalletService) {
+    public NgBalanceController(UserService userService,
+                               RefillPendingRequestService refillPendingRequestService,
+                               InputOutputService inputOutputService,
+                               LocaleResolver localeResolver,
+                               NgWalletService ngWalletService) {
         this.userService = userService;
         this.refillPendingRequestService = refillPendingRequestService;
         this.inputOutputService = inputOutputService;
@@ -45,20 +50,20 @@ public class NgBalanceController {
     }
 
     @GetMapping
-    public List<MyWalletsDetailedDto> getBalances() {
+    public ResponseEntity<List<MyWalletsDetailedDto>> getBalances() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ngWalletService.getAllWalletsForUserDetailed(email, Locale.ENGLISH);
+        return ResponseEntity.ok(ngWalletService.getAllWalletsForUserDetailed(email, Locale.ENGLISH));
     }
 
     @GetMapping("/getPendingRequests")
-    public List<RefillPendingRequestDto> getPendingRequests() {
+    public ResponseEntity<List<RefillPendingRequestDto>> getPendingRequests() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return refillPendingRequestService.getPendingRefillRequests(userService.getIdByEmail(email));
+        return ResponseEntity.ok(refillPendingRequestService.getPendingRefillRequests(userService.getIdByEmail(email)));
     }
 
     //@OnlineMethod TODO check
     @RequestMapping(value = "/getInputOutputData/{tableId}", method = RequestMethod.GET)
-    public List<MyInputOutputHistoryDto> getMyInputOutputData(
+    public ResponseEntity<List<MyInputOutputHistoryDto>> getMyInputOutputData(
             @RequestParam(required = false) Integer limit,
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) String currency,
@@ -67,7 +72,14 @@ public class NgBalanceController {
             HttpServletRequest request) {
         log.info("Got params for getInputOutputData request " + limit + " " + offset + " " + dateFrom + " " + dateTo);
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return inputOutputService.getMyInputOutputHistory(email, offset == null ? 0 : offset, limit == null ? 28 : limit, dateFrom, dateTo, localeResolver.resolveLocale(request), currency);
+        return ResponseEntity.ok(inputOutputService.getMyInputOutputHistory(
+                email,
+                offset == null ? 0 : offset,
+                limit == null ? 28 : limit,
+                dateFrom,
+                dateTo,
+                localeResolver.resolveLocale(request),
+                currency)
+        );
     }
-
 }

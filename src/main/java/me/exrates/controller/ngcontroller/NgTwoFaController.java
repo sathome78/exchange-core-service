@@ -4,16 +4,19 @@ import me.exrates.model.User;
 import me.exrates.model.dto.Generic2faResponseDto;
 import me.exrates.service.G2faService;
 import me.exrates.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.Map;
 
 @RestController
@@ -22,8 +25,6 @@ import java.util.Map;
         consumes = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
 public class NgTwoFaController {
-
-    private static final Logger logger = LogManager.getLogger(NgUserSettingsController.class);
 
     private final UserService userService;
     private final G2faService g2faService;
@@ -36,15 +37,13 @@ public class NgTwoFaController {
     }
 
     @GetMapping("/google2fa/hash")
-    @ResponseBody
     public Generic2faResponseDto getSecurityCode() {
         Integer userId = userService.getIdByEmail(getPrincipalEmail());
         return g2faService.getGoogleAuthenticatorCodeNg(userId);
     }
 
     @GetMapping("/google2fa/pin")
-    @ResponseBody
-    public ResponseEntity<Void> getSecurityPinCode(HttpServletRequest request) {
+    public ResponseEntity getSecurityPinCode(HttpServletRequest request) {
         User user = userService.findByEmail(getPrincipalEmail());
         g2faService.sendGoogleAuthPinConfirm(user, request);
         return ResponseEntity.ok().build();
@@ -71,7 +70,6 @@ public class NgTwoFaController {
     }
 
     @GetMapping(value = "/verify_google2fa")
-    @ResponseBody
     public ResponseEntity<Boolean> verifyGoogleAuthenticatorCode(@RequestParam String code) {
         Integer userId = userService.getIdByEmail(getPrincipalEmail());
         if (g2faService.checkGoogle2faVerifyCode(code, userId)) {

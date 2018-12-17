@@ -47,17 +47,17 @@ public class DatabaseConfiguration {
     @Value("${spring.datasource.ssm-path}")
     private String password;
 
-    @Autowired
-    SSMGetter ssmGetter;
+//    @Autowired
+//    SSMGetter ssmGetter;
 
     @Bean
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
 
-        String lookup = ssmGetter.lookup(password);
+//        String lookup = ssmGetter.lookup(password);
         HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setPassword(lookup);
+        hikariDataSource.setPassword("vLHjSkPJjB6JLVcA");
         hikariDataSource.setUsername(dbUsername);
         hikariDataSource.setJdbcUrl(jdbcUrl);
         hikariDataSource.setConnectionTestQuery(connectionTestQuery);
@@ -113,7 +113,6 @@ public class DatabaseConfiguration {
         DataSource dataSource = new HikariDataSource(hikariConfig);
         return dataSource;
     }
-
 
     @DependsOn("slaveHikariDataSource")
     @Bean(name = "slaveTemplate")

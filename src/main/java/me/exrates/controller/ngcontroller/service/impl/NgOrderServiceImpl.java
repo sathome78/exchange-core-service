@@ -4,13 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import me.exrates.controller.ngcontroller.exception.NgDashboardException;
-import me.exrates.controller.ngcontroller.model.*;
+import me.exrates.controller.ngcontroller.model.InputCreateOrderDto;
+import me.exrates.controller.ngcontroller.model.OrderBookWrapperDto;
+import me.exrates.controller.ngcontroller.model.ResponseInfoCurrencyPairDto;
+import me.exrates.controller.ngcontroller.model.ResponseUserBalances;
+import me.exrates.controller.ngcontroller.model.SimpleOrderBookItem;
 import me.exrates.controller.ngcontroller.service.NgOrderService;
 import me.exrates.dao.OrderDao;
 import me.exrates.dao.StopOrderDao;
 import me.exrates.model.StatisticForMarket;
 import me.exrates.model.User;
-import me.exrates.model.dto.*;
+import me.exrates.model.dto.CandleDto;
+import me.exrates.model.dto.ChartPeriodsEnum;
+import me.exrates.model.dto.ExOrderStatisticsDto;
+import me.exrates.model.dto.OrderCreateDto;
+import me.exrates.model.dto.OrderValidationDto;
+import me.exrates.model.dto.WalletsAndCommissionsForOrderCreationDto;
 import me.exrates.model.enums.ActionType;
 import me.exrates.model.enums.CurrencyPairType;
 import me.exrates.model.enums.OperationType;
@@ -24,7 +33,12 @@ import me.exrates.model.main.ExOrder;
 import me.exrates.model.main.StopOrder;
 import me.exrates.model.onlineTableDto.ExOrderStatisticsShortByPairsDto;
 import me.exrates.model.onlineTableDto.OrderListDto;
-import me.exrates.service.*;
+import me.exrates.service.CurrencyService;
+import me.exrates.service.MarketRatesHolder;
+import me.exrates.service.OrderService;
+import me.exrates.service.StopOrderService;
+import me.exrates.service.UserService;
+import me.exrates.service.WalletService;
 import me.exrates.service.impl.DashboardService;
 import me.exrates.util.BigDecimalProcessing;
 import org.apache.commons.lang.StringUtils;
@@ -576,7 +590,7 @@ public class NgOrderServiceImpl implements NgOrderService {
     }
 
     private boolean safeCompareBigDecimals(BigDecimal last, BigDecimal beforeLast) {
-        if (last == null && beforeLast == null || last == null) {
+        if (last == null) {
             return false;
         } else if (beforeLast == null) {
             return true;
@@ -652,6 +666,4 @@ public class NgOrderServiceImpl implements NgOrderService {
         response.put("c", c);
         response.put("v", v);
     }
-
-
 }

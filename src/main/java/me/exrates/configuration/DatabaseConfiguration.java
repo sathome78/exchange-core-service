@@ -54,18 +54,15 @@ public class DatabaseConfiguration {
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
-
-        String lookup = ssmGetter.lookup(password);
         HikariDataSource hikariDataSource = new HikariDataSource();
 //        hikariDataSource.setPassword("vLHjSkPJjB6JLVcA");
-        hikariDataSource.setPassword(lookup);
+        hikariDataSource.setPassword(getPassword(password));
         hikariDataSource.setUsername(dbUsername);
         hikariDataSource.setJdbcUrl(jdbcUrl);
         hikariDataSource.setConnectionTestQuery(connectionTestQuery);
         hikariDataSource.setDriverClassName(driverClassName);
 //        hikariDataSource.setMaximumPoolSize(maximumPoolSize); TODO
 //        hikariDataSource.setMinimumIdle(minimumidle);
-
         return hikariDataSource;
     }
 
@@ -87,8 +84,7 @@ public class DatabaseConfiguration {
     @Autowired
     @Bean(name = "transactionManager")
     public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
-        return transactionManager;
+        return new HibernateTransactionManager(sessionFactory);
     }
 
     @Bean(name = "slaveHikariDataSource")
@@ -97,7 +93,7 @@ public class DatabaseConfiguration {
         hikariConfig.setDriverClassName(driverClassName);
         hikariConfig.setJdbcUrl(jdbcUrl);
         hikariConfig.setUsername(dbUsername);
-        hikariConfig.setPassword(password);
+        hikariConfig.setPassword(getPassword(password));
         hikariConfig.setMaximumPoolSize(50);
         hikariConfig.setReadOnly(true);
         return new HikariDataSource(hikariConfig);
@@ -109,10 +105,13 @@ public class DatabaseConfiguration {
         hikariConfig.setDriverClassName(driverClassName);
         hikariConfig.setJdbcUrl(jdbcUrl);
         hikariConfig.setUsername(dbUsername);
-        hikariConfig.setPassword(password);
+        hikariConfig.setPassword(getPassword(password));
         hikariConfig.setMaximumPoolSize(50);
-        DataSource dataSource = new HikariDataSource(hikariConfig);
-        return dataSource;
+        return new HikariDataSource(hikariConfig);
+    }
+
+    private String getPassword(String password) {
+        return ssmGetter.lookup(password);
     }
 
     @DependsOn("slaveHikariDataSource")

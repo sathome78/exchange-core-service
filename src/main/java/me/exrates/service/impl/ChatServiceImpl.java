@@ -1,6 +1,5 @@
 package me.exrates.service.impl;
 
-import javafx.util.Pair;
 import me.exrates.dao.ChatDao;
 import me.exrates.exception.IllegalChatMessageException;
 import me.exrates.model.ChatComponent;
@@ -9,13 +8,18 @@ import me.exrates.model.enums.ChatLang;
 import me.exrates.model.main.ChatMessage;
 import me.exrates.service.ChatService;
 import me.exrates.service.UserService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -25,6 +29,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 public class ChatServiceImpl implements ChatService {
+
     private final int MESSAGE_BARRIER = 50;
     private final int CACHE_BARRIER = 150;
     private final int MAX_MESSAGE = 256;
@@ -32,16 +37,16 @@ public class ChatServiceImpl implements ChatService {
 
     private final ChatDao chatDao;
     private final EnumMap<ChatLang, ChatComponent> chats;
+    private final UserService userService;
 
-    private AtomicLong GENERATOR;
     private long flushCursor;
 
     private final Predicate<String> deprecatedChars = Pattern.compile("^[^<>{}&*\"/;`]*$").asPredicate();
-    private final UserService userService;
 
     @Autowired
-    public ChatServiceImpl(final ChatDao chatDao,
-                           final EnumMap<ChatLang, ChatComponent> chats, UserService userService) {
+    public ChatServiceImpl(ChatDao chatDao,
+                           EnumMap<ChatLang, ChatComponent> chats,
+                           UserService userService) {
         this.chatDao = chatDao;
         this.chats = chats;
         this.userService = userService;
@@ -51,7 +56,7 @@ public class ChatServiceImpl implements ChatService {
     public void cacheWarm() {
         final List<Long> ids = new ArrayList<>();
         Stream.of(ChatLang.values())
-                .map(lang -> new Pair<>(lang, new TreeSet<>(chatDao.findLastMessages(lang, MESSAGE_BARRIER))))
+                .map(lang -> Pair.of(lang, new TreeSet<>(chatDao.findLastMessages(lang, MESSAGE_BARRIER))))
                 .forEach(pair -> {
                     final ChatComponent comp = chats.get(pair.getKey());
                     final NavigableSet<ChatMessage> cache = pair.getValue();
@@ -66,8 +71,8 @@ public class ChatServiceImpl implements ChatService {
                     comp.setCache(cache);
                     comp.setTail(tail);
                 });
-        GENERATOR = new AtomicLong(ids.stream().reduce(Long::max).orElse(0L));
-        flushCursor = GENERATOR.get();
+        AtomicLong generator = new AtomicLong(ids.stream().reduce(Long::max).orElse(0L));
+        flushCursor = generator.get();
     }
 
     public NavigableSet<ChatMessage> getLastMessages(final ChatLang lang) {
@@ -112,7 +117,6 @@ public class ChatServiceImpl implements ChatService {
         return chatDao.persistPublic(lang, message);
     }
 
-
     @Scheduled(fixedDelay = 1000L, initialDelay = 1000L)
     public void flushCache() {
         for (ChatLang lang : ChatLang.values()) {
@@ -129,5 +133,4 @@ public class ChatServiceImpl implements ChatService {
             }
         }
     }
-
 }

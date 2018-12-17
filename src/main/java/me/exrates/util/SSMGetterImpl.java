@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class SSMGetterImpl implements SSMGetter {
 
 
-//    @Autowired
+    @Autowired
     AWSSimpleSystemsManagement awsSimpleSystemsManagement;
 
     private static Logger logger = LoggerFactory.getLogger(SSMGetterImpl.class);
